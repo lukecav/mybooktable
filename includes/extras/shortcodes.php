@@ -192,7 +192,7 @@ function mbt_mybooktable_shortcode($attrs) {
 			$output .= '</div>';
 		}
 	} else {
-		$max_books = empty($attr['max-books']) ? -1 : $attr['max-books'];
+		$max_books = empty($attrs['max_books']) ? -1 : intval($attrs['max_books']);
 
 		$mbt_shortcode_old_id = $id;
 		$mbt_shortcode_old_post = $post;
@@ -211,6 +211,7 @@ function mbt_mybooktable_shortcode($attrs) {
 		} else {
 			$wp_query = new WP_Query(array('post_type' => 'mbt_book', 'orderby' => 'menu_order', 'posts_per_page' => $max_books));
 		}
+		$wp_query->max_num_pages = 1;
 		$post = empty($wp_query->post) ? null : $wp_query->post;
 		$posts = $wp_query->posts;
 

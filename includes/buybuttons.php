@@ -24,7 +24,6 @@ function mbt_add_basic_stores($stores) {
 	}
 	$stores['goodreads'] = array('name' => 'GoodReads', 'search' => 'http://www.goodreads.com/search');
 	$stores['cbd'] = array('name' => 'Christian Book Distributor', 'search' => 'http://www.christianbook.com/Christian/Books/easy_find');
-	$stores['sba'] = array('name' => 'Signed by the Author', 'search' => 'http://www.signedbytheauthor.com');
 	$stores['bam'] = array('name' => 'Books-A-Million', 'search' => 'http://www.booksamillion.com/search');
 	$stores['bookbaby'] = array('name' => 'BookBaby');
 	$stores['lifeway'] = array('name' => 'Lifeway', 'search' => 'http://www.lifeway.com');

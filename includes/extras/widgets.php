@@ -21,7 +21,7 @@ function mbr_enqueue_widget_js() {
 class MBT_Featured_Book extends WP_Widget {
 	function MBT_Featured_Book() {
 		$widget_ops = array('classname' => 'mbt_featured_book', 'description' => __("Displays featured or random books.", 'mybooktable'));
-		parent::WP_Widget('mbt_featured_book', __('MyBookTable Featured Books', 'mybooktable'), $widget_ops);
+		parent::__construct('mbt_featured_book', __('MyBookTable Featured Books', 'mybooktable'), $widget_ops);
 		$this->defaultargs = array('title' => __('Featured Books', 'mybooktable'), 'selectmode' => 'by_date', 'featured_books' => array(), 'image_size' => 'medium', 'num_books' => 1, 'show_blurb' => true, 'use_shadowbox' => true);
 	}
 
@@ -60,7 +60,7 @@ class MBT_Featured_Book extends WP_Widget {
 				$permalink = get_permalink($book->ID);
 				?>
 					<div class="mbt-featured-book-widget-book">
-						<h1 class="mbt-book-title widget-title"><a href="<?php echo($permalink); ?>"><?php echo(get_the_title($book->ID)); ?></a></h1>
+						<h2 class="mbt-book-title widget-title"><a href="<?php echo($permalink); ?>"><?php echo(get_the_title($book->ID)); ?></a></h2>
 						<div class="mbt-book-images"><a href="<?php echo($permalink); ?>"><?php echo(mbt_get_book_image($book->ID, array('class' => $image_size))); ?></a></div>
 						<?php if($show_blurb) { ?><div class="mbt-book-blurb"><?php echo(mbt_get_book_blurb($book->ID, true)); ?></div><?php } ?>
 						<div class="mbt-book-buybuttons">
@@ -172,7 +172,7 @@ class MBT_Featured_Book extends WP_Widget {
 class MBT_Taxonomies extends WP_Widget {
 	function MBT_Taxonomies() {
 		$widget_ops = array('classname' => 'mbt_taxonomies', 'description' => __("A list of Authors, Genres, Series, or Tags.", 'mybooktable'));
-		parent::WP_Widget('mbt_taxonomies', __('MyBookTable Taxonomy Widget', 'mybooktable'), $widget_ops);
+		parent::__construct('mbt_taxonomies', __('MyBookTable Taxonomy Widget', 'mybooktable'), $widget_ops);
 	}
 
 	function widget($args, $instance) {

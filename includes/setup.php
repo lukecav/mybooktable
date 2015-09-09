@@ -129,12 +129,21 @@ function mbt_check_rewrites() {
 
 	$archive_correct = mbt_get_rewrite($rules, mbt_get_product_slug()) === 'index.php?post_type=mbt_book';
 	$book_page_correct = mbt_get_rewrite($rules, mbt_get_product_slug().'/book') === 'index.php?mbt_book=$matches[1]&page=$matches[2]';
-	$genres_correct = mbt_get_rewrite($rules, apply_filters('mbt_genre_rewrite_name', _x('genre', 'URL slug', 'mybooktable')).'/genre') === 'index.php?mbt_genre=$matches[1]';
-	$authors_correct = mbt_get_rewrite($rules, apply_filters('mbt_author_rewrite_name', _x('authors', 'URL slug', 'mybooktable')).'/author') === 'index.php?mbt_author=$matches[1]';
-	$series_correct = mbt_get_rewrite($rules, apply_filters('mbt_series_rewrite_name', _x('series', 'URL slug', 'mybooktable')).'/series') === 'index.php?mbt_series=$matches[1]';
-	$tags_correct = mbt_get_rewrite($rules, apply_filters('mbt_tag_rewrite_name', mbt_get_product_slug()._x('tag', 'URL slug', 'mybooktable')).'/tag') === 'index.php?mbt_tag=$matches[1]';
+	$genres_correct = mbt_check_tax_rewrites($rules, 'mbt_genre');
+	$authors_correct = mbt_check_tax_rewrites($rules, 'mbt_author');
+	$series_correct = mbt_check_tax_rewrites($rules, 'mbt_series');
+	$tags_correct = mbt_check_tax_rewrites($rules, 'mbt_tag');
 
 	return $archive_correct and $book_page_correct and $genres_correct and $authors_correct and $series_correct and $tags_correct;
+}
+
+function mbt_check_tax_rewrites($rules, $tax) {
+	$terms = get_terms($tax);
+	if(empty($terms)) { return true; }
+	$parts = parse_url(get_term_link(reset($terms), $tax));
+	$url = $parts['path'];
+	if($url[0] === '/') { $url = substr($url, 1); }
+	return mbt_get_rewrite($rules, $url) === 'index.php?'.$tax.'=$matches[1]';
 }
 
 function mbt_get_rewrite($rules, $url) {

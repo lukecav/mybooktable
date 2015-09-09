@@ -6,10 +6,10 @@ Description: A WordPress Bookstore Plugin to help authors boost book sales on si
 Author: Author Media
 Author URI: http://www.authormedia.com
 Text Domain: mybooktable
-Version: 2.1.2
+Version: 2.1.3
 */
 
-define("MBT_VERSION", "2.1.2");
+define("MBT_VERSION", "2.1.3");
 
 
 

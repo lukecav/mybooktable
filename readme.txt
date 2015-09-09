@@ -3,7 +3,7 @@ Contributors: authormedia, zookatron, neovita
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=K6UGSUCSKP4NS
 Tags: book, books, ecommerce, affiliate, store, author plugin, amazon, ibooks, iTunes, smashwords, goodreads, gumroad
 Requires at least: 3.5.0
-Tested up to: 4.2.0
+Tested up to: 4.3
 Stable tag: trunk
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -57,7 +57,6 @@ MyBookTable comes with Buy Buttons for the following stores:
 * Mardel
 * Powell’s
 * Scribd
-* Signed By The Author
 * Smashwords
 * Sony Reader
 
@@ -211,6 +210,14 @@ This version adds several cool new features, including "Publisher" and "Publicat
 This version adds **many** new buy button options, including Apple iBooks & Sony Reader.
 
 == Changelog ==
+
+= 2.1.3 =
+* Added a "max_book" attribute to all book listing shortcodes that can limit the number of shown books.
+* Fixed a bug that was interfering with the colon on book series box text.
+* Fixed a error message bug that cropped up when using certain permalink structures.
+* Removed the Signed by the Author Buy Button due to the service closing down.
+* Added the ability to use shortcodes in archive descriptions.
+* Improved compatability with various commonly used themes.
 
 = 2.1.2 =
 * Fixed problem caused by Jetpack Photon that caused Book Series images to not show up correctly

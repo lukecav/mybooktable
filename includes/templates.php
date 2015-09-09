@@ -378,7 +378,7 @@ function mbt_get_book_archive_description($before = '', $after = '') {
 	$output = '';
 
 	if(is_tax('mbt_author') or is_tax('mbt_genre') or is_tax('mbt_series') or is_tax('mbt_tag')) {
-		$output = apply_filters('term_description', get_queried_object()->description);
+		$output = do_shortcode(apply_filters('term_description', get_queried_object()->description));
 	} else if(mbt_is_booktable_page()) {
 		$booktable_page = get_post(mbt_get_setting('booktable_page'));
 		if(function_exists('st_remove_st_add_link')) { st_remove_st_add_link(''); }
@@ -511,7 +511,7 @@ function mbt_the_book_sample_url() {
 
 function mbt_get_book_sample($post_id) {
 	$url = mbt_get_book_sample_url($post_id);
-	return empty($url) ? '' : apply_filters('mbt_get_book_sample', '<br><a class="mbt-book-sample" target="_blank" href="'.$url.'">'.__('Download Sample Chapter', 'mybooktable').'</a>');
+	return empty($url) ? '' : apply_filters('mbt_get_book_sample', '<br><a class="mbt-book-sample" target="_blank" href="'.$url.'">'.__('Download Sample Chapter', 'mybooktable').'</a>', $post_id, $url);
 }
 function mbt_the_book_sample() {
 	global $post;
@@ -778,10 +778,10 @@ function mbt_get_book_series_box($post_id) {
 	if(!empty($series)) {
 		$relatedbooks = new WP_Query(array('mbt_series' => $series->slug, 'order' => 'ASC', 'orderby' => 'meta_value_num', 'meta_key' => 'mbt_series_order', 'post__not_in' => array($post_id), 'posts_per_page' => -1));
 		if(!empty($relatedbooks->posts)) {
-			$title = apply_filters('mbt_book_series_box_title', sprintf(__('Other %s in', 'mybooktable'), mbt_get_product_name()).' "'.$series->name, $series->name);
+			$title = apply_filters('mbt_book_series_box_title', sprintf(__('Other %s in', 'mybooktable'), mbt_get_product_name()).' "'.$series->name.'":', $series->name);
 			$output .= '<div style="clear:both"></div>';
 			$output .= '<div class="mbt-book-series">';
-			$output .= '<div class="mbt-book-series-title">'.$title.'":</div>';
+			$output .= '<div class="mbt-book-series-title">'.$title.'</div>';
 			foreach($relatedbooks->posts as $relatedbook) {
 				$size = 100;
 				list($src, $width, $height) = mbt_get_book_image_src($relatedbook->ID);
