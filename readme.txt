@@ -211,13 +211,18 @@ This version adds **many** new buy button options, including Apple iBooks & Sony
 
 == Changelog ==
 
+= 2.1.4 =
+* Fixed a minor typo
+* Updated Kobo logo to match new design
+* Updated iBooks buy buttons to better match Apple's style guidelines
+
 = 2.1.3 =
-* Added a "max_book" attribute to all book listing shortcodes that can limit the number of shown books.
-* Fixed a bug that was interfering with the colon on book series box text.
-* Fixed a error message bug that cropped up when using certain permalink structures.
-* Removed the Signed by the Author Buy Button due to the service closing down.
-* Added the ability to use shortcodes in archive descriptions.
-* Improved compatability with various commonly used themes.
+* Added a "max_book" attribute to all book listing shortcodes that can limit the number of shown books
+* Fixed a bug that was interfering with the colon on book series box text
+* Fixed a error message bug that cropped up when using certain permalink structures
+* Removed the Signed by the Author Buy Button due to the service closing down
+* Added the ability to use shortcodes in archive descriptions
+* Improved compatability with various commonly used themes
 
 = 2.1.2 =
 * Fixed problem caused by Jetpack Photon that caused Book Series images to not show up correctly
