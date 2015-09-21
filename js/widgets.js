@@ -21,7 +21,7 @@ function mbt_update_featured_books(parent) {
 	return true;
 }
 
-function init_book_remover(i, elem) {
+function mbt_init_book_remover(i, elem) {
 	elem = jQuery(elem)
 	elem.click(function(e) {
 		parent = elem.parents('.mbt-featured-book-manual-selector');
@@ -41,13 +41,13 @@ function mbt_initialize_featured_book_widget_editor(elem) {
 		if(!selector.val()){return false;}
 		element = jQuery('<li data-id="'+selector.val()+'" class="mbt-book">'+selector.find(":selected").text()+'<a class="mbt-book-remover">X</a></li>');
 		init_book_remover(0, element.find('.mbt-book-remover'));
-		parent.find('.mbt-featured-book-list').prepend(element);
+		mbt_parent.find('.mbt-featured-book-list').prepend(element);
 		mbt_update_featured_books(parent);
 		selector.val('');
 		return false;
 	});
 
-	parent.find('.mbt-book-remover').each(init_book_remover);
+	parent.find('.mbt-book-remover').each(mbt_init_book_remover);
 
 	parent.find('.mbt-featured-book-list').sortable({stop: function(){mbt_update_featured_books(parent);}});
 }

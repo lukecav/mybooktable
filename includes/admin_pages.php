@@ -9,6 +9,11 @@ function mbt_admin_pages_init() {
 add_action('mbt_init', 'mbt_admin_pages_init');
 
 function mbt_enqueue_admin_resources() {
+	wp_enqueue_style('mbt-admin-global-css', plugins_url('css/admin-global-style.css', dirname(__FILE__)), array(), MBT_VERSION);
+	wp_enqueue_script('mbt-admin-global-js', plugins_url('js/admin-global.js', dirname(__FILE__)), array('jquery'), MBT_VERSION);
+
+	if(!mbt_is_mbt_admin_page()) { return; }
+
 	wp_enqueue_style('mbt-admin-css', plugins_url('css/admin-style.css', dirname(__FILE__)), array(), MBT_VERSION);
 	wp_enqueue_style('mbt-jquery-ui', plugins_url('css/jquery-ui.css', dirname(__FILE__)), array(), MBT_VERSION);
 
@@ -205,9 +210,9 @@ function mbt_render_settings_page() {
 					<li><a href="#mbt-tab-1" data-mbt-track-event="settings_page_setup_tab_click"><?php _e('Setup', 'mybooktable'); ?></a></li>
 					<li><a href="#mbt-tab-2" data-mbt-track-event="settings_page_style_tab_click"><?php _e('Style', 'mybooktable'); ?></a></li>
 					<li><a href="#mbt-tab-3" data-mbt-track-event="settings_page_promote_tab_click"><?php _e('Promote', 'mybooktable'); ?></a></li>
-					<li><a href="#mbt-tab-4" data-mbt-track-event="settings_page_affiliates_tab_click"><?php if(mbt_get_ab_testing_status('settings_page_affiliates_tab')) { _e('Affiliates', 'mybooktable'); } else { _e('Earn', 'mybooktable'); } ?></a></li>
+					<li><a href="#mbt-tab-4" data-mbt-track-event="settings_page_affiliates_tab_click"><?php _e('Earn', 'mybooktable'); ?></a></li>
 					<li><a href="#mbt-tab-5" data-mbt-track-event="settings_page_integrate_tab_click"><?php _e('Integrate', 'mybooktable'); ?></a></li>
-					<li><a href="<?php echo(admin_url('admin.php?page=mbt_help')); ?>" id="mbt-help-link" data-mbt-track-event-override="settings_page_help_tab_click"><?php if(mbt_get_ab_testing_status('settings_page_help_tab')) { _e('Help', 'mybooktable'); } else { _e('Troubleshoot', 'mybooktable'); } ?></a></li>
+					<li><a href="<?php echo(admin_url('admin.php?page=mbt_help')); ?>" id="mbt-help-link" data-mbt-track-event-override="settings_page_help_tab_click"><?php _e('Troubleshoot', 'mybooktable'); ?></a></li>
 				</ul>
 				<div class="mbt-tab" id="mbt-tab-1">
 					<table class="form-table">

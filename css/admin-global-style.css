@@ -1,0 +1,223 @@
+
+/*---------------------------------------------------------*/
+/* Install Messages                                        */
+/*---------------------------------------------------------*/
+
+.mbt-admin-notice {
+	position: relative;
+	z-index: 100;
+	border: 1px solid #21759b;
+	border-radius: 8px;
+	box-shadow: inset 0 0 15px rgba(0,0,0,0.04);
+	background: #2a95c5;
+	display: inline-block;
+	min-width: 50%;
+
+	padding-right: 10px;
+	margin: 5px 10px 2px;
+	overflow: hidden;
+}
+
+.mbt-admin-notice h4 {
+	font-size: 18px;
+	font-family: "Helvetica Neue",Helvetica,Arial,"Lucida Grande",Verdana,"Bitstream Vera Sans",sans-serif;
+	font-weight: normal;
+	line-height: 36px;
+	text-shadow: 0 1px 1px #21759b;
+	color: white;
+	vertical-align: middle;
+
+	display: inline-block;
+	margin: 6px 5px 6px 10px;
+	float: left;
+
+	border-radius: 5px;
+}
+
+.mbt-admin-notice .notice-button,
+.mbt-admin-notice .notice-button:link {
+	font-family: "Helvetica Neue",Helvetica,Arial,"Lucida Grande",Verdana,"Bitstream Vera Sans",sans-serif;
+	font-weight: bold;
+	font-size: 16px!important;
+	line-height: 16px!important;
+	vertical-align: middle;
+	color: white;
+	text-align: center;
+	text-decoration: none;
+	text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.3);
+
+	border: 1px solid #21759B;
+	border-bottom-color: #1E6A8D;
+	border-radius: 5px;
+	background-color: #21759B;
+	background-image: -webkit-gradient(linear,left top,left bottom,from(#2a95c5),to(#21759b));
+	background-image: -webkit-linear-gradient(top,#2a95c5,#21759b);
+	background-image: -moz-linear-gradient(top,#2a95c5,#21759b);
+	background-image: -ms-linear-gradient(top,#2a95c5,#21759b);
+	background-image: -o-linear-gradient(top,#2a95c5,#21759b);
+	background-image: linear-gradient(to bottom,#2a95c5,#21759b);
+
+	box-shadow: inset 0 1px 0 rgba(120,200,230,0.5);
+
+	display: inline-block;
+	margin: 10px 0px 10px 7px;
+	padding: 6px 15px;
+
+	-webkit-transition-duration: .3s;
+	-moz-transition-duration: .3s;
+	cursor: pointer;
+}
+
+.mbt-admin-notice .notice-button.secondary {
+	opacity: .5;
+}
+
+.mbt-admin-notice .notice-button:hover, .mbt-admin-notice .notice-button:active {
+	background-color: #278AB7;
+	background-image: -webkit-gradient(linear,left top,left bottom,from(#2e9fd2),to(#21759b));
+	background-image: -webkit-linear-gradient(top,#2e9fd2,#21759b);
+	background-image: -moz-linear-gradient(top,#2e9fd2,#21759b);
+	background-image: -ms-linear-gradient(top,#2e9fd2,#21759b);
+	background-image: -o-linear-gradient(top,#2e9fd2,#21759b);
+	background-image: linear-gradient(to bottom,#2e9fd2,#21759b);
+	border-color: #1B607F;
+	box-shadow: inset 0 1px 0 rgba(120,200,230,0.6);
+	text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.3);
+
+	opacity: 1;
+	-webkit-transition-duration: .3s;
+}
+
+.mbt-email-pointer .wp-pointer-content h3:before {
+	top: 18px;
+	content: '\f331';
+}
+
+.mbt-email-pointer #mbt-pointer-email.error {
+	border: 1px solid #FFB8B5;
+	background: #FFDAD8;
+	box-shadow: 0px 0px 6px #FFB8B5;
+}
+
+/*---------------------------------------------------------*/
+/* Widget Editor                                           */
+/*---------------------------------------------------------*/
+
+.widget-content .mbt-featured-book-list .mbt-book {
+	padding: 5px 8px;
+	border: 1px solid #dfdfdf;
+	border-radius: 5px;
+	width: 220px;
+	cursor: move;
+	position: relative;
+
+	background: #f1f1f1;
+	background: -webkit-gradient(linear,left bottom,left top,from(#ececec),to(#f9f9f9));
+	background: -webkit-linear-gradient(bottom,#ececec,#f9f9f9);
+	background: -moz-linear-gradient(bottom,#ececec,#f9f9f9);
+	background: -o-linear-gradient(bottom,#ececec,#f9f9f9);
+	background: linear-gradient(to top,#ececec,#f9f9f9);
+}
+
+.widget-content .mbt-featured-book-list .mbt-book .mbt-book-remover {
+	position: absolute;
+	top: 3px;
+	right: 5px;
+	font-size: 13px;
+	text-decoration: none;
+	line-height: 1;
+	cursor: pointer;
+	width: 20px;
+	height: 20px;
+	overflow: hidden;
+}
+
+.widget-content .mbt-featured-book-list .mbt-book .mbt-book-remover:before {
+	content: '\f153';
+	display: block!important;
+	font: 400 16px/1 dashicons;
+	speak: none;
+	height: 20px;
+	margin: 2px 0;
+	text-align: center;
+	width: 20px;
+	-webkit-font-smoothing: antialiased!important;
+}
+
+/*---------------------------------------------------------*/
+/* Shortcode Inserter                                      */
+/*---------------------------------------------------------*/
+
+.authormedia-insert-shortcode-icon {
+	background:url('../images/am-logo.png') no-repeat top left;
+	display: inline-block;
+	height: 16px;
+	margin: 0 2px 0 0;
+	vertical-align: text-top;
+	width: 17px;
+}
+
+.authormedia-insert-shortcode-container .shortcode-modal-close {
+	text-decoration: none;
+	text-align: right;
+	width: 30px;
+	height: 30px;
+	padding: 10px;
+}
+
+.authormedia-insert-shortcode-container .authormedia-shortcode-section-nav {
+	position:absolute;
+	top:0px;
+	left:0px;
+	right:0px;
+	height:50px;
+	z-index:150;
+	background:white;
+}
+
+.authormedia-insert-shortcode-container .authormedia-shortcode-section-nav .nav-tab-active,
+.authormedia-insert-shortcode-container .authormedia-shortcode-section-nav  .nav-tab-active:hover {
+	border-bottom: 1px solid #ccc;
+}
+
+.authormedia-insert-shortcode-container .authormedia-shortcode-section {
+	top: 50px;
+	display: none;
+}
+
+.authormedia-insert-shortcode-container .authormedia-shortcode-section .media-frame-title {
+	padding-top: 15px;
+}
+
+.authormedia-insert-shortcode-container #authormedia_shortcode_form_intro {
+	color: #aaa;
+	font-size: 3em;
+	line-height: 1.2em;
+	padding: 1em;
+}
+
+.authormedia-insert-shortcode-container .authormedia_shortcode_description {
+	border-bottom: 1px solid #dfdfdf;
+	padding-bottom: 1em;
+	margin: 1em;
+}
+
+.authormedia-insert-shortcode-container .authormedia_shortcode_form_atts .description {
+	padding-top: 0.4em;
+	font-style: italic;
+	opacity: 0.8;
+}
+
+
+
+/*---------------------------------------------------------*/
+/* Wordpress Sidebar                                       */
+/*---------------------------------------------------------*/
+
+a[href="admin.php?page=mbt_upgrade_link"] {
+	color: #6bbc5b !important;
+	white-space: nowrap;
+}
+a[href="admin.php?page=mbt_upgrade_link"]:hover {
+	color: #7ad368 !important;
+}

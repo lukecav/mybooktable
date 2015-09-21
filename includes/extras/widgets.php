@@ -3,15 +3,14 @@
 function mbt_register_widgets() {
 	register_widget("MBT_Featured_Book");
 	register_widget("MBT_Taxonomies");
-	add_action('admin_enqueue_scripts', 'mbr_enqueue_widget_js');
+	add_action('admin_enqueue_scripts', 'mbr_enqueue_widget_admin_js');
 }
 add_action('widgets_init', 'mbt_register_widgets');
 
-function mbr_enqueue_widget_js() {
-	global $pagenow;
-	if($pagenow == 'widgets.php') {
-		wp_enqueue_script("mbt-widgets", plugins_url('js/widgets.js', dirname(dirname(__FILE__))), 'jquery', MBT_VERSION, true);
-	}
+function mbr_enqueue_widget_admin_js() {
+	global $pagenow; if($pagenow != 'widgets.php') { return; }
+
+	wp_enqueue_script("mbt-widgets", plugins_url('js/widgets.js', dirname(dirname(__FILE__))), 'jquery', MBT_VERSION, true);
 }
 
 /*---------------------------------------------------------*/
@@ -55,6 +54,7 @@ class MBT_Featured_Book extends WP_Widget {
 		}
 
 		if(!empty($books)) {
+			mbt_enqueue_frontend_scripts();
 			?> <div class="mbt-featured-book-widget"> <?php
 			foreach($books as $book) {
 				$permalink = get_permalink($book->ID);

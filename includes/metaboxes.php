@@ -23,6 +23,8 @@ function mbt_add_metaboxes() {
 }
 
 function mbt_enqueue_metabox_js() {
+	if(!mbt_is_mbt_admin_page()) { return; }
+
 	wp_enqueue_script('mbt-metaboxes', plugins_url('js/metaboxes.js', dirname(__FILE__)), array('jquery'), MBT_VERSION);
 	wp_localize_script('mbt-metaboxes', 'mbt_metabox_i18n', array(
 		'author_helptext' => '<p class="description"><a href="'.admin_url('edit-tags.php?taxonomy=mbt_author&post_type=mbt_book').'" target="_blank">'.__('Set the priority (order) of the authors.', 'mybooktable').'</a></p>'

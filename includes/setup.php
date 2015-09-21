@@ -145,9 +145,13 @@ function mbt_check_rewrites() {
 function mbt_check_tax_rewrites($rules, $tax) {
 	$terms = get_terms($tax);
 	if(empty($terms)) { return true; }
+
+	$parts = parse_url(home_url('/'));
+	$default_path = $parts['path'];
 	$parts = parse_url(get_term_link(reset($terms), $tax));
 	$url = $parts['path'];
-	if($url[0] === '/') { $url = substr($url, 1); }
+	$url = substr($url, strlen($default_path));
+
 	return mbt_get_rewrite($rules, $url) === 'index.php?'.$tax.'=$matches[1]';
 }
 

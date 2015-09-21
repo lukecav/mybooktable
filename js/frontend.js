@@ -23,8 +23,8 @@ jQuery(document).ready(function() {
 
 			geocoder.geocode({ 'address': city + " " + zip }, function(results, status) {
 				if(status == google.maps.GeocoderStatus.OK) {
-					var lat = results[0].geometry.location.k;
-					var lng = results[0].geometry.location.D;
+					var lat = results[0].geometry.location.lat();
+					var lng = results[0].geometry.location.lng();
 					var url = "https://www.google.com/maps/search/bookstore/@"+lat+","+lng+",14z";
 					form.attr('action', url);
 					form.find('[type="submit"]').prop('disabled', false);
@@ -37,8 +37,8 @@ jQuery(document).ready(function() {
 		var form = jQuery(e);
 
 		updatefn = function() { mbt_update_bookstore_form(form); }
-		form.find('.mbt-city').change(updatefn).keyup(updatefn);
-		form.find('.mbt-zip').change(updatefn).keyup(updatefn);
+		form.find('.mbt-city').on('input', updatefn);
+		form.find('.mbt-zip').on('input', updatefn);
 
 		form.submit(function() {
 			window.open(form.attr('action'), "", "");

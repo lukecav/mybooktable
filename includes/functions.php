@@ -105,6 +105,25 @@ function mbt_is_mbt_page() {
 	return (is_post_type_archive('mbt_book') or is_tax('mbt_author') or is_tax('mbt_genre') or is_tax('mbt_series') or is_tax('mbt_tag') or is_singular('mbt_book') or mbt_is_booktable_page() or mbt_is_archive_query());
 }
 
+function mbt_is_mbt_admin_page() {
+	global $pagenow;
+	$screen = get_current_screen();
+	return is_admin() and (
+		($pagenow == 'edit.php' and $screen->post_type == 'mbt_book') or
+		($pagenow == 'post.php' and $screen->post_type == 'mbt_book') or
+		($pagenow == 'post-new.php' and $screen->post_type == 'mbt_book') or
+		($pagenow == 'edit-tags.php' and $screen->taxonomy == 'mbt_author') or
+		($pagenow == 'edit-tags.php' and $screen->taxonomy == 'mbt_genre') or
+		($pagenow == 'edit-tags.php' and $screen->taxonomy == 'mbt_series') or
+		($pagenow == 'edit-tags.php' and $screen->taxonomy == 'mbt_tag') or
+		($pagenow == 'admin.php' and $screen->id == 'mybooktable_page_mbt_import') or
+		($pagenow == 'admin.php' and $screen->id == 'mybooktable_page_mbt_sort_books') or
+		($pagenow == 'admin.php' and $screen->id == 'toplevel_page_mbt_dashboard') or
+		($pagenow == 'admin.php' and $screen->id == 'mybooktable_page_mbt_settings') or
+		($pagenow == 'admin.php' and $screen->id == 'mybooktable_page_mbt_help')
+	);
+}
+
 function mbt_is_booktable_page() {
 	global $mbt_is_booktable_page;
 	return !empty($mbt_is_booktable_page);

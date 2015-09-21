@@ -215,6 +215,7 @@ function mbt_mybooktable_shortcode($attrs) {
 		$post = empty($wp_query->post) ? null : $wp_query->post;
 		$posts = $wp_query->posts;
 
+		mbt_enqueue_frontend_scripts();
 		ob_start();
 
 		$mbt_in_custom_page_content = true;

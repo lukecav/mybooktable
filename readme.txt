@@ -211,6 +211,11 @@ This version adds **many** new buy button options, including Apple iBooks & Sony
 
 == Changelog ==
 
+= 2.1.5 =
+* Added conditional loading for scripts to improve page load time
+* Removed Celery shadowbox option due to security vulnerability
+* Other minor bug fixes
+
 = 2.1.4 =
 * Fixed a minor typo
 * Updated Kobo logo to match new design
