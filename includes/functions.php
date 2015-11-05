@@ -682,6 +682,7 @@ function mbt_verify_api_key() {
 		} else {
 			mbt_update_setting('api_key_status', -20);
 			mbt_update_setting('api_key_message', __('Permissions error!', 'mybooktable'));
+			mbp_update_setting('upgrade_active', false);
 		}
 	} else if($status == -10) {
 		mbt_update_setting('api_key_status', $status);
@@ -742,9 +743,9 @@ function mbt_get_upgrade_message($require_upgrade=true, $upgrade_text=null, $tha
 		if(mbt_get_upgrade_plugin_exists(false)) {
 			$api_key = mbt_get_setting('api_key');
 			if(empty($api_key)) {
-				return '<a href="'.admin_url('admin.php?page=mbt_settings').'">'.__('Insert your API Key to enable your advanced features!', 'mybooktable').'</a>';
+				return '<a href="'.admin_url('admin.php?page=mbt_settings').'">'.__('Insert your License Key to enable your advanced features!', 'mybooktable').'</a>';
 			} else {
-				return '<a href="'.admin_url('admin.php?page=mbt_settings').'">'.__('Update your API Key to enable your advanced features!', 'mybooktable').'</a>';
+				return '<a href="'.admin_url('admin.php?page=mbt_settings').'">'.__('Update your License Key to enable your advanced features!', 'mybooktable').'</a>';
 			}
 		} else {
 			return '<a href="http://www.authormedia.com/mybooktable/upgrades" target="_blank">'.($upgrade_text !== null ? $upgrade_text : __('Upgrade your MyBookTable to enable these advanced features!', 'mybooktable')).'</a>';

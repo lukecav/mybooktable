@@ -211,6 +211,11 @@ This version adds **many** new buy button options, including Apple iBooks & Sony
 
 == Changelog ==
 
+= 2.1.6 =
+* Fixed a bug with the "Manual Select" option of the Featured Book Widget
+* Renamed API Key to License Key to reduce confusion
+* Increased default size of generated book cover images to work better with wide themes
+
 = 2.1.5 =
 * Added conditional loading for scripts to improve page load time
 * Removed Celery shadowbox option due to security vulnerability

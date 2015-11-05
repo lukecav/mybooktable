@@ -132,8 +132,16 @@ function mbt_check_rewrites() {
 	$rules = $wp_rewrite->wp_rewrite_rules();
 	if(empty($rules) or !is_array($rules)) { return true; }
 
-	$archive_correct = mbt_get_rewrite($rules, mbt_get_product_slug()) === 'index.php?post_type=mbt_book';
-	$book_page_correct = mbt_get_rewrite($rules, mbt_get_product_slug().'/book') === 'index.php?mbt_book=$matches[1]&page=$matches[2]';
+	$book_page_correct = false;
+	$books = new WP_Query(array('post_type' => 'mbt_book', 'posts_per_page' => 1));
+	if(empty($books->posts)) {
+		$book_page_correct = true;
+	} else {
+		$book = $books->posts[0];
+		$book_page_correct = mbt_get_rewrite($rules, get_permalink($book)) === 'index.php?mbt_book=$matches[1]&page=$matches[2]';
+	}
+
+	$archive_correct = mbt_get_rewrite($rules, get_post_type_archive_link('mbt_book')) === 'index.php?post_type=mbt_book';
 	$genres_correct = mbt_check_tax_rewrites($rules, 'mbt_genre');
 	$authors_correct = mbt_check_tax_rewrites($rules, 'mbt_author');
 	$series_correct = mbt_check_tax_rewrites($rules, 'mbt_series');
@@ -145,17 +153,16 @@ function mbt_check_rewrites() {
 function mbt_check_tax_rewrites($rules, $tax) {
 	$terms = get_terms($tax);
 	if(empty($terms)) { return true; }
-
-	$parts = parse_url(home_url('/'));
-	$default_path = $parts['path'];
-	$parts = parse_url(get_term_link(reset($terms), $tax));
-	$url = $parts['path'];
-	$url = substr($url, strlen($default_path));
-
-	return mbt_get_rewrite($rules, $url) === 'index.php?'.$tax.'=$matches[1]';
+	return mbt_get_rewrite($rules, get_term_link(reset($terms), $tax)) === 'index.php?'.$tax.'=$matches[1]';
 }
 
 function mbt_get_rewrite($rules, $url) {
+	$parts = parse_url(home_url('/'));
+	$default_path = $parts['path'];
+	$parts = parse_url($url);
+	$url = $parts['path'];
+	$url = substr($url, strlen($default_path));
+
 	foreach($rules as $match => $query) {
 		if(preg_match("#^$match#", $url)) {
 			return $query;
@@ -284,7 +291,7 @@ function mbt_admin_installed_notice() {
 function mbt_admin_setup_api_key_notice() {
 	?>
 	<div id="message" class="mbt-admin-notice">
-		<h4><?php _e('<strong>Setup your API Key</strong> &#8211; MyBookTable needs your API key to enable enhanced features', 'mybooktable'); ?></h4>
+		<h4><?php _e('<strong>Setup your License Key</strong> &#8211; MyBookTable needs your License key to enable enhanced features', 'mybooktable'); ?></h4>
 		<a class="notice-button primary" href="<?php echo(admin_url('admin.php?page=mbt_settings')); ?>" data-mbt-track-event-override="admin_notice_setup_api_key_click"><?php _e('Go To Settings', 'mybooktable'); ?></a>
 	</div>
 	<?php

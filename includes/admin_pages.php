@@ -162,11 +162,11 @@ function mbt_api_key_feedback() {
 	$output = '';
 	if(mbt_get_setting('api_key') and mbt_get_setting('api_key_status') != 0) {
 		if(mbt_get_setting('api_key_status') > 0) {
-			$output .= '<span class="mbt_admin_message_success">'.__('Valid API Key', 'mybooktable').': '.mbt_get_setting('api_key_message').'</span>';
+			$output .= '<span class="mbt_admin_message_success">'.__('Valid License Key', 'mybooktable').': '.mbt_get_setting('api_key_message').'</span>';
 			$upgrade_message = mbt_get_upgrade_message(false, '', '');
 			if(!empty($upgrade_message)) { $output .= '<br>'.$upgrade_message; }
 		} else {
-			$output .= '<span class="mbt_admin_message_failure">'.__('Invalid API Key', 'mybooktable').': '.mbt_get_setting('api_key_message').'</span>';
+			$output .= '<span class="mbt_admin_message_failure">'.__('Invalid License Key', 'mybooktable').': '.mbt_get_setting('api_key_message').'</span>';
 		}
 	}
 	return $output;
@@ -218,13 +218,13 @@ function mbt_render_settings_page() {
 					<table class="form-table">
 						<tbody>
 							<tr>
-								<th><?php _e('MyBookTable API Key', 'mybooktable'); ?></th>
+								<th><?php _e('MyBookTable License Key', 'mybooktable'); ?></th>
 								<td>
 									<div class="mbt_api_key_feedback mbt_feedback"><?php echo(mbt_api_key_feedback()); ?></div>
 									<div style="clear:both"></div>
 									<input type="text" name="mbt_api_key" id="mbt_api_key" value="<?php echo(mbt_hide_api_key(mbt_get_setting('api_key'))); ?>" size="60" class="regular-text" />
 									<div class="mbt_feedback_refresh" data-refresh-action="mbt_api_key_refresh" data-element="mbt_api_key"></div>
-									<p class="description"><?php _e('If you have purchased an API Key for MyBookTable, enter it here to activate your enhanced features. You can find it in your <a href="https://gumroad.com/library/" target="_blank">Gumroad Library here</a>. If you would like to purchase an API key visit <a href="http://www.authormedia.com/mybooktable/">AuthorMedia.com/MyBookTable</a>.', 'mybooktable'); ?></p>
+									<p class="description"><?php _e('If you have purchased an License Key for MyBookTable, enter it here to activate your enhanced features. You can find it in your <a href="https://gumroad.com/library/" target="_blank">Gumroad Library here</a>. If you would like to purchase an License key visit <a href="http://www.authormedia.com/mybooktable/">AuthorMedia.com/MyBookTable</a>.', 'mybooktable'); ?></p>
 								</td>
 							</tr>
 							<tr>
@@ -627,7 +627,7 @@ function mbt_render_help_page() {
 
 		<div class="mbt_help_top_links">
 			<a class="mbt_help_link mbt_apikey" href="https://gumroad.com/library/" target="_blank" data-mbt-track-event="help_page_apikey_button_click">
-				<div class="mbt_icon"></div><?php _e('Need to find or manage your <strong>API Key</strong>?<br>Access through Gumroad', 'mybooktable'); ?>
+				<div class="mbt_icon"></div><?php _e('Need to find or manage your <strong>License Key</strong>?<br>Access through Gumroad', 'mybooktable'); ?>
 			</a>
 			<a class="mbt_help_link mbt_forum" href="http://wordpress.org/support/plugin/mybooktable" target="_blank" data-mbt-track-event="help_page_forum_button_click">
 				<div class="mbt_icon"></div><?php _e('Have <strong>questions or comments</strong>?<br>Check out the Support Forum', 'mybooktable'); ?>
@@ -1024,7 +1024,7 @@ function mbt_render_get_upgrade_page() {
 			}
 
 			function mbt_get_upgrade_do_plugin_install($name, $slug, $url) {
-				if(empty($url)) { echo('<p>'.__('An error occurred while trying to retrieve the plugin from the server. Please check your API Key.', 'mybooktable').'</p>'); return; }
+				if(empty($url)) { echo('<p>'.__('An error occurred while trying to retrieve the plugin from the server. Please check your License Key.', 'mybooktable').'</p>'); return; }
 				if(!current_user_can('install_plugins')) { echo('<p>'.__('Sorry, but you do not have the correct permissions to install plugins. Contact the administrator of this site for help on getting the plugin installed.', 'mybooktable').'</p>'); return; }
 
 				$nonce_url = wp_nonce_url('admin.php?page=mbt_dashboard', 'mbt-install-upgrade');

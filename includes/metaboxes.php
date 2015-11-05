@@ -103,7 +103,7 @@ function mbt_metadata_metabox($post) {
 ?>
 	<table class="form-table mbt_metadata_metabox">
 		<tr>
-			<td rowspan="7">
+			<td rowspan="8">
 				<h4 class="mbt-cover-image-title"><?php _e('Book Cover Image', 'mybooktable'); ?></h4>
 				<?php mbt_the_book_image(); ?><br>
 				<input type="hidden" id="mbt_book_image_id" name="mbt_book_image_id" value="<?php echo(get_post_meta($post->ID, "mbt_book_image_id", true)); ?>" />

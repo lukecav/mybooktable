@@ -40,8 +40,8 @@ function mbt_initialize_featured_book_widget_editor(elem) {
 		selector = parent.find('.mbt-featured-book-selector');
 		if(!selector.val()){return false;}
 		element = jQuery('<li data-id="'+selector.val()+'" class="mbt-book">'+selector.find(":selected").text()+'<a class="mbt-book-remover">X</a></li>');
-		init_book_remover(0, element.find('.mbt-book-remover'));
-		mbt_parent.find('.mbt-featured-book-list').prepend(element);
+		mbt_init_book_remover(0, element.find('.mbt-book-remover'));
+		parent.find('.mbt-featured-book-list').prepend(element);
 		mbt_update_featured_books(parent);
 		selector.val('');
 		return false;

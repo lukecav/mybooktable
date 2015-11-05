@@ -2,7 +2,7 @@
 
 function mbt_templates_init() {
 	//register image size
-	list($width, $height) = apply_filters('mbt_book_image_size', array(400, 400));
+	list($width, $height) = apply_filters('mbt_book_image_size', array(600, 600));
 	add_image_size('mbt_book_image', $width, $height, false);
 
 	if(!is_admin()) {
@@ -859,7 +859,7 @@ function mbt_get_reviews_box($post_id) {
 			set_transient($cache_id, $output, HOUR_IN_SECONDS);
 		}
 	}
-	return apply_filters('mbt_get_reviews_box', $output);
+	return apply_filters('mbt_get_reviews_box', $output, $post_id);
 
 }
 function mbt_the_reviews_box() {
