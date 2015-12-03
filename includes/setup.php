@@ -133,7 +133,7 @@ function mbt_check_rewrites() {
 	if(empty($rules) or !is_array($rules)) { return true; }
 
 	$book_page_correct = false;
-	$books = new WP_Query(array('post_type' => 'mbt_book', 'posts_per_page' => 1));
+	$books = new WP_Query(array('post_type' => 'mbt_book', 'post_status' => 'publish', 'posts_per_page' => 1));
 	if(empty($books->posts)) {
 		$book_page_correct = true;
 	} else {

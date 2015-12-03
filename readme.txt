@@ -61,12 +61,13 @@ MyBookTable comes with Buy Buttons for the following stores:
 * Sony Reader
 
 = Premium Buy Buttons =
-The following buy buttons are available with the Pro & Dev Upgrades for MyBookTable.
+The Pro & Dev Upgrades for MyBookTable include the Universal Buy Button, that lets you easily create a custom Buy Button that can link to any site.
+
+The following advanced buy buttons are available in the Developer Upgrade only:
 
 * PayPal
 * 1ShoppingCart
 * eJunkie
-* Universal Buy Button
 
 = Buy Button Style Packs =
 Customize your store by showing some of the buy buttons as a bulleted list. Also, choose from multiple buy button color schemes.
@@ -210,6 +211,9 @@ This version adds several cool new features, including "Publisher" and "Publicat
 This version adds **many** new buy button options, including Apple iBooks & Sony Reader.
 
 == Changelog ==
+
+= 2.1.7 =
+* Fixed a error message bug that cropped up when using certain permalink structures
 
 = 2.1.6 =
 * Fixed a bug with the "Manual Select" option of the Featured Book Widget
