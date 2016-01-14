@@ -85,7 +85,10 @@ function mbt_compat_pre_get_posts($query) {
 
 function mbt_compat_override_query_posts() {
 	if(mbt_is_archive_query()) {
-		//ID must be -1, not 0, or get_post_meta will return false instead of "", which some themes (such as Divi theme) rely on.
+		//If ID is -1 Jetpack will freak out. It looks at $post->ID and then calls get_post on it...
+		add_filter('jetpack_enable_open_graph', '__return_false');
+
+		//ID must be -1, not 0, or get_post_meta will (inexplicably) return false instead of "", which some themes (such as Divi theme) can't handle. There is no hook in get_post_meta to prevent this.
 		$post = new WP_Post((object)array(
 			"ID" => -1,
 			"post_author" => "1",

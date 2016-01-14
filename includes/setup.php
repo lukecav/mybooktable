@@ -16,11 +16,11 @@ function mbt_update_check() {
 	if(version_compare($version, '2.0.1') < 0) { mbt_update_2_0_1(); }
 	if(version_compare($version, '2.0.4') < 0) { mbt_update_2_0_4(); }
 	if(version_compare($version, '2.1.0') < 0) { mbt_update_2_1_0(); }
+	if(version_compare($version, '2.2.0') < 0) { mbt_update_2_2_0(); }
 
 	if($version !== MBT_VERSION) {
 		mbt_update_setting('version', MBT_VERSION);
 		mbt_track_event('plugin_updated', array('version' => MBT_VERSION));
-		mbt_send_tracking_data();
 	}
 }
 
@@ -104,6 +104,17 @@ function mbt_update_2_1_0() {
 	}
 
 	mbt_update_setting('buybutton_shadowbox', mbt_get_setting('enable_buybutton_shadowbox') ? 'all' : 'none');
+}
+
+function mbt_update_2_2_0() {
+	global $wpdb;
+	$books = $wpdb->get_col('SELECT ID FROM '.$wpdb->posts.' WHERE post_type = "mbt_book"');
+	if(!empty($books)) {
+		foreach($books as $book_id) {
+			update_post_meta($book_id, 'mbt_unique_id_type', 'isbn');
+			update_post_meta($book_id, 'mbt_unique_id_isbn', get_post_meta($book_id, 'mbt_unique_id', true));
+		}
+	}
 }
 
 

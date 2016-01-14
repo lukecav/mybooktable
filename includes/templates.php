@@ -463,6 +463,9 @@ function mbt_the_book_archive_pagination() {
 function mbt_get_placeholder_image_src() {
 	return apply_filters('mbt_get_placeholder_image_src', array(plugins_url('images/book-placeholder.jpg', dirname(__FILE__)), 400, 472));
 }
+function mbt_get_placeholder_image_srcset() {
+	return apply_filters('mbt_get_placeholder_image_srcset', plugins_url('images/book-placeholder.jpg', dirname(__FILE__)).' 400w');
+}
 function mbt_get_book_image_src($post_id) {
 	//prevent Jetpack Photon from breaking image width/height by disabling their image downsize
 	add_filter('jetpack_photon_override_image_downsize', '__return_true');
@@ -470,15 +473,33 @@ function mbt_get_book_image_src($post_id) {
 	remove_filter('jetpack_photon_override_image_downsize', '__return_true');
 	return apply_filters('mbt_get_book_image_src', $image ? $image : mbt_get_placeholder_image_src());
 }
+function mbt_get_book_image_srcset($post_id) {
+	//prevent Jetpack Photon from breaking image width/height by disabling their image downsize
+	add_filter('jetpack_photon_override_image_downsize', '__return_true');
+	$srcset = function_exists('wp_get_attachment_image_srcset') ? wp_get_attachment_image_srcset(get_post_meta($post_id, 'mbt_book_image_id', true), 'mbt_book_image') : '';
+	remove_filter('jetpack_photon_override_image_downsize', '__return_true');
+	return apply_filters('mbt_get_book_image_srcset', $srcset ? $srcset : mbt_get_placeholder_image_srcset());
+}
 function mbt_get_book_image($post_id, $attrs = '') {
 	list($src, $width, $height) = mbt_get_book_image_src($post_id);
-	$attrs = wp_parse_args($attrs, array('alt' => wp_strip_all_tags(get_the_title($post_id)), 'class' => ''));
+	$srcset = mbt_get_book_image_srcset($post_id);
+
+	$image_size = mbt_get_setting('image_size');
+	if($image_size == 'small') { $sizes = '15vw'; }
+	else if($image_size == 'large') { $sizes = '35vw'; }
+	else { $sizes = '25vw'; }
+
+	$attrs = wp_parse_args($attrs, array('alt' => wp_strip_all_tags(get_the_title($post_id)), 'class' => '', 'sizes' => $sizes));
 	$attrs['class'] .= ' mbt-book-image';
+	$attrs['src'] = esc_url($src);
+	$attrs['srcset'] = esc_attr($srcset);
+
 	$attributes = array();
 	foreach($attrs as $attr => $value) {
 		$attributes[] = $attr.'="'.$value.'"';
 	}
-	return apply_filters('mbt_get_book_image', '<img itemprop="image" src="'.$src.'" '.implode($attributes, ' ').'>');
+
+	return apply_filters('mbt_get_book_image', '<img itemprop="image" '.implode($attributes, ' ').'>');
 }
 function mbt_the_book_image($attrs = '') {
 	global $post;
@@ -689,8 +710,14 @@ function mbt_the_book_publication_year() {
 
 
 function mbt_get_book_unique_id($post_id) {
-	$unique_id = get_post_meta($post_id, 'mbt_unique_id', true);
-	return empty($unique_id) ? '' : '<span class="mbt-meta-title">ISBN:</span> <span itemprop="isbn">'.$unique_id.'</span><br>';
+	$unique_id_type = get_post_meta($post_id, 'mbt_unique_id_type', true);
+	if($unique_id_type == 'asin') {
+		$unique_id = get_post_meta($post_id, 'mbt_unique_id_asin', true);
+		return empty($unique_id) ? '' : '<span class="mbt-meta-title">ASIN:</span> <span itemprop="asin">'.$unique_id.'</span><br>';
+	} else {
+		$unique_id = get_post_meta($post_id, 'mbt_unique_id_isbn', true);
+		return empty($unique_id) ? '' : '<span class="mbt-meta-title">ISBN:</span> <span itemprop="isbn">'.$unique_id.'</span><br>';
+	}
 }
 function mbt_the_book_unique_id() {
 	global $post;
@@ -852,7 +879,7 @@ function mbt_get_reviews_box($post_id) {
 	$reviews_boxes = mbt_get_reviews_boxes();
 	$current_reviews = mbt_get_setting('reviews_box');
 	if(!empty($reviews_boxes[$current_reviews])) {
-		$unique_id = get_post_meta($post_id, 'mbt_unique_id', true);
+		$unique_id = get_post_meta($post_id, 'mbt_unique_id_type', true) == 'asin' ? 'asin_'.get_post_meta($post_id, 'mbt_unique_id_asin', true) : 'isbn_'.get_post_meta($post_id, 'mbt_unique_id_isbn', true);
 		$cache_id = 'mbt_'.$current_reviews.'_reviews_'.$post_id.'_'.$unique_id;
 		if(false === ($output = get_transient($cache_id))) {
 			$output = call_user_func_array($reviews_boxes[$current_reviews]['callback'], array());
@@ -860,7 +887,6 @@ function mbt_get_reviews_box($post_id) {
 		}
 	}
 	return apply_filters('mbt_get_reviews_box', $output, $post_id);
-
 }
 function mbt_the_reviews_box() {
 	global $post;

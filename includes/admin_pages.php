@@ -80,7 +80,8 @@ add_action('mbt_init', 'mbt_ajax_event_tracking_init');
 
 function mbt_track_event_ajax() {
 	if(!empty($_REQUEST['event_name'])) {
-		mbt_track_event($_REQUEST['event_name']);
+		$instance = json_decode(str_replace('\\\\', '\\', str_replace('\\\'', '\'', str_replace('\\"', '"', (isset($_POST['instance']) ? $_POST['instance'] : 'false')))), true);
+		mbt_track_event($_REQUEST['event_name'], $instance);
 	}
 	die();
 }
@@ -220,7 +221,7 @@ function mbt_render_settings_page() {
 							<tr>
 								<th><?php _e('MyBookTable License Key', 'mybooktable'); ?></th>
 								<td>
-									<div class="mbt_api_key_feedback mbt_feedback"><?php echo(mbt_api_key_feedback()); ?></div>
+									<div class="mbt_feedback_above mbt_feedback"><?php echo(mbt_api_key_feedback()); ?></div>
 									<div style="clear:both"></div>
 									<input type="text" name="mbt_api_key" id="mbt_api_key" value="<?php echo(mbt_hide_api_key(mbt_get_setting('api_key'))); ?>" size="60" class="regular-text" />
 									<div class="mbt_feedback_refresh" data-refresh-action="mbt_api_key_refresh" data-element="mbt_api_key"></div>
@@ -576,7 +577,7 @@ function mbt_render_setup_default_affiliates_page() {
 			<input type="hidden" name="mbt_enable_default_affiliates" id="mbt_enable_default_affiliates" value="">
 			<input type="submit" name="save_default_affiliate_settings" class="button button-primary" onclick="jQuery('#mbt_enable_default_affiliates').val('true');" value="<?php _e('Enable Affiliate Buttons', 'mybooktable'); ?>">
 			<input type="submit" name="save_default_affiliate_settings" class="button button-primary" onclick="jQuery('#mbt_enable_default_affiliates').val('false');" value="<?php _e('Disable Affiliate Buttons', 'mybooktable'); ?>">
-			<a href="http://www.authormedia.com/products/mybooktable/upgrades/" class="button button-primary" target="_blank"><?php _e('Buy a Premium Upgrade with Affiliate support', 'mybooktable'); ?></a>
+			<a href="http://www.authormedia.com/all-products/mybooktable/upgrades/" class="button button-primary" target="_blank"><?php _e('Buy a Premium Upgrade with Affiliate support', 'mybooktable'); ?></a>
 		</form>
 		<br>
 		<a href="<?php echo(admin_url('admin.php?page=mbt_settings')); ?>&amp;mbt_current_tab=4"><?php _e('Go to Affiliate Settings', 'mybooktable'); ?></a>
@@ -639,7 +640,7 @@ function mbt_render_help_page() {
 		</div>
 
 		<?php if(mbt_get_upgrade() === false) { ?>
-			<div class="mbt_get_premium_support"><a href="http://www.authormedia.com/mybooktable/upgrades/" class="button button-primary"><?php _e('Need Premium Support? Purchase an upgrade here', 'mybooktable'); ?></a></div>
+			<div class="mbt_get_premium_support"><a href="http://www.authormedia.com/all-products/mybooktable/upgrades/" class="button button-primary"><?php _e('Need Premium Support? Purchase an upgrade here', 'mybooktable'); ?></a></div>
 		<?php } else { ?>
 			<div class="mbt_help_box">
 				<div class="mbt_help_box_title"><?php _e('Premium Support Options', 'mybooktable'); ?></div>
@@ -955,10 +956,10 @@ function mbt_render_dashboard() {
 									<a href="http://authormedia.us1.list-manage.com/subscribe?u=b7358f48fe541fe61acdf747b&amp;id=6b5a675fcf" target="_blank" data-mbt-track-event="dashboard_promotion_click_amazing_websites"><img src="<?php echo(plugins_url('images/promotions/amazing_websites.jpg', dirname(__FILE__))); ?>"></a>
 								</div>
 								<div class="welcome-panel-column">
-									<a href="http://www.authormedia.com/store/write-novel-month-mp3-ebook/" target="_blank" data-mbt-track-event="dashboard_promotion_click_novel_month"><img src="<?php echo(plugins_url('images/promotions/novel_month.jpg', dirname(__FILE__))); ?>"></a>
+									<a href="http://www.authormedia.com/all-products/write-novel-month-mp3-ebook-2/" target="_blank" data-mbt-track-event="dashboard_promotion_click_novel_month"><img src="<?php echo(plugins_url('images/promotions/novel_month.jpg', dirname(__FILE__))); ?>"></a>
 								</div>
 								<div class="welcome-panel-column">
-									<a href="http://www.authormedia.com/store/7-tax-saving-tips-irs-doesnt-want-authors-know/" target="_blank" data-mbt-track-event="dashboard_promotion_click_tax_strategies_authors"><img src="<?php echo(plugins_url('images/promotions/tax_strategies_authors.jpg', dirname(__FILE__))); ?>"></a>
+									<a href="http://www.authormedia.com/all-products/7-tax-saving-tips-irs-doesnt-want-authors-know-2/" target="_blank" data-mbt-track-event="dashboard_promotion_click_tax_strategies_authors"><img src="<?php echo(plugins_url('images/promotions/tax_strategies_authors.jpg', dirname(__FILE__))); ?>"></a>
 								</div>
 							</div>
 						</div>

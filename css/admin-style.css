@@ -35,6 +35,11 @@
 	vertical-align: top;
 }
 
+#mbt_metadata .mbt-unique-id-type {
+	margin: 0 10px 5px 0;
+	display: inline-block;
+}
+
 #mbt_buybuttons .mbt-buybuttons-note {
 	color: gray;
 	padding-bottom: 5px;
@@ -272,8 +277,13 @@
 
 /* feedback boxes */
 
-.mbt_api_key_feedback {
+.mbt_feedback_above {
 	padding-bottom: 8px;
+}
+
+.mbt_feedback_beside {
+	padding-left: 8px;
+	display: inline-block;
 }
 
 .mbt_feedback .mbt_feedback_loading {

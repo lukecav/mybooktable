@@ -61,7 +61,7 @@ class MBT_Featured_Book extends WP_Widget {
 				?>
 					<div class="mbt-featured-book-widget-book">
 						<h2 class="mbt-book-title widget-title"><a href="<?php echo($permalink); ?>"><?php echo(get_the_title($book->ID)); ?></a></h2>
-						<div class="mbt-book-images"><a href="<?php echo($permalink); ?>"><?php echo(mbt_get_book_image($book->ID, array('class' => $image_size))); ?></a></div>
+						<div class="mbt-book-images"><a href="<?php echo($permalink); ?>"><?php echo(mbt_get_book_image($book->ID, array('class' => $image_size, 'size' => '25vw'))); ?></a></div>
 						<?php if($show_blurb) { ?><div class="mbt-book-blurb"><?php echo(mbt_get_book_blurb($book->ID, true)); ?></div><?php } ?>
 						<div class="mbt-book-buybuttons">
 							<?php

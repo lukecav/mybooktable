@@ -33,7 +33,8 @@ function mbt_add_basic_stores($stores) {
 	$stores['createspace'] = array('name' => 'CreateSpace', 'search' => 'https://www.createspace.com');
 	$stores['alibris'] = array('name' => 'Alibris', 'search' => 'http://www.alibris.com');
 	$stores['bookdepository'] = array('name' => 'Book Depository', 'search' => 'http://www.bookdepository.com');
-	$stores['ibooks'] = array('name' => 'Apple iBooks', 'search' => 'http://www.researchmaniacs.com/Search/iBookstore.html');
+	$stores['itunes'] = array('name' => 'Apple iTunes');
+	$stores['ibooks'] = array('name' => 'Apple iBooks');
 	$stores['powells'] = array('name' => 'Powells', 'search' => 'http://www.powells.com');
 	$stores['scribd'] = array('name' => 'Scribd', 'search' => 'http://www.scribd.com');
 	$stores['sony'] = array('name' => 'Sony Reader', 'search' => 'https://ebookstore.sony.com');
@@ -127,11 +128,12 @@ function mbt_itunes_affiliate_settings_render() {
 						Used by:
 						<ul>
 							<li>Apple iBooks Buy Button</li>
+							<li>Apple iTunes Buy Button</li>
 						</ul>
 					</div>
 				</th>
 				<td>
-					<div class="mbt_api_key_feedback mbt_feedback"><?php echo(mbt_itunes_affiliate_token_feedback()); ?></div>
+					<div class="mbt_feedback_above mbt_feedback"><?php echo(mbt_itunes_affiliate_token_feedback()); ?></div>
 					<label for="mbt_itunes_affiliate_token"><?php _e('Affiliate Token:', 'mybooktable'); ?></label>
 					<input type="text" name="mbt_itunes_affiliate_token" id="mbt_itunes_affiliate_token" value="<?php echo(mbt_get_setting('itunes_affiliate_token')); ?>" class="regular-text">
 					<div class="mbt_feedback_refresh" data-refresh-action="mbt_itunes_affiliate_token_refresh" data-element="mbt_itunes_affiliate_token"></div>
@@ -202,8 +204,6 @@ function mbt_linkshare_affiliate_settings_render() {
 					<div class="mbt-affiliate-usedby">
 						Used by:
 						<ul>
-							<li>Barnes &amp; Noble Buy Button</li>
-							<li>Nook Buy Button</li>
 							<li>Kobo Buy Button</li>
 						</ul>
 					</div>
@@ -240,6 +240,8 @@ function mbt_cj_affiliate_settings_render() {
 						Used by:
 						<ul>
 							<li>Audible.com Buy Button</li>
+							<li>Barnes &amp; Noble Buy Button</li>
+							<li>Nook Buy Button</li>
 						</ul>
 					</div>
 				</th>
@@ -251,6 +253,22 @@ function mbt_cj_affiliate_settings_render() {
 		</tbody>
 	</table>
 <?php
+}
+
+function mbt_get_cj_affiliate_link($url, $website_id) {
+	$server = 'www.qksrv.net';
+	$scheme = 'http';
+	$url_info = parse_url($url);
+	if(!empty($url_info) and !empty($url_info['scheme'])) { $scheme = $url_info['scheme']; }
+	$hashIndex = strpos($url, '#');
+	$frag = "";
+	if($hashIndex !== false) {
+		$frag = substr($url, $hashIndex + 1);
+		$url = substr($url, 0, $hashIndex);
+	}
+	$extraParams = "";
+	if(!empty($frag)) { $extraParams = "/fragment/".urlencode($frag); }
+	return $scheme."://".$server."/links/".$website_id."/type/am".$extraParams."/".$url;
 }
 
 
@@ -303,7 +321,7 @@ function mbt_amazon_buybutton_editor($editor, $data, $id, $store) {
 		$editor .= '
 		<script type="text/javascript">
 			var url = jQuery("#'.$id.'_url");
-			url.before(jQuery("<div class=\"mbt_api_key_feedback mbt_feedback\"></div>"));
+			url.before(jQuery("<div class=\"mbt_feedback_above mbt_feedback\"></div>"));
 			url.addClass("mbt_feedback_refresh mbt_feedback_refresh_initial");
 			url.attr("data-refresh-action", "mbt_amazon_buybutton_preview");
 			url.attr("data-element", "self");
@@ -323,22 +341,6 @@ function mbt_audible_buybuttons_init() {
 	add_action('mbt_filter_buybutton_data', 'mbt_filter_audible_buybutton_data', 10, 2);
 }
 add_action('mbt_init', 'mbt_audible_buybuttons_init');
-
-function mbt_get_cj_affiliate_link($url, $website_id) {
-	$server = 'www.qksrv.net';
-	$scheme = 'http';
-	$url_info = parse_url($url);
-	if(!empty($url_info) and !empty($url_info['scheme'])) { $scheme = $url_info['scheme']; }
-	$hashIndex = strpos($url, '#');
-	$frag = "";
-	if($hashIndex !== false) {
-		$frag = substr($url, $hashIndex + 1);
-		$url = substr($url, 0, $hashIndex);
-	}
-	$extraParams = "";
-	if(!empty($frag)) { $extraParams = "/fragment/".urlencode($frag); }
-	return $scheme."://".$server."/links/".$website_id."/type/am".$extraParams."/".$url;
-}
 
 function mbt_filter_audible_buybutton_data($data, $store) {
 	if($data['store'] == 'audible' and !empty($data['url'])) {
@@ -361,14 +363,14 @@ function mbt_bnn_buybuttons_init() {
 add_action('mbt_init', 'mbt_bnn_buybuttons_init');
 
 function mbt_is_bbn_url_valid($url) {
-	return preg_match("/barnesandnoble.com\/((s\/([0-9]{13}))|(w\/.*[eE][aA][nN]=([0-9]{13})))/", $url);
+	return preg_match("/barnesandnoble.com\/((s\/([0-9]{13}))|(w\/.*(([eE][aA][nN]=[0-9]{13})|(\/[0-9]{10}))))/", $url);
 }
 
 function mbt_get_bnn_identifier($url) { return ' '; }
 
 function mbt_filter_bnn_buybutton_data($data, $store) {
 	if(($data['store'] == 'bnn' or $data['store'] == 'nook') and !empty($data['url'])) {
-		$data['url'] = !mbt_is_bbn_url_valid($data['url']) ? '' : 'http://click.linksynergy.com/deeplink?id=W1PQs9y/1/c&mid=36889&murl='.urlencode($data['url']);
+		$data['url'] = mbt_get_cj_affiliate_link($data['url'], 7737731);
 	}
 	return $data;
 }
@@ -388,7 +390,7 @@ function mbt_bnn_buybutton_editor($editor, $data, $id, $store) {
 		$editor .= '
 		<script type="text/javascript">
 			var url = jQuery("#'.$id.'_url");
-			url.before(jQuery("<div class=\"mbt_api_key_feedback mbt_feedback\"></div>"));
+			url.before(jQuery("<div class=\"mbt_feedback_above mbt_feedback\"></div>"));
 			url.addClass("mbt_feedback_refresh mbt_feedback_refresh_initial");
 			url.attr("data-refresh-action", "mbt_bnn_buybutton_preview");
 			url.attr("data-element", "self");
@@ -469,16 +471,16 @@ function mbt_celery_buybutton_editor($output, $data, $id, $store) {
 
 
 /*---------------------------------------------------------*/
-/* iBooks Buy Button                                       */
+/* iBooks & iTunes Buy Buttons                             */
 /*---------------------------------------------------------*/
 
-function mbt_ibooks_buybutton_init() {
-	add_filter('mbt_filter_buybutton_data', 'mbt_filter_ibooks_buybutton_data', 10, 2);
+function mbt_apple_buybuttons_init() {
+	add_filter('mbt_filter_buybutton_data', 'mbt_filter_apple_buybuttons_data', 10, 2);
 }
-add_action('mbt_init', 'mbt_ibooks_buybutton_init');
+add_action('mbt_init', 'mbt_apple_buybuttons_init');
 
-function mbt_filter_ibooks_buybutton_data($data, $store) {
-	if($data['store'] == 'ibooks' and !empty($data['url']) and !mbt_get_setting('disable_itunes_affiliates')) {
+function mbt_filter_apple_buybuttons_data($data, $store) {
+	if(($data['store'] == 'ibooks' or $data['store'] == 'itunes') and !empty($data['url']) and !mbt_get_setting('disable_itunes_affiliates')) {
 		$token = mbt_get_setting('itunes_affiliate_token');
 		if(empty($token)) { $token = '1l3vwPw'; }
 		$data['url'] .= (parse_url($data['url'], PHP_URL_QUERY) ? '&' : '?') . 'uo=8&at='.$token;

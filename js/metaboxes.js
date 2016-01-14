@@ -1,6 +1,23 @@
 jQuery(document).ready(function() {
 
 	/*---------------------------------------------------------*/
+	/* Details Metabox                                         */
+	/*---------------------------------------------------------*/
+
+	function mbt_unique_id_type_change() {
+		var type = jQuery('.mbt-unique-id-type input:checked').val();
+		if(type == 'asin') {
+			jQuery('.mbt-unique-id-asin').show();
+			jQuery('.mbt-unique-id-isbn').hide();
+		} else {
+			jQuery('.mbt-unique-id-asin').hide();
+			jQuery('.mbt-unique-id-isbn').show();
+		}
+	}
+	mbt_unique_id_type_change();
+	jQuery('.mbt-unique-id-type input').change(mbt_unique_id_type_change);
+
+	/*---------------------------------------------------------*/
 	/* Buy Buttons Metabox                                     */
 	/*---------------------------------------------------------*/
 
@@ -51,7 +68,8 @@ jQuery(document).ready(function() {
 	// need to undisable form inputs or they will not be saved
 	jQuery('form#post').submit(function() {
 		jQuery("#mbt_buybutton_editors .mbt_buybutton_editor textarea").removeAttr("disabled");
-		jQuery("#mbt_unique_id").removeAttr("disabled");
+		jQuery("#mbt_unique_id_isbn").removeAttr("disabled");
+		jQuery("#mbt_unique_id_asin").removeAttr("disabled");
 	});
 
 	/*---------------------------------------------------------*/

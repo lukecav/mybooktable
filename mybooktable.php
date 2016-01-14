@@ -6,10 +6,10 @@ Description: A WordPress Bookstore Plugin to help authors boost book sales on si
 Author: Author Media
 Author URI: http://www.authormedia.com
 Text Domain: mybooktable
-Version: 2.1.7
+Version: 2.2.0
 */
 
-define("MBT_VERSION", "2.1.7");
+define("MBT_VERSION", "2.2.0");
 
 
 
@@ -124,7 +124,7 @@ function mbt_plugin_action_links($actions) {
 	unset($actions['edit']);
 	$actions['settings'] = '<a href="'.admin_url('admin.php?page=mbt_settings').'">'.__('Settings', 'mybooktable').'</a>';
 	$actions['help'] = '<a href="'.admin_url('admin.php?page=mbt_help').'">'.__('Help', 'mybooktable').'</a>';
-	$actions['upgrade'] = '<a href="http://www.authormedia.com/mybooktable/upgrades" target="_blank">'.__('Purchase Upgrade', 'mybooktable').'</a>';
+	$actions['upgrade'] = '<a href="http://www.authormedia.com/all-products/mybooktable/upgrades/" target="_blank">'.__('Purchase Upgrade', 'mybooktable').'</a>';
 	return $actions;
 }
 

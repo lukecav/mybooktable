@@ -3,7 +3,7 @@ Contributors: authormedia, zookatron, neovita
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=K6UGSUCSKP4NS
 Tags: book, books, ecommerce, affiliate, store, author plugin, amazon, ibooks, iTunes, smashwords, goodreads, gumroad
 Requires at least: 3.5.0
-Tested up to: 4.3
+Tested up to: 4.4.0
 Stable tag: trunk
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -18,7 +18,7 @@ Forget everything you think you know about selling your book online. We’re cha
 
 MyBookTable allows you to have your own bookstore that links to online bookstores where visitors can buy the book.
 
-You can find a **live demo** of MyBookTable in action [here](http://www.authormedia.com/books/ "MyBookTable Demo").
+You can find a **live demo** of MyBookTable in action [here](http://www.authormedia.com/book-table/ "MyBookTable Demo").
 
 = FEATURES =
 
@@ -198,6 +198,9 @@ No! This plugin would work great for anyone wanting to have an Amazon Affiliate 
 
 == Upgrade Notice ==
 
+= 2.2.0 =
+IMPORTANT UPDATE: Barnes and Noble has discontinued Linkshare Affiliates and switched to Commission Junction. This update is required to continue using B&N affiliates. [Learn more...](http://www.authormedia.com/barnes-and-noble-is-ending-its-affiliate-program-how-to-keep-from-losing-out/)
+
 = 2.0.0 =
 This is a major update to MyBookTable. After this update, you will need to update any MyBookTable Add-ons that you have installed.
 
@@ -211,6 +214,13 @@ This version adds several cool new features, including "Publisher" and "Publicat
 This version adds **many** new buy button options, including Apple iBooks & Sony Reader.
 
 == Changelog ==
+
+= 2.2.0 =
+* Updated affiliate system for Barnes & Noble
+* Added iTunes Buy Button
+* Added responsive image support for Retina displays
+* Added support for using ASINs instead of ISBNs
+* Fixed several out of date links in the plugin
 
 = 2.1.7 =
 * Fixed a error message bug that cropped up when using certain permalink structures

@@ -58,7 +58,7 @@ function mbt_goodreads_settings_render() {
 			<tr>
 				<th><label for="mbt_goodreads_developer_key"><?php _e('GoodReads', 'mybooktable'); ?></label></th>
 				<td>
-					<div class="mbt_api_key_feedback mbt_feedback"></div>
+					<div class="mbt_feedback_above mbt_feedback"></div>
 					<label for="mbt_goodreads_developer_key" class="mbt-integrate-label">Developer Key:</label>
 					<input type="text" id="mbt_goodreads_developer_key" name="mbt_goodreads_developer_key" value="<?php echo(mbt_get_setting('goodreads_developer_key')); ?>" class="regular-text">
 					<div class="mbt_feedback_refresh mbt_feedback_refresh_initial" data-refresh-action="mbt_goodreads_developer_key_refresh" data-element="mbt_goodreads_developer_key"></div>
@@ -76,7 +76,7 @@ function mbt_get_goodreads_reviews($post_id = 0) {
 
 	$output = '';
 	$key = mbt_get_setting('goodreads_developer_key');
-	$isbn = get_post_meta($post_id, 'mbt_unique_id', true);
+	if(get_post_meta($post_id, 'mbt_unique_id_type', true) == 'isbn') { $isbn = get_post_meta($post_id, 'mbt_unique_id_isbn', true); }
 	if(!empty($key) and !empty($isbn)) {
 		$raw_response = wp_remote_get('http://www.goodreads.com/book/isbn?format=json&isbn='.$isbn.'&key='.$key, array('timeout' => 3, 'user-agent' => 'WordPress/'.$wp_version.'; '.get_bloginfo('url')));
 		if(!is_wp_error($raw_response) and 200 == wp_remote_retrieve_response_code($raw_response)) {
