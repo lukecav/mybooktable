@@ -476,7 +476,12 @@ function mbt_get_book_image_src($post_id) {
 function mbt_get_book_image_srcset($post_id) {
 	//prevent Jetpack Photon from breaking image width/height by disabling their image downsize
 	add_filter('jetpack_photon_override_image_downsize', '__return_true');
-	$srcset = function_exists('wp_get_attachment_image_srcset') ? wp_get_attachment_image_srcset(get_post_meta($post_id, 'mbt_book_image_id', true), 'mbt_book_image') : '';
+	if(function_exists('wp_get_attachment_image_srcset')) {
+		$srcset = wp_get_attachment_image_srcset(get_post_meta($post_id, 'mbt_book_image_id', true), 'mbt_book_image');
+	} else {
+		list($src, $width, $height) = mbt_get_book_image_src($post_id);
+		$srcset = $src ? $src.' '.$width.'w' : '';
+	}
 	remove_filter('jetpack_photon_override_image_downsize', '__return_true');
 	return apply_filters('mbt_get_book_image_srcset', $srcset ? $srcset : mbt_get_placeholder_image_srcset());
 }
