@@ -215,6 +215,9 @@ This version adds **many** new buy button options, including Apple iBooks & Sony
 
 == Changelog ==
 
+= 2.2.2 =
+* Fixed a bug that prevented book covers from displaying corrently on old versions of WordPress
+
 = 2.2.0 =
 * Updated affiliate system for Barnes & Noble
 * Added iTunes Buy Button
