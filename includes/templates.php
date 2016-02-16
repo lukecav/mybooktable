@@ -463,6 +463,9 @@ function mbt_the_book_archive_pagination() {
 function mbt_get_placeholder_image_src() {
 	return apply_filters('mbt_get_placeholder_image_src', array(plugins_url('images/book-placeholder.jpg', dirname(__FILE__)), 400, 472));
 }
+function mbt_get_large_placeholder_image_src() {
+	return apply_filters('mbt_get_large_placeholder_image_src', array(plugins_url('images/book-placeholder-large.jpg', dirname(__FILE__)), 1000, 1178));
+}
 function mbt_get_book_image_src($post_id) {
 	//prevent Jetpack Photon from breaking image width/height by disabling their image downsize
 	add_filter('jetpack_photon_override_image_downsize', '__return_true');
@@ -477,6 +480,13 @@ function mbt_get_book_image_srcset($post_id) {
 	if(!$srcset) {
 		list($src, $width, $height) = mbt_get_book_image_src($post_id);
 		$srcset = $src ? $src.' '.$width.'w' : '';
+
+		//build extra srcset for placeholder image
+		$placeholder = mbt_get_placeholder_image_src();
+		if($src == $placeholder[0]) {
+			$placeholder_large = mbt_get_large_placeholder_image_src();
+			$srcset = $placeholder[0].' '.$placeholder[1].'w, '.$placeholder_large[0].' '.$placeholder_large[1].'w';
+		}
 	}
 	remove_filter('jetpack_photon_override_image_downsize', '__return_true');
 	return apply_filters('mbt_get_book_image_srcset', $srcset);
@@ -543,7 +553,7 @@ function mbt_the_book_sample_url() {
 
 function mbt_get_book_sample($post_id) {
 	$url = mbt_get_book_sample_url($post_id);
-	return empty($url) ? '' : apply_filters('mbt_get_book_sample', '<br><a class="mbt-book-sample" target="_blank" href="'.$url.'">'.__('Download Sample Chapter', 'mybooktable').'</a>', $post_id, $url);
+	return empty($url) ? '' : apply_filters('mbt_get_book_sample', '<br><a class="mbt-book-sample" target="_blank" href="'.$url.'">'.__('View Book Sample', 'mybooktable').'</a>', $post_id, $url);
 }
 function mbt_the_book_sample() {
 	global $post;
@@ -557,7 +567,7 @@ function mbt_get_book_socialmedia_badges($post_id) {
 	$output = '';
 
 	$output .= '<iframe src="https://plusone.google.com/_/+1/fastbutton?url='.$url.'&amp;size=tall&amp;count=true&amp;annotation=bubble" class="mbt-gplusone" style="width: 55px; height: 61px; margin: 0px; border: none; overflow: hidden;" frameborder="0" hspace="0" vspace="0" marginheight="0" marginwidth="0" scrolling="no" allowtransparency="true"></iframe>';
-	$output .= '<iframe src="http://www.facebook.com/plugins/like.php?href='.$url.'&amp;layout=box_count" class="mbt-fblike" style="width: 50px; height: 61px; margin: 0px; border: none; overflow: hidden;" scrolling="no" frameborder="0" allowtransparency="true"></iframe>';
+	$output .= '<iframe src="https://www.facebook.com/plugins/like.php?href='.$url.'&amp;layout=box_count" class="mbt-fblike" style="width: 50px; height: 61px; margin: 0px; border: none; overflow: hidden;" scrolling="no" frameborder="0" allowtransparency="true"></iframe>';
 
 	return apply_filters('mbt_get_book_socialmedia_badges', $output);
 }
@@ -574,8 +584,8 @@ function mbt_get_book_socialmedia_bar($post_id) {
 		$output .= st_makeEntries();
 	} else {
 		$output .= '<iframe src="https://plusone.google.com/_/+1/fastbutton?url='.$url.'&amp;size=medium&amp;count=true&amp;annotation=bubble" class="mbt-gplusone" style="width: 75px; height: 20px; margin: 0px; border: none; overflow: hidden;" frameborder="0" hspace="0" vspace="0" marginheight="0" marginwidth="0" scrolling="no" allowtransparency="true"></iframe>';
-		$output .= '<iframe src="http://www.facebook.com/plugins/like.php?href='.$url.'&amp;layout=button_count" class="mbt-fblike" style="width: 75px; height: 20px; margin: 0px; border: none; overflow: hidden;" scrolling="no" frameborder="0" allowtransparency="true"></iframe>';
-		$output .= '<iframe src="http://platform.twitter.com/widgets/tweet_button.html?url='.$url.'&amp;count=horizontal&amp;size=m" class="mbt-twittershare" style="height: 20px; width: 100px; margin: 0px; border: none; overflow: hidden;" allowtransparency="true" frameborder="0" scrolling="no"></iframe>';
+		$output .= '<iframe src="https://www.facebook.com/plugins/like.php?href='.$url.'&amp;layout=button_count" class="mbt-fblike" style="width: 75px; height: 20px; margin: 0px; border: none; overflow: hidden;" scrolling="no" frameborder="0" allowtransparency="true"></iframe>';
+		$output .= '<iframe src="https://platform.twitter.com/widgets/tweet_button.html?url='.$url.'&amp;count=horizontal&amp;size=m" class="mbt-twittershare" style="height: 20px; width: 100px; margin: 0px; border: none; overflow: hidden;" allowtransparency="true" frameborder="0" scrolling="no"></iframe>';
 	}
 
 	return apply_filters('mbt_get_book_socialmedia_bar', $output);
@@ -858,7 +868,7 @@ function mbt_get_find_bookstore_box($post_id) {
 	$output .= '<div style="clear:both"></div>';
 	$output .= '<div class="mbt-find-bookstore">';
 	$output .= '<div class="mbt-find-bookstore-title">'.__('Find A Local Bookstore', 'mybooktable').'</div>';
-	$output .= '<form class="mbt-find-bookstore-form" action="http://maps.google.com/maps">';
+	$output .= '<form class="mbt-find-bookstore-form" action="//maps.google.com/maps">';
 	$output .= '	<input type="text" class="mbt-city" placeholder="'.__('City', 'mybooktable').'" name="city" size="20">,';
 	$output .= '	<input type="text" class="mbt-zip" placeholder="'.__('Zip', 'mybooktable').'" name="zip" size="5" maxlength="5">';
 	$output .= '	<input type="submit" name="submit" value="'.__('Find Store', 'mybooktable').'">';

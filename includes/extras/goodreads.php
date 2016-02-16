@@ -83,6 +83,7 @@ function mbt_get_goodreads_reviews($post_id = 0) {
 			$response = json_decode(wp_remote_retrieve_body($raw_response));
 			$output = empty($response->reviews_widget) ? '' : $response->reviews_widget;
 			$output = preg_replace("/<style>.*<\/style>/s", "", $output);
+			$output = preg_replace("/http:\/\//s", "//", $output);
 		}
 	}
 	return $output;

@@ -858,8 +858,8 @@
 }
 
 .mbt-book-importer #mbt-book-import-results li a:after {
-    content: url('../images/new-window.png');
-    margin-left: 5px;
+	content: url('../images/new-window.png');
+	margin-left: 5px;
 }
 
 /*---------------------------------------------------------*/

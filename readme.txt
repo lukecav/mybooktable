@@ -215,6 +215,11 @@ This version adds **many** new buy button options, including Apple iBooks & Sony
 
 == Changelog ==
 
+= 2.2.3 =
+* Improved HTTPS support
+* Updated the Amazon Buy Button to better match Amazon's style guidelines
+* Added a high resolution version of the book placeholder image for high definition displays
+
 = 2.2.2 =
 * Fixed a bug that prevented book covers from displaying corrently on old versions of WordPress
 

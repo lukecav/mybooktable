@@ -451,7 +451,7 @@ add_filter('mbt_style_folders', 'mbt_add_uploaded_style_folder', 100);
 function mbt_init_tracking() {
 	if(mbt_get_setting('allow_tracking') !== 'yes') { return; }
 
-	if(!wp_next_scheduled('mbt_periodic_tracking')) { wp_schedule_event(time(), 'daily', 'mbt_periodic_tracking'); }
+	if(!wp_next_scheduled('mbt_periodic_tracking')) { wp_schedule_event(time(), 'weekly', 'mbt_periodic_tracking'); }
 	add_action('mbt_periodic_tracking', 'mbt_send_tracking_data');
 }
 add_action('mbt_init', 'mbt_init_tracking');
@@ -709,7 +709,7 @@ function mbt_verify_api_key() {
 }
 
 function mbt_init_api_key_check() {
-	if(!wp_next_scheduled('mbt_periodic_api_key_check')) { wp_schedule_event(time(), 'daily', 'mbt_periodic_api_key_check'); }
+	if(!wp_next_scheduled('mbt_periodic_api_key_check')) { wp_schedule_event(time(), 'weekly', 'mbt_periodic_api_key_check'); }
 	add_action('mbt_periodic_api_key_check', 'mbt_verify_api_key');
 }
 add_action('mbt_init', 'mbt_init_api_key_check');
