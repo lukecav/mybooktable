@@ -6,10 +6,10 @@ Description: A WordPress Bookstore Plugin to help authors boost book sales on si
 Author: Author Media
 Author URI: http://www.authormedia.com
 Text Domain: mybooktable
-Version: 2.2.3
+Version: 2.3.0
 */
 
-define("MBT_VERSION", "2.2.3");
+define("MBT_VERSION", "2.3.0");
 
 
 
@@ -44,24 +44,24 @@ if(PHP_VERSION_ID < 50309) {
 /* Includes                                                */
 /*---------------------------------------------------------*/
 
-require_once("includes/functions.php");
-require_once("includes/setup.php");
-require_once("includes/templates.php");
-require_once("includes/buybuttons.php");
-require_once("includes/admin_pages.php");
-require_once("includes/post_types.php");
-require_once("includes/taxonomies.php");
-require_once("includes/metaboxes.php");
-require_once("includes/extras/seo.php");
-require_once("includes/extras/widgets.php");
-require_once("includes/extras/shortcodes.php");
-require_once("includes/extras/compatibility.php");
-require_once("includes/extras/googleanalytics.php");
-require_once("includes/extras/breadcrumbs.php");
-require_once("includes/extras/goodreads.php");
-require_once("includes/extras/booksorting.php");
-require_once("includes/extras/getnoticed.php");
-require_once("includes/extras/totallybooked.php");
+require_once(dirname(__FILE__).'/includes/functions.php');
+require_once(dirname(__FILE__).'/includes/setup.php');
+require_once(dirname(__FILE__).'/includes/templates.php');
+require_once(dirname(__FILE__).'/includes/buybuttons.php');
+require_once(dirname(__FILE__).'/includes/admin_pages.php');
+require_once(dirname(__FILE__).'/includes/post_types.php');
+require_once(dirname(__FILE__).'/includes/taxonomies.php');
+require_once(dirname(__FILE__).'/includes/metaboxes.php');
+require_once(dirname(__FILE__).'/includes/extras/seo.php');
+require_once(dirname(__FILE__).'/includes/extras/widgets.php');
+require_once(dirname(__FILE__).'/includes/extras/shortcodes.php');
+require_once(dirname(__FILE__).'/includes/extras/compatibility.php');
+require_once(dirname(__FILE__).'/includes/extras/googleanalytics.php');
+require_once(dirname(__FILE__).'/includes/extras/breadcrumbs.php');
+require_once(dirname(__FILE__).'/includes/extras/goodreads.php');
+require_once(dirname(__FILE__).'/includes/extras/booksorting.php');
+require_once(dirname(__FILE__).'/includes/extras/getnoticed.php');
+require_once(dirname(__FILE__).'/includes/extras/totallybooked.php');
 
 
 

@@ -76,9 +76,10 @@ function mbt_get_goodreads_reviews($post_id = 0) {
 
 	$output = '';
 	$key = mbt_get_setting('goodreads_developer_key');
-	if(get_post_meta($post_id, 'mbt_unique_id_type', true) == 'isbn') { $isbn = get_post_meta($post_id, 'mbt_unique_id_isbn', true); }
+	$isbn = get_post_meta($post_id, 'mbt_unique_id_isbn', true);
 	if(!empty($key) and !empty($isbn)) {
-		$raw_response = wp_remote_get('http://www.goodreads.com/book/isbn?format=json&isbn='.$isbn.'&key='.$key, array('timeout' => 3, 'user-agent' => 'WordPress/'.$wp_version.'; '.get_bloginfo('url')));
+		$query = apply_filters('mbt_goodreads_reviews_query', 'http://www.goodreads.com/book/isbn?format=json&isbn='.$isbn.'&key='.$key);
+		$raw_response = wp_remote_get($query, array('timeout' => 3, 'user-agent' => 'WordPress/'.$wp_version.'; '.get_bloginfo('url')));
 		if(!is_wp_error($raw_response) and 200 == wp_remote_retrieve_response_code($raw_response)) {
 			$response = json_decode(wp_remote_retrieve_body($raw_response));
 			$output = empty($response->reviews_widget) ? '' : $response->reviews_widget;

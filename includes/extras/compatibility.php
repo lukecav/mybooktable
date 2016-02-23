@@ -7,7 +7,7 @@
 function mbt_compat_init() {
 	if(mbt_get_setting('compatibility_mode')) {
 		//override page content
-		add_filter('the_content', 'mbt_compat_custom_page_content', 100, 2);
+		add_filter('the_content', 'mbt_compat_custom_page_content', 999, 2);
 
 		//modify the post query
 		add_action('pre_get_posts', 'mbt_compat_pre_get_posts', 30);
@@ -42,6 +42,10 @@ function mbt_compat_custom_page_content($content) {
 	}
 
 	if($template) {
+		//tweak $wp_current_filter in order to allow jetpack sharing to work
+		global $wp_current_filter;
+		$content_filter = array_pop($wp_current_filter);
+
 		$mbt_in_custom_page_content = true;
 		ob_start();
 
@@ -50,6 +54,9 @@ function mbt_compat_custom_page_content($content) {
 		$content = ob_get_contents();
 		ob_end_clean();
 		$mbt_in_custom_page_content = false;
+
+		//undo $wp_current_filter tweak
+		$wp_current_filter[] = $content_filter;
 	}
 
 	return $content;

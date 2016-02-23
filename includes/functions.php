@@ -22,7 +22,7 @@ function mbt_reset_settings() {
 		'installed_examples' => false,
 		'booktable_page' => 0,
 		'compatibility_mode' => true,
-		'style_pack' => 'Default',
+		'style_pack' => mbt_get_default_style_pack(),
 		'image_size' => 'medium',
 		'reviews_box' => 'none',
 		'enable_socialmedia_badges_single_book' => false,
@@ -323,7 +323,6 @@ function mbt_import_book($book) {
 		update_post_meta($post_id, 'mbt_buybuttons', $book['buybuttons']);
 		update_post_meta($post_id, 'mbt_book_image_id', $book['image_id']);
 		update_post_meta($post_id, 'mbt_price', $book['price']);
-		update_post_meta($post_id, 'mbt_unique_id_type', $book['unique_id_type']);
 		update_post_meta($post_id, 'mbt_unique_id_isbn', $book['unique_id_isbn']);
 		update_post_meta($post_id, 'mbt_unique_id_asin', $book['unique_id_asin']);
 		update_post_meta($post_id, 'mbt_publisher_name', $book['publisher_name']);
@@ -383,15 +382,15 @@ function mbt_get_custom_page_url($name) {
 
 function mbt_image_url($image) {
 	$url = mbt_current_style_url($image);
-	return apply_filters('mbt_image_url', empty($url) ? plugins_url('styles/Default/'.$image, dirname(__FILE__)) : $url, $image);
+	return apply_filters('mbt_image_url', empty($url) ? plugins_url('styles/'.mbt_get_default_style_pack().'/'.$image, dirname(__FILE__)) : $url, $image);
 }
 
 function mbt_current_style_url($file) {
 	$style = mbt_get_setting('style_pack');
-	if(empty($style)) { $style = 'Default'; }
+	if(empty($style)) { $style = mbt_get_default_style_pack(); }
 
 	$url = mbt_style_url($file, $style);
-	if(empty($url) and $style !== 'Default') { $url = mbt_style_url($file, 'Default'); }
+	if(empty($url) and $style !== mbt_get_default_style_pack()) { $url = mbt_style_url($file, mbt_get_default_style_pack()); }
 
 	return $url;
 }
@@ -404,6 +403,10 @@ function mbt_style_url($file, $style) {
 			}
 		}
 	}
+
+	$meta = mbt_get_style_pack_meta($style);
+	if($meta['template']) { return mbt_style_url($file, $meta['template']); }
+
 	return '';
 }
 
@@ -414,7 +417,7 @@ function mbt_get_style_packs() {
 	foreach($folders as $folder) {
 		if(file_exists($folder['dir']) and $handle = opendir($folder['dir'])) {
 			while(false !== ($entry = readdir($handle))) {
-				if ($entry != '.' and $entry != '..' and $entry != 'Default' and !in_array($entry, $styles)) {
+				if ($entry != '.' and $entry != '..' and !in_array($entry, $styles)) {
 					$styles[] = $entry;
 				}
 			}
@@ -422,7 +425,47 @@ function mbt_get_style_packs() {
 		}
 	}
 
+	sort($styles);
 	return $styles;
+}
+
+function mbt_get_style_pack_meta($style) {
+	$default_headers = array(
+		'name' => 'Style Pack Name',
+		'stylepack_uri' => 'Style Pack URI',
+		'template' => 'Template',
+		'version' => 'Version',
+		'desc' => 'Description',
+		'author' => 'Author',
+		'author_uri' => 'Author URI',
+	);
+
+	$data = array(
+		'name' => $style,
+		'stylepack_uri' => '',
+		'template' => '',
+		'version' => '',
+		'desc' => '',
+		'author' => '',
+		'author_uri' => '',
+	);
+
+	$readme = '';
+	foreach(mbt_get_style_folders() as $folder) {
+		if(file_exists($folder['dir'].'/'.$style)) {
+			if(file_exists($folder['dir'].'/'.$style.'/readme.txt')) {
+				$readme = $folder['dir'].'/'.$style.'/readme.txt';
+				break;
+			}
+		}
+	}
+	if($readme) { $data = get_file_data($readme, $default_headers, 'mbt_style_pack'); }
+
+	return $data;
+}
+
+function mbt_get_default_style_pack() {
+	return apply_filters('mbt_default_style_pack', 'silver');
 }
 
 function mbt_get_style_folders() {

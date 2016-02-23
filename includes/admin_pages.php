@@ -174,7 +174,7 @@ function mbt_api_key_feedback() {
 }
 
 function mbt_style_pack_preview_ajax() {
-	echo('<img src="'.mbt_style_url('amazon_button.png',  $_REQUEST['data']).'">');
+	echo('<img src="'.mbt_style_url('bnn_button.png',  $_REQUEST['data']).'">');
 	die();
 }
 
@@ -185,7 +185,7 @@ function mbt_button_size_preview_ajax() {
 
 function mbt_button_size_feedback($size) {
 	$id = 'mbt_book_'.time().'_'.rand();
-	echo('<img id="'.$id.'" src="'.mbt_style_url('amazon_button.png', 'Default').'">');
+	echo('<img id="'.$id.'" src="'.mbt_style_url('bnn_button.png', mbt_get_default_style_pack()).'">');
 	echo('<style type="text/css">');
 	if($size == 'small') { echo('#'.$id.' { width: 144px; height: 25px; }'); }
 	else if($size == 'medium') { echo('#'.$id.' { width: 172px; height: 30px; }'); }
@@ -296,11 +296,11 @@ function mbt_render_settings_page() {
 										<td colspan="3">
 											<?php $pack_upload_output = mbt_do_style_pack_upload(); ?>
 											<?php $current_style = mbt_get_setting('style_pack'); ?>
-											<div id="mbt_style_pack_preview" class="mbt_feedback"><img src="<?php echo(mbt_style_url('amazon_button.png', $current_style)); ?>"></div>
+											<div id="mbt_style_pack_preview" class="mbt_feedback"><img src="<?php echo(mbt_style_url('bnn_button.png', $current_style)); ?>"></div>
 											<select name="mbt_style_pack" id="mbt_style_pack" class="mbt_feedback_refresh" data-refresh-action="mbt_style_pack_preview" data-element="mbt_style_pack">
-												<option value="Default" <?php echo((empty($current_style) or $current_style == 'Default') ? ' selected="selected"' : '') ?> ><?php _e('Default', 'mybooktable'); ?></option>
 												<?php foreach(mbt_get_style_packs() as $style) { ?>
-													<option value="<?php echo($style); ?>" <?php echo($current_style == $style ? ' selected="selected"' : ''); ?> ><?php echo($style); ?></option>
+													<?php $meta = mbt_get_style_pack_meta($style); ?>
+													<option value="<?php echo($style); ?>" <?php echo($current_style == $style ? ' selected="selected"' : ''); ?> ><?php echo($meta['name']); ?></option>
 												<?php } ?>
 											</select>
 											<input type="hidden" id="mbt_style_pack_id" name="mbt_style_pack_id" onchange="jQuery('#mbt_current_tab').val(2); jQuery('#mbt_settings_form').submit();">

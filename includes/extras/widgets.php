@@ -126,7 +126,7 @@ class MBT_Featured_Book extends WP_Widget {
 				</select>
 			</p>
 			<div class="mbt-featured-book-manual-selector" <?php echo($selectmode === 'manual_select' ? '' : 'style="display:none"'); ?>>
-				<label for="mbt-book-selector"><?php _e('Select Books:', 'mybooktable'); ?></label></br>
+				<label for="mbt-featured-book-selector"><?php _e('Select Books:', 'mybooktable'); ?></label></br>
 				<select class="mbt-featured-book-selector">
 					<option value=""><?php _e('-- Choose One --', 'mybooktable'); ?></option>
 					<?php

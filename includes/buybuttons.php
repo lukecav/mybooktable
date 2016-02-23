@@ -40,6 +40,8 @@ function mbt_add_basic_stores($stores) {
 	$stores['sony'] = array('name' => 'Sony Reader', 'search' => 'https://ebookstore.sony.com');
 	$stores['googleplay'] = array('name' => 'Google Play', 'search' => 'https://play.google.com');
 	$stores['pubslush'] = array('name' => 'Pubslush', 'search' => 'https://pubslush.com/discover');
+	$stores['inktera'] = array('name' => 'Inktera', 'search' => 'http://www.inktera.com/store/search');
+	$stores['lulu'] = array('name' => 'Lulu', 'search' => 'https://www.lulu.com/shop/search.ep');
 	$stores['gumroad'] = array('name' => 'Gumroad');
 	$stores['celery'] = array('name' => 'Celery');
 	return $stores;
@@ -483,6 +485,10 @@ function mbt_filter_apple_buybuttons_data($data, $store) {
 	if(($data['store'] == 'ibooks' or $data['store'] == 'itunes') and !empty($data['url']) and !mbt_get_setting('disable_itunes_affiliates')) {
 		$token = mbt_get_setting('itunes_affiliate_token');
 		if(empty($token)) { $token = '1l3vwPw'; }
+		$host = parse_url($data['url'], PHP_URL_HOST);
+		if(stripos($host, 'itunes.apple.com') !== false and stripos($host, 'geo') === false) {
+			$data['url'] = str_replace($host, 'geo.'.$host, $data['url']);
+		}
 		$data['url'] .= (parse_url($data['url'], PHP_URL_QUERY) ? '&' : '?') . 'uo=8&at='.$token;
 	}
 	return $data;

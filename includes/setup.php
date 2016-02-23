@@ -17,6 +17,7 @@ function mbt_update_check() {
 	if(version_compare($version, '2.0.4') < 0) { mbt_update_2_0_4(); }
 	if(version_compare($version, '2.1.0') < 0) { mbt_update_2_1_0(); }
 	if(version_compare($version, '2.2.0') < 0) { mbt_update_2_2_0(); }
+	if(version_compare($version, '2.3.0') < 0) { mbt_update_2_3_0(); }
 
 	if($version !== MBT_VERSION) {
 		mbt_update_setting('version', MBT_VERSION);
@@ -111,10 +112,20 @@ function mbt_update_2_2_0() {
 	$books = $wpdb->get_col('SELECT ID FROM '.$wpdb->posts.' WHERE post_type = "mbt_book"');
 	if(!empty($books)) {
 		foreach($books as $book_id) {
-			update_post_meta($book_id, 'mbt_unique_id_type', 'isbn');
 			update_post_meta($book_id, 'mbt_unique_id_isbn', get_post_meta($book_id, 'mbt_unique_id', true));
 		}
 	}
+}
+
+function mbt_update_2_3_0() {
+	$style_pack = mbt_get_setting('style_pack');
+	if($style_pack == 'Default') { mbt_update_setting('style_pack', 'silver'); }
+	if($style_pack == 'Golden') { mbt_update_setting('style_pack', 'golden'); }
+	if($style_pack == 'Blue Flat') { mbt_update_setting('style_pack', 'blue_flat'); }
+	if($style_pack == 'Gold Flat') { mbt_update_setting('style_pack', 'gold_flat'); }
+	if($style_pack == 'Green Flat') { mbt_update_setting('style_pack', 'green_flat'); }
+	if($style_pack == 'Grey Flat') { mbt_update_setting('style_pack', 'grey_flat'); }
+	if($style_pack == 'Orange Flat') { mbt_update_setting('style_pack', 'orange_flat'); }
 }
 
 

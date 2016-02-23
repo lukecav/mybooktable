@@ -124,6 +124,7 @@ function mbt_mybooktable_shortcode($attrs) {
 			}
 		} else {
 			remove_action('mbt_before_book_archive', 'mbt_the_breadcrumbs');
+			if(!empty($attrs['header']) and $attrs['header'] == 'hidden') { remove_action('mbt_book_archive_header', 'mbt_do_book_archive_header'); }
 			include(mbt_locate_template('archive-book/content.php'));
 		}
 		$mbt_in_custom_page_content = false;

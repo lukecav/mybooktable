@@ -148,7 +148,7 @@ function mbt_add_wpseo_opengraph_image() {
 function mbt_add_wpseo_opengraph_isbn() {
 	global $post;
 	if(is_singular('mbt_book')) {
-		if(get_post_meta($post->ID, 'mbt_unique_id_type', true) == 'isbn') { $isbn = get_post_meta($post->ID, 'mbt_unique_id_isbn', true); }
+		$isbn = get_post_meta($post->ID, 'mbt_unique_id_isbn', true);
 		if(!empty($isbn)) { echo("<meta property='book:isbn' content='".$isbn."'/>\n"); }
 	}
 }
@@ -319,7 +319,7 @@ function mbt_seo_add_opengraph() {
 		$tags['og:site_name'] = get_bloginfo('name');
 		$image = mbt_get_book_image_src($post->ID);
 		if(!empty($image[0])) { $tags['og:image'] = esc_url($image[0]); }
-		if(get_post_meta($post->ID, 'mbt_unique_id_type', true) == 'isbn') { $isbn = get_post_meta($post->ID, 'mbt_unique_id_isbn', true); }
+		$isbn = get_post_meta($post->ID, 'mbt_unique_id_isbn', true);
 		if(!empty($isbn)) { $tags['book:isbn'] = $isbn; }
 	} else if(is_post_type_archive('mbt_book') or (mbt_is_archive_query() and $mbt_archive_query->is_post_type_archive('mbt_book'))) {
 		$tags['og:type'] = 'object';

@@ -1,23 +1,6 @@
 jQuery(document).ready(function() {
 
 	/*---------------------------------------------------------*/
-	/* Details Metabox                                         */
-	/*---------------------------------------------------------*/
-
-	function mbt_unique_id_type_change() {
-		var type = jQuery('.mbt-unique-id-type input:checked').val();
-		if(type == 'asin') {
-			jQuery('.mbt-unique-id-asin').show();
-			jQuery('.mbt-unique-id-isbn').hide();
-		} else {
-			jQuery('.mbt-unique-id-asin').hide();
-			jQuery('.mbt-unique-id-isbn').show();
-		}
-	}
-	mbt_unique_id_type_change();
-	jQuery('.mbt-unique-id-type input').change(mbt_unique_id_type_change);
-
-	/*---------------------------------------------------------*/
 	/* Buy Buttons Metabox                                     */
 	/*---------------------------------------------------------*/
 

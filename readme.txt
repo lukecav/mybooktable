@@ -3,7 +3,7 @@ Contributors: authormedia, zookatron, neovita
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=K6UGSUCSKP4NS
 Tags: book, books, ecommerce, affiliate, store, author plugin, amazon, ibooks, iTunes, smashwords, goodreads, gumroad
 Requires at least: 3.5.0
-Tested up to: 4.4.0
+Tested up to: 4.4.2
 Stable tag: trunk
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -214,6 +214,11 @@ This version adds several cool new features, including "Publisher" and "Publicat
 This version adds **many** new buy button options, including Apple iBooks & Sony Reader.
 
 == Changelog ==
+
+= 2.3.0 =
+* New Kindle Instant Preview feature
+* New versions of style packs, Trademark Compliant and Beautiful
+* New Intera and Lulu Buy Buttons
 
 = 2.2.3 =
 * Improved HTTPS support
