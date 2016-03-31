@@ -648,9 +648,9 @@ function mbt_get_buybuttons($post_id, $excerpt=false, $force_shadowbox=null) {
 		$shadowbox_output .= '</div></div>';
 
 		$shadowbox_button_output  = '<div class="mbt-book-buybutton">';
-		$shadowbox_button_output .= '	<a href="#mbt_buybutton_shadowbox_'.$post_id.'" class="mbt-shadowbox-buybutton mbt-shadowbox-inline">';
+		$shadowbox_button_output .= '	<div data-href="#mbt_buybutton_shadowbox_'.$post_id.'" class="mbt-shadowbox-buybutton mbt-shadowbox-inline">';
 		$shadowbox_button_output .= '		<img src="'.mbt_image_url('shadowbox_button.png').'" border="0" alt="'.__('Buy now!', 'mybooktable').'"/>';
-		$shadowbox_button_output .= '	</a>';
+		$shadowbox_button_output .= '	</div>';
 		$shadowbox_button_output .= '</div>';
 		$shadowbox_button_output = apply_filters('mbt_format_buybutton', $shadowbox_button_output, array('display'=>'button', 'store'=>'shadowbox', 'url'=>''), array('name' => 'Shadow Box'));
 
@@ -863,6 +863,9 @@ function mbt_the_book_series_box() {
 
 
 function mbt_get_kindle_instant_preview_box($post_id) {
+	$show_instant_preview = get_post_meta($post_id, 'mbt_show_instant_preview', true);
+	if($show_instant_preview === "no") { return ''; }
+
 	$output = '';
 	$asin = get_post_meta($post_id, 'mbt_unique_id_asin', true);
 	if($asin) {

@@ -444,9 +444,9 @@ function mbt_gumroad_buybutton_button($output, $data, $store) {
 		$data['url'] = $data['url'].((strpos($data['url'], '?') === false) ? '?as_embed=true&outbound_embed=true' : '&as_embed=true&outbound_embed=true');
 
 		if(!empty($data['display']) and $data['display'] == 'text') {
-			$output = empty($data['url']) ? '' : '<li><a class="mbt-shadowbox-iframe" href="'.htmlspecialchars($data['url']).'" target="_blank" rel="nofollow">'.sprintf(__('Buy from %s', 'mybooktable'), $store['name']).'</a></li>';
+			$output = empty($data['url']) ? '' : '<li><div class="mbt-shadowbox-iframe" data-href="'.htmlspecialchars($data['url']).'">'.sprintf(__('Buy from %s', 'mybooktable'), $store['name']).'</div></li>';
 		} else {
-			$output = empty($data['url']) ? '' : '<div class="mbt-book-buybutton"><a class="mbt-shadowbox-iframe" href="'.htmlspecialchars($data['url']).'" target="_blank" rel="nofollow"><img src="'.mbt_image_url($data['store'].'_button.png').'" border="0" alt="'.sprintf(__('Buy from %s', 'mybooktable'), $store['name']).'"/></a></div>';
+			$output = empty($data['url']) ? '' : '<div class="mbt-book-buybutton"><div class="mbt-shadowbox-iframe" data-href="'.htmlspecialchars($data['url']).'"><img src="'.mbt_image_url($data['store'].'_button.png').'" border="0" alt="'.sprintf(__('Buy from %s', 'mybooktable'), $store['name']).'"/></div></div>';
 		}
 	}
 	return $output;

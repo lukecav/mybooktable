@@ -4,8 +4,8 @@ jQuery(document).ready(function() {
 	/* Shadow Boxes                                            */
 	/*---------------------------------------------------------*/
 
-	jQuery('.mbt-shadowbox-inline').colorbox({inline:true, scrolling:false, transition:'none'});
-	jQuery('.mbt-shadowbox-iframe').colorbox({iframe:true, scrolling:true, transition:'none', width:"80%", height:"80%"});
+	jQuery('.mbt-shadowbox-inline').each(function(i, e) { jQuery(e).colorbox({inline:true, scrolling:false, transition:'none', href: jQuery(e).attr('data-href')}); });
+	jQuery('.mbt-shadowbox-iframe').each(function(i, e) { jQuery(e).colorbox({iframe:true, scrolling:true, transition:'none', width:"80%", height:"80%", href: jQuery(e).attr('data-href')}); });
 
 	/*---------------------------------------------------------*/
 	/* Find Bookstore Form                                     */

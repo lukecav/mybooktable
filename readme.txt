@@ -215,6 +215,10 @@ This version adds **many** new buy button options, including Apple iBooks & Sony
 
 == Changelog ==
 
+= 2.3.2 =
+* Fixed a bug that caused the Kindle Instant Preview to show up even when disabled
+* Fixed a bug that caused the the Shadow Box Buy buttons to not open properly when used with certain themes
+
 = 2.3.0 =
 * New Kindle Instant Preview feature
 * New versions of style packs, Trademark Compliant and Beautiful

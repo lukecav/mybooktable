@@ -209,7 +209,7 @@ function mbt_metadata_metabox($post) {
 			</td>
 		</tr>
 		<tr>
-			<th><label for="mbt_publication_year"><?php _e('Kindle Instant Preview', 'mybooktable'); ?></label></th>
+			<th><label for="mbt_show_instant_preview"><?php _e('Kindle Instant Preview', 'mybooktable'); ?></label></th>
 			<td>
 				<input type="checkbox" name="mbt_show_instant_preview" id="mbt_show_instant_preview" <?php echo(get_post_meta($post->ID, "mbt_show_instant_preview", true) !== "no" ? 'checked="checked"' : ''); ?> >
 				<p class="description"><?php _e('Displays a free instant preview of your book from Amazon (optional)', 'mybooktable'); ?></p>
