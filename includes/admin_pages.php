@@ -96,6 +96,7 @@ function mbt_settings_page_init() {
 	add_action('wp_ajax_mbt_api_key_refresh', 'mbt_api_key_refresh_ajax');
 	add_action('wp_ajax_mbt_style_pack_preview', 'mbt_style_pack_preview_ajax');
 	add_action('wp_ajax_mbt_button_size_preview', 'mbt_button_size_preview_ajax');
+	add_action('wp_ajax_mbt_check_reviews', 'mbt_check_reviews_ajax');
 
 	//needs to happen before setup.php admin_init in order to properly update admin notices
 	add_action('admin_init', 'mbt_save_settings_page');
@@ -191,6 +192,37 @@ function mbt_button_size_feedback($size) {
 	else if($size == 'medium') { echo('#'.$id.' { width: 172px; height: 30px; }'); }
 	else { echo('#'.$id.' { width: 201px; height: 35px; }'); }
 	echo('</style>');
+}
+
+function mbt_check_reviews_ajax() {
+	$output = '';
+	$reviews_boxes = mbt_get_reviews_boxes();
+	$reviews_type = $_REQUEST['reviews_type'];
+	if(!empty($reviews_boxes[$reviews_type]['book-check'])) {
+		$books_query = new WP_Query(array('post_type' => 'mbt_book', 'posts_per_page' => -1));
+		$books_results = array();
+		foreach ($books_query->posts as $book) {
+			$result = call_user_func_array($reviews_boxes[$reviews_type]['book-check'], array($book->ID));
+			$books_results[] = array('id' => $book->ID, 'title' => (strlen($book->post_title) > 30 ? substr($book->post_title, 0, 30) : $book->post_title), 'result' => $result);
+		}
+
+		$sort_books_results = function($a, $b) {
+			$a_val = (strpos($a['result'], 'mbt_admin_message_failure') !== false) ? 0 : ((strpos($a['result'], 'mbt_admin_message_warning') !== false) ? 1 : 2);
+			$b_val = (strpos($b['result'], 'mbt_admin_message_failure') !== false) ? 0 : ((strpos($b['result'], 'mbt_admin_message_warning') !== false) ? 1 : 2);
+			return $a_val == $b_val ? 0 : ($a_val > $b_val ? 1 : -1);
+		};
+		usort($books_results, $sort_books_results);
+
+		$output .= '<ul id="mbt-check-reviews-results-list">';
+		foreach($books_results as $result) {
+			$output .= '<li><a href="'.get_permalink($result['id']).'" target="_blank">'.$result['title'].'</a> - '.$result['result'].'</li>';
+		}
+		$output .= '</ul>';
+	} else {
+		$output .= '<div class="mbt-check-reviews-noresults">This reviews system does not support reviews checking.</div>';
+	}
+
+	echo($output); exit();
 }
 
 function mbt_render_settings_page() {
@@ -445,6 +477,14 @@ function mbt_render_settings_page() {
 										}
 									?>
 									<p class="description"><?php _e('Select the reviews box that will be displayed under each book with a valid ISBN.', 'mybooktable'); ?></p>
+									<div class="mbt-check-reviews">
+										<div class="mbt-check-reviews-begin">
+											<div class="mbt-check-reviews-button button"><?php _e('Check Reviews', 'mybooktable'); ?></div>
+											<span class="description"> - <?php _e('Use this tool to check if your books will be able to display reviews.', 'mybooktable'); ?></span>
+										</div>
+										<div class="mbt-check-reviews-checking">Checking&hellip;<div class="mbt-check-reviews-spinner"></div></div>
+										<div class="mbt-check-reviews-results"></div>
+									</div>
 								</td>
 							</tr>
 							<tr>

@@ -14,6 +14,7 @@ function mbt_add_goodreads_reviews_box($reviews) {
 	$reviews['goodreads'] = array(
 		'name' => 'GoodReads Reviews',
 		'callback' => 'mbt_get_goodreads_reviews',
+		'book-check' => 'mbt_check_book_goodreads_reviews',
 		'disabled' => $disabled,
 	);
 	return $reviews;
@@ -88,4 +89,20 @@ function mbt_get_goodreads_reviews($post_id = 0) {
 		}
 	}
 	return $output;
+}
+
+function mbt_check_book_goodreads_reviews($book_id) {
+	$isbn = get_post_meta($book_id, 'mbt_unique_id_isbn', true);
+	if(empty($isbn)) {
+		return '<span class="mbt_admin_message_failure">'.__('No ISBN entered.', 'mybooktable').'</span>';
+	} else {
+		$matches = array();
+		preg_match("/^([0-9][0-9\-]{8,}[0-9Xx])$/", $isbn, $matches);
+		if(!empty($matches[1])) {
+			$filtered_isbn = preg_replace("/[^0-9Xx]/", "", $isbn);
+			return '<span class="mbt_admin_message_success">'.__('Valid ISBN', 'mybooktable').' <a href="http://www.isbnsearch.org/isbn/'.$filtered_isbn.'" target="_blank">'.__('(verify book)', 'mybooktable').'</a></span>';
+		} else {
+			return '<span class="mbt_admin_message_failure">'.__('Invalid ISBN', 'mybooktable').'</span>';
+		}
+	}
 }
