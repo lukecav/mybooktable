@@ -282,14 +282,19 @@ function mbt_import_book($book) {
 		'genres' => array(),
 		'tags' => array(),
 		'price' => '',
-		'unique_id_type' => 'isbn',
 		'unique_id_isbn' => '',
 		'unique_id_asin' => '',
 		'buybuttons' => '',
 		'publisher_name'  => '',
+		'publisher_url'  => '',
 		'publication_year' => '',
 		'image_id' => '',
 		'imported_book_id' => '',
+		'sample_url' => '',
+		'book_length' => '',
+		'sale_price' => '',
+		'show_instant_preview' => '',
+		'series_order' => '',
 	);
 	$book = array_merge($defaults, $book);
 	if(!empty($book['unique_id'])) { $book['unique_id_isbn'] = $book['unique_id']; }
@@ -303,15 +308,20 @@ function mbt_import_book($book) {
 		if(empty($old_buybuttons)) { update_post_meta($post_id, 'mbt_buybuttons', $book['buybuttons']); }
 		if(!empty($book['image_id'])) { update_post_meta($post_id, 'mbt_book_image_id', $book['image_id']); }
 		if(!empty($book['price'])) { update_post_meta($post_id, 'mbt_price', $book['price']); }
-		if(!empty($book['unique_id_type'])) { update_post_meta($post_id, 'unique_id_type', $book['unique_id_type']); }
 		if(!empty($book['unique_id_isbn'])) { update_post_meta($post_id, 'unique_id_isbn', $book['unique_id_isbn']); }
 		if(!empty($book['unique_id_asin'])) { update_post_meta($post_id, 'unique_id_asin', $book['unique_id_asin']); }
 		if(!empty($book['publisher_name'])) { update_post_meta($post_id, 'mbt_publisher_name', $book['publisher_name']); }
+		if(!empty($book['publisher_url'])) { update_post_meta($post_id, 'mbt_publisher_url', $book['publisher_url']); }
 		if(!empty($book['publication_year'])) { update_post_meta($post_id, 'mbt_publication_year', $book['publication_year']); }
 		if(!empty($book['authors'])) { wp_set_object_terms($post_id, mbt_import_taxonomy_terms($book['authors'], 'mbt_author'), 'mbt_author'); }
 		if(!empty($book['series'])) { wp_set_object_terms($post_id, mbt_import_taxonomy_terms($book['series'], 'mbt_series'), 'mbt_series'); }
 		if(!empty($book['genres'])) { wp_set_object_terms($post_id, mbt_import_taxonomy_terms($book['genres'], 'mbt_genre'), 'mbt_genre'); }
 		if(!empty($book['tags'])) { wp_set_object_terms($post_id, mbt_import_taxonomy_terms($book['tags'], 'mbt_tag'), 'mbt_tag'); }
+		if(!empty($book['sample_url'])) { update_post_meta($post_id, 'mbt_sample_url', $book['sample_url']); }
+		if(!empty($book['book_length'])) { update_post_meta($post_id, 'mbt_book_length', $book['book_length']); }
+		if(!empty($book['sale_price'])) { update_post_meta($post_id, 'mbt_sale_price', $book['sale_price']); }
+		if(!empty($book['show_instant_preview'])) { update_post_meta($post_id, 'mbt_show_instant_preview', $book['show_instant_preview']); }
+		if(!empty($book['series_order'])) { update_post_meta($post_id, 'mbt_series_order', $book['series_order']); }
 	} else {
 		$post_id = wp_insert_post(array(
 			'post_title' => $book['title'],
@@ -326,11 +336,17 @@ function mbt_import_book($book) {
 		update_post_meta($post_id, 'mbt_unique_id_isbn', $book['unique_id_isbn']);
 		update_post_meta($post_id, 'mbt_unique_id_asin', $book['unique_id_asin']);
 		update_post_meta($post_id, 'mbt_publisher_name', $book['publisher_name']);
+		update_post_meta($post_id, 'mbt_publisher_url', $book['publisher_url']);
 		update_post_meta($post_id, 'mbt_publication_year', $book['publication_year']);
 		wp_set_object_terms($post_id, mbt_import_taxonomy_terms($book['authors'], 'mbt_author'), 'mbt_author');
 		wp_set_object_terms($post_id, mbt_import_taxonomy_terms($book['series'], 'mbt_series'), 'mbt_series');
 		wp_set_object_terms($post_id, mbt_import_taxonomy_terms($book['genres'], 'mbt_genre'), 'mbt_genre');
 		wp_set_object_terms($post_id, mbt_import_taxonomy_terms($book['tags'], 'mbt_tag'), 'mbt_tag');
+		update_post_meta($post_id, 'mbt_sample_url', $book['sample_url']);
+		update_post_meta($post_id, 'mbt_book_length', $book['book_length']);
+		update_post_meta($post_id, 'mbt_sale_price', $book['sale_price']);
+		update_post_meta($post_id, 'mbt_show_instant_preview', $book['show_instant_preview']);
+		update_post_meta($post_id, 'mbt_series_order', $book['series_order']);
 
 		if(!empty($book['source_id'])) { update_post_meta($book['source_id'], 'mbt_imported_book_id', $post_id); }
 	}

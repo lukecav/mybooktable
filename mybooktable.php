@@ -62,6 +62,7 @@ require_once(dirname(__FILE__).'/includes/extras/goodreads.php');
 require_once(dirname(__FILE__).'/includes/extras/booksorting.php');
 require_once(dirname(__FILE__).'/includes/extras/getnoticed.php');
 require_once(dirname(__FILE__).'/includes/extras/totallybooked.php');
+require_once(dirname(__FILE__).'/includes/extras/customimport.php');
 
 
 
