@@ -12,6 +12,7 @@ jQuery(document).ready(function() {
 
 	jQuery('#mbt-tabs').tabs({active: jQuery('#mbt_current_tab').val()-1});
 	jQuery('#mbt-help-link').off();
+	jQuery('.mbt-accordion').accordion({collapsible: true, active: false, heightStyle: 'content'});
 
  	jQuery('#mbt_settings_form input[type="submit"]').click(function() { jQuery('#mbt_current_tab').val(jQuery(this).parents('.mbt-tab').attr('id').substring(8)); });
 

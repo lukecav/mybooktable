@@ -149,6 +149,7 @@ function mbt_detect_custom_export_download() {
 			);
 		}
 		$data[$tax_name] = $terms;
+		//todo: export author priorities and taxonomy images
 	}
 
 	// save books
