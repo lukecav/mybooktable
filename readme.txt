@@ -3,7 +3,7 @@ Contributors: authormedia, zookatron, neovita
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=K6UGSUCSKP4NS
 Tags: book, books, ecommerce, affiliate, store, author plugin, amazon, ibooks, iTunes, smashwords, goodreads, gumroad
 Requires at least: 3.5.0
-Tested up to: 4.4.2
+Tested up to: 4.5.0
 Stable tag: trunk
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -214,6 +214,10 @@ This version adds several cool new features, including "Publisher" and "Publicat
 This version adds **many** new buy button options, including Apple iBooks & Sony Reader.
 
 == Changelog ==
+
+= 2.3.3 =
+* Added WordPress 4.5 support
+* Improved responsive styling for single book pages and archive pages
 
 = 2.3.2 =
 * Fixed a bug that caused the Kindle Instant Preview to show up even when disabled

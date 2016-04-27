@@ -111,7 +111,7 @@ function mbt_register_taxonomies()
 function mbt_override_taxonomy_parent_files() {
 	global $pagenow, $parent_file, $submenu_file;
 
-	if($pagenow == "edit-tags.php" and ($_GET['taxonomy'] == "mbt_series" or $_GET['taxonomy'] == "mbt_genre" or $_GET['taxonomy'] == "mbt_author" or $_GET['taxonomy'] == "mbt_tag")) {
+	if(($pagenow == "edit-tags.php" or $pagenow == "term.php") and ($_GET['taxonomy'] == "mbt_series" or $_GET['taxonomy'] == "mbt_genre" or $_GET['taxonomy'] == "mbt_author" or $_GET['taxonomy'] == "mbt_tag")) {
 		$parent_file = "mbt_dashboard";
 	}
 

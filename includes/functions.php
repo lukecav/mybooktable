@@ -112,10 +112,10 @@ function mbt_is_mbt_admin_page() {
 		($pagenow == 'edit.php' and $screen->post_type == 'mbt_book') or
 		($pagenow == 'post.php' and $screen->post_type == 'mbt_book') or
 		($pagenow == 'post-new.php' and $screen->post_type == 'mbt_book') or
-		($pagenow == 'edit-tags.php' and $screen->taxonomy == 'mbt_author') or
-		($pagenow == 'edit-tags.php' and $screen->taxonomy == 'mbt_genre') or
-		($pagenow == 'edit-tags.php' and $screen->taxonomy == 'mbt_series') or
-		($pagenow == 'edit-tags.php' and $screen->taxonomy == 'mbt_tag') or
+		(($pagenow == 'edit-tags.php' or $pagenow == 'term.php') and $screen->taxonomy == 'mbt_author') or
+		(($pagenow == 'edit-tags.php' or $pagenow == 'term.php') and $screen->taxonomy == 'mbt_genre') or
+		(($pagenow == 'edit-tags.php' or $pagenow == 'term.php') and $screen->taxonomy == 'mbt_series') or
+		(($pagenow == 'edit-tags.php' or $pagenow == 'term.php') and $screen->taxonomy == 'mbt_tag') or
 		($pagenow == 'admin.php' and $screen->id == 'mybooktable_page_mbt_import') or
 		($pagenow == 'admin.php' and $screen->id == 'mybooktable_page_mbt_sort_books') or
 		($pagenow == 'admin.php' and $screen->id == 'toplevel_page_mbt_dashboard') or

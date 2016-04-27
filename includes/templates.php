@@ -175,9 +175,11 @@ function mbt_add_custom_css() {
 	$widget_button_size = mbt_get_setting('widget_button_size');
 	echo('<style type="text/css">');
 	//Image Size
+	echo('@media only screen and (min-width: 600px) {');
 	if($image_size == 'small') { echo('.mbt-book .mbt-book-images { width: 15%; } .mbt-book .mbt-book-right { width: 85%; } '); }
 	else if($image_size == 'large') { echo('.mbt-book .mbt-book-images { width: 35%; } .mbt-book .mbt-book-right { width: 65%; } '); }
 	else { echo('.mbt-book .mbt-book-images { width: 25%; } .mbt-book .mbt-book-right { width: 75%; } '); }
+	echo('} ');
 	//Book Button Size
 	if($book_button_size == 'small') { echo('.mbt-book .mbt-book-buybuttons .mbt-book-buybutton img { width: 144px; height: 25px; } .mbt-book .mbt-book-buybuttons .mbt-book-buybutton { padding: 3px 6px 0px 0px; }'); }
 	else if($book_button_size == 'medium') { echo('.mbt-book .mbt-book-buybuttons .mbt-book-buybutton img { width: 172px; height: 30px; } .mbt-book .mbt-book-buybuttons .mbt-book-buybutton { padding: 4px 8px 0px 0px; }'); }

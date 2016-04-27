@@ -602,6 +602,19 @@
 	padding: 6px 15px;
 }
 
+@media only screen and (max-width: 600px) {
+	.mbt-book .mbt-book-images {
+		float: none;
+		margin: auto;
+		margin-bottom: 15px;
+		width: 40%;
+	}
+
+	.mbt-book .mbt-book-right {
+		float: none;
+		width: 100%;
+	}
+}
 
 
 /*---------------------------------------------------------*/
