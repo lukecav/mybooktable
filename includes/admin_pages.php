@@ -26,12 +26,7 @@ function mbt_enqueue_admin_resources() {
 	wp_enqueue_script('jquery-ui-accordion');
 
 	wp_enqueue_script('mbt-admin-pages', plugins_url('js/admin.js', dirname(__FILE__)), array('jquery'), MBT_VERSION);
-	wp_localize_script('mbt-admin-pages', 'mbt_media_upload_i18n', array(
-		'mbt_upload_sample_button' => __('Sample Chapter Image', 'mybooktable'),
-		'mbt_upload_tax_image_button' => __('Taxonomy Image', 'mybooktable'),
-		'mbt_set_book_image_button' => __('Book Cover Image', 'mybooktable'),
-		'select' => __('Select', 'mybooktable')
-	));
+	wp_localize_script('mbt-admin-pages', 'mbt_media_upload_i18n', array('select' => __('Select', 'mybooktable')));
 
 	if(function_exists('wp_enqueue_media')) { wp_enqueue_media(); }
 }
@@ -389,7 +384,7 @@ function mbt_render_settings_page() {
 										<th><?php _e('Upload New Style Pack', 'mybooktable'); ?></th>
 										<td colspan="3">
 											<?php echo($pack_upload_output); ?>
-											<input id="mbt_upload_style_pack_button" type="button" class="button" value="<?php _e('Upload', 'mybooktable'); ?>">
+											<input id="mbt_upload_style_pack_button" class="button mbt_upload_button" data-upload-target="mbt_style_pack_id" data-upload-property="id" data-upload-title="<?php _e('Style Pack', 'mybooktable'); ?>" type="button" value="<?php _e('Upload', 'mybooktable'); ?>">
 											<p class="description"><?php printf(__('If you would like to make your own style pack you can learn how from our <a href="%s" target="_blank">developer documentation</a>.', 'mybooktable'), 'https://github.com/authormedia/mybooktable/wiki/Style-Pack-System'); ?></p>
 										</td>
 									</tr>

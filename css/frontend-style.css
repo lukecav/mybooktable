@@ -127,6 +127,11 @@
 	color: #484949;
 }
 
+.mbt-book .mbt-book-price .mbt-alt-price  {
+	display: block;
+	font-size: 12px;
+}
+
 
 
 /*---------------------------------------------------------*/
@@ -145,6 +150,23 @@
 
 .mbt-book .mbt-book-meta a {
 	font-weight: 600;
+}
+
+.mbt-book .mbt-book-meta .mbt-star-rating {
+	display: inline-block;
+}
+.mbt-book .mbt-book-meta .mbt-star-rating .mbt-star {
+	float: left;
+	width: 17px;
+	height: 15px;
+	text-indent: -999em;
+	display: block;
+	background: transparent;
+	overflow: hidden;
+	background: url('../images/star.gif') no-repeat 0 0px;
+}
+.mbt-book .mbt-book-meta .mbt-star-rating .mbt-star.mbt-star-filled {
+	background-position:0 -32px !important;
 }
 
 
@@ -179,7 +201,7 @@
 	text-decoration: underline;
 }
 
-.mbt-book a.mbt-book-sample {
+.mbt-book .mbt-book-blurb a.mbt-book-sample {
 	font-family: Helvetica, sans-serif;
 	font-weight: bold;
 	font-size: 14px;
@@ -209,6 +231,10 @@
 	margin-top: 10px;
 	padding: 6px 15px;
 	min-width: 70px;
+}
+
+.mbt-book .mbt-book-blurb audio.mbt-book-sample {
+	margin-top: 10px;
 }
 
 

@@ -38,44 +38,48 @@ jQuery(document).ready(function() {
 	/* Media Upload Buttons                                    */
 	/*---------------------------------------------------------*/
 
-	function mbt_make_uploader(button, data_element, title, desired_data) {
-		var file_frame;
+	jQuery.fn.mbt_upload_button = function() {
+		jQuery(this).each(function(i, e) {
+			var file_frame;
 
-		jQuery(button).on('click', function(event) {
+			var element = jQuery(this);
 
-			event.preventDefault();
+			element.on('click', function(event) {
 
-			// If the media frame already exists, reopen it.
-			if(file_frame) {
+				event.preventDefault();
+
+				// If the media frame already exists, reopen it.
+				if(file_frame) {
+					file_frame.open();
+					return;
+				}
+
+				// Create the media frame.
+				var options = {
+					button: { text: mbt_media_upload_i18n.select },
+					multiple: false  // Set to true to allow multiple files to be selected
+				};
+				if(element.attr('data-upload-title')) { options.title = element.attr('data-upload-title'); }
+				file_frame = wp.media.frames.file_frame = wp.media();
+
+				// When an image is selected, run a callback.
+				file_frame.on( 'select', function() {
+					// We set multiple to false so only get one image from the uploader
+					attachment = file_frame.state().get('selection').first().toJSON();
+
+					// Save the desired data
+					var desired_data = 'url';
+					if(element.attr('data-upload-property')) { desired_data = element.attr('data-upload-property'); }
+					jQuery('#'+element.attr('data-upload-target')).val(attachment[desired_data]).trigger('change');
+				});
+
+				// Finally, open the modal
 				file_frame.open();
-				return;
-			}
-
-			// Create the media frame.
-			file_frame = wp.media.frames.file_frame = wp.media({
-				title: title,
-				button: { text: mbt_media_upload_i18n.select },
-				multiple: false  // Set to true to allow multiple files to be selected
 			});
-
-			// When an image is selected, run a callback.
-			file_frame.on( 'select', function() {
-				// We set multiple to false so only get one image from the uploader
-				attachment = file_frame.state().get('selection').first().toJSON();
-
-				// Save the returned url
-				jQuery(data_element).val(attachment[typeof desired_data !== 'undefined' ? desired_data : 'url']).trigger('change');
-			});
-
-			// Finally, open the modal
-			file_frame.open();
 		});
 	};
 
-	mbt_make_uploader('#mbt_upload_sample_button', '#mbt_sample_url', mbt_media_upload_i18n.mbt_upload_sample_button);
-	mbt_make_uploader('#mbt_upload_tax_image_button', '#mbt_tax_image_url', mbt_media_upload_i18n.mbt_upload_tax_image_button);
-	mbt_make_uploader('#mbt_set_book_image_button', '#mbt_book_image_id', mbt_media_upload_i18n.mbt_set_book_image_button, 'id');
-	mbt_make_uploader('#mbt_upload_style_pack_button', '#mbt_style_pack_id', mbt_media_upload_i18n.select, 'id');
+	jQuery('.mbt_upload_button').mbt_upload_button();
 
 	/*---------------------------------------------------------*/
 	/* Book Import Page                                        */
@@ -126,6 +130,20 @@ jQuery(document).ready(function() {
 /* Feedback Boxes                                          */
 /*---------------------------------------------------------*/
 
+function mbt_do_feedback_colorize(element) {
+	var feedback = element.parent().find('.mbt_feedback').html();
+	element.removeClass('mbt_admin_input_success');
+	element.removeClass('mbt_admin_input_failure');
+	element.removeClass('mbt_admin_input_warning');
+	if(feedback.indexOf('mbt_admin_message_success') !== -1) {
+		element.addClass('mbt_admin_input_success');
+	} else if(feedback.indexOf('mbt_admin_message_failure') !== -1) {
+		element.addClass('mbt_admin_input_failure');
+	} else if(feedback.indexOf('mbt_admin_message_warning') !== -1) {
+		element.addClass('mbt_admin_input_warning');
+	}
+}
+
 function mbt_do_feedback_refresh(element) {
 	if(!element.attr('disabled')) {
 		element.attr('disabled', 'disabled');
@@ -161,6 +179,7 @@ function mbt_do_feedback_refresh(element) {
 				element.removeAttr('disabled');
 				if(element.attr('type') == 'radio') { jQuery('input[name='+element.attr('name')+']').removeAttr('disabled', 'disabled'); }
 				feedback.html(response);
+				if(element.hasClass('mbt_feedback_colorize')) { mbt_do_feedback_colorize(element); }
 			}
 		);
 	}
@@ -171,6 +190,7 @@ jQuery.fn.mbt_feedback = function() {
 		var element = jQuery(this);
 
 		if(element.hasClass('mbt_feedback_refresh_initial')) { mbt_do_feedback_refresh(element); }
+		if(element.hasClass('mbt_feedback_colorize')) { mbt_do_feedback_colorize(element); }
 
 		if(element.prop("tagName") == "DIV") {
 			element.click(function() {

@@ -27,6 +27,7 @@ function mbt_enqueue_metabox_js() {
 	if(!mbt_is_mbt_admin_page()) { return; }
 
 	wp_enqueue_script('mbt-metaboxes', plugins_url('js/metaboxes.js', dirname(__FILE__)), array('jquery'), MBT_VERSION);
+	wp_enqueue_script('mbt-star-ratings', plugins_url('js/lib/jquery.rating.js', dirname(__FILE__)), array('jquery'), MBT_VERSION);
 	wp_localize_script('mbt-metaboxes', 'mbt_metabox_i18n', array(
 		'author_helptext' => '<p class="description"><a href="'.admin_url('edit-tags.php?taxonomy=mbt_author&post_type=mbt_book').'" target="_blank">'.__('Set the priority (order) of the authors.', 'mybooktable').'</a></p>'
 	));
@@ -130,92 +131,177 @@ function mbt_asin_preview_feedback($data) {
 	return $output;
 }
 
+function mbt_metadata_text($post_id, $field_id, $data) {
+	$value = get_post_meta($post_id, $field_id, true);
+	return '<input type="text" name="'.$field_id.'" id="'.$field_id.'" value="'.$value.'" />';
+}
+
+function mbt_metadata_checkbox($post_id, $field_id, $data) {
+	$value = get_post_meta($post_id, $field_id, true);
+	if(!empty($data['default']) and $value === '') { $value = $data['default']; }
+	return '<input type="checkbox" name="'.$field_id.'" id="'.$field_id.'" '.checked($value, 'yes', false).'>';
+}
+
+function mbt_metadata_upload($post_id, $field_id, $data) {
+	$output = '';
+	$output .= '<input type="text" name="'.$field_id.'" id="'.$field_id.'" value="'.get_post_meta($post_id, $field_id, true).'" /> ';
+	$output .= '<input class="button mbt_upload_button" data-upload-target="'.$field_id.'" data-upload-title="'.__('Choose Sample', 'mybooktable').'" type="button" value="'.__('Upload', 'mybooktable').'" />';
+	return $output;
+}
+
+function mbt_metadata_star_rating($post_id, $field_id, $data) {
+	$star_rating = get_post_meta($post_id, 'mbt_star_rating', true);
+	$output = '';
+	$output .= '<div class="mbt_star_rating_container">';
+	$output .= '<input name="mbt_star_rating" value="1" type="radio" class="mbt-star" '.checked($star_rating, 1, false).'/>';
+	$output .= '<input name="mbt_star_rating" value="2" type="radio" class="mbt-star" '.checked($star_rating, 2, false).'/>';
+	$output .= '<input name="mbt_star_rating" value="3" type="radio" class="mbt-star" '.checked($star_rating, 3, false).'/>';
+	$output .= '<input name="mbt_star_rating" value="4" type="radio" class="mbt-star" '.checked($star_rating, 4, false).'/>';
+	$output .= '<input name="mbt_star_rating" value="5" type="radio" class="mbt-star" '.checked($star_rating, 5, false).'/>';
+	$output .= '</div>';
+	return $output;
+}
+
+function mbt_get_metadata_fields() {
+	return array(
+		'Book Samples' => array(
+			'mbt_sample_url' => array(
+				'type' => 'mbt_metadata_upload',
+				'name' => __('Sample Chapter', 'mybooktable'),
+				'desc' => __('Upload a sample chapter from your book to give viewers a preview. We recommend using a .pdf format for the sample chapter.', 'mybooktable'),
+			),
+			'mbt_sample_audio' => array(
+				'type' => 'mbt_metadata_upload',
+				'name' => __('Audio Sample', 'mybooktable'),
+				'desc' => __('Upload a sample from your audiobook to give viewers a preview. We recommend using a .mp3 format for the sample.', 'mybooktable'),
+			),
+			'mbt_show_instant_preview' => array(
+				'type' => 'mbt_metadata_checkbox',
+				'name' => __('Kindle Instant Preview', 'mybooktable'),
+				'desc' => __('Displays a free instant preview of your book from Amazon.', 'mybooktable'),
+				'default' => 'yes',
+			),
+		),
+		'Price' => array(
+			'mbt_price' => array(
+				'type' => 'mbt_metadata_text',
+				'name' => __('List Price', 'mybooktable'),
+				'desc' => __('You can typically find the list price just above the ISBN barcode on the back cover of the book.', 'mybooktable'),
+			),
+			'mbt_sale_price' => array(
+				'type' => 'mbt_metadata_text',
+				'name' => __('Sale Price', 'mybooktable'),
+				'desc' => __('Setting a sale price will cross out the normal price and show the sale price prominently.', 'mybooktable'),
+			),
+			'mbt_ebook_price' => array(
+				'type' => 'mbt_metadata_text',
+				'name' => __('E-book Price', 'mybooktable'),
+				'desc' => __('If your book is available in multiple formats, you can use this to display the e-book price.', 'mybooktable'),
+			),
+			'mbt_audiobook_price' => array(
+				'type' => 'mbt_metadata_text',
+				'name' => __('Audiobook Price', 'mybooktable'),
+				'desc' => __('If your book is available in multiple formats, you can use this to display the audiobook price.', 'mybooktable'),
+			),
+		),
+		'Publisher' => array(
+			'mbt_publisher_name' => array(
+				'type' => 'mbt_metadata_text',
+				'name' => __('Publisher Name', 'mybooktable'),
+			),
+			'mbt_publisher_url' => array(
+				'type' => 'mbt_metadata_text',
+				'name' => __('Publisher URL', 'mybooktable'),
+				'desc' => __('Setting a publisher URL will turn the "Publisher Name" into a link to this address.', 'mybooktable'),
+			),
+			'mbt_publication_year' => array(
+				'type' => 'mbt_metadata_text',
+				'name' => __('Publication Year', 'mybooktable'),
+			),
+		),
+		'Other' => array(
+			'mbt_star_rating' => array(
+				'type' => 'mbt_metadata_star_rating',
+				'name' => __('Star Rating', 'mybooktable'),
+			),
+			'mbt_book_format' => array(
+				'type' => 'mbt_metadata_text',
+				'name' => __('Book Format', 'mybooktable'),
+				'desc' => __('What format is the book presented in?', 'mybooktable'),
+			),
+			'mbt_book_length' => array(
+				'type' => 'mbt_metadata_text',
+				'name' => __('Book Length', 'mybooktable'),
+				'desc' => __('Is this book a short story, a complete novel, or an epic drama?', 'mybooktable'),
+			),
+			'mbt_narrator' => array(
+				'type' => 'mbt_metadata_text',
+				'name' => __('Narrator', 'mybooktable'),
+				'desc' => __('If applicable, who is the book narrated by?', 'mybooktable'),
+			),
+			'mbt_illustrator' => array(
+				'type' => 'mbt_metadata_text',
+				'name' => __('Illustrator', 'mybooktable'),
+				'desc' => __('If applicable, who is the book illustrated by?', 'mybooktable'),
+			),
+		),
+	);
+}
+
 function mbt_metadata_metabox($post) {
+	$metadata = mbt_get_metadata_fields();
 ?>
 	<input type="hidden" id="mbt_post_id" value="<?php echo($post->ID); ?>" />
-	<table class="form-table mbt_metadata_metabox">
+	<table>
 		<tr>
-			<td rowspan="11">
+			<td rowspan="3" class="mbt_cover_image_container">
 				<h4 class="mbt-cover-image-title"><?php _e('Book Cover Image', 'mybooktable'); ?></h4>
 				<?php mbt_the_book_image(); ?><br>
 				<input type="hidden" id="mbt_book_image_id" name="mbt_book_image_id" value="<?php echo(get_post_meta($post->ID, "mbt_book_image_id", true)); ?>" />
-				<input id="mbt_set_book_image_button" type="button" class="button" value="<?php _e('Set cover image', 'mybooktable'); ?>" />
+				<input id="mbt_set_book_image_button" class="button mbt_upload_button" data-upload-target="mbt_book_image_id" data-upload-property="id" data-upload-title="<?php _e('Book Cover Image', 'mybooktable'); ?>" type="button" value="<?php _e('Set cover image', 'mybooktable'); ?>" />
 			</td>
-			<th><label><?php _e('ISBN', 'mybooktable'); ?></label></th>
-			<td>
+			<td class="mbt_unique_identifier_container">
+				<label><?php _e('ISBN', 'mybooktable'); ?>:</label>
 				<?php $isbn = get_post_meta($post->ID, 'mbt_unique_id_isbn', true); ?>
-				<input type="text" name="mbt_unique_id_isbn" id="mbt_unique_id_isbn" value="<?php echo($isbn); ?>" class="mbt_feedback_refresh" data-refresh-action="mbt_isbn_preview" data-element="mbt_unique_id_isbn,mbt_post_id"/>
-				<div class="mbt_feedback mbt_feedback_beside"><?php echo(mbt_isbn_preview_feedback(array('mbt_unique_id_isbn' => $isbn, 'mbt_post_id' => $post->ID))); ?></div>
-				<p class="description"><?php _e('This is the International Standard Book Number, used to populate GoodReads and Amazon reviews. (optional)', 'mybooktable'); ?></p>
+				<div class="mbt_unique_identifier_input">
+					<input type="text" name="mbt_unique_id_isbn" id="mbt_unique_id_isbn" value="<?php echo($isbn); ?>" class="mbt_feedback_refresh mbt_feedback_colorize" data-refresh-action="mbt_isbn_preview" data-element="mbt_unique_id_isbn,mbt_post_id"/>
+					<div class="mbt_feedback"><?php echo(mbt_isbn_preview_feedback(array('mbt_unique_id_isbn' => $isbn, 'mbt_post_id' => $post->ID))); ?></div>
+				</div>
+				<p class="description"><?php _e('This is the International Standard Book Number, used to populate GoodReads and Amazon reviews.', 'mybooktable'); ?></p>
 			</td>
 		</tr>
 		<tr>
-			<th><label><?php _e('ASIN', 'mybooktable'); ?></label></th>
-			<td>
+			<td class="mbt_unique_identifier_container">
+				<label><?php _e('ASIN', 'mybooktable'); ?>:</label>
 				<?php $asin = get_post_meta($post->ID, 'mbt_unique_id_asin', true); ?>
-				<input type="text" name="mbt_unique_id_asin" id="mbt_unique_id_asin" value="<?php echo($asin); ?>" class="mbt_feedback_refresh" data-refresh-action="mbt_asin_preview" data-element="mbt_unique_id_asin,mbt_post_id"/>
-				<div class="mbt_feedback mbt_feedback_beside"><?php echo(mbt_asin_preview_feedback(array('mbt_unique_id_asin' => $asin, 'mbt_post_id' => $post->ID))); ?></div>
-				<p class="description"><?php _e('This is the Amazon Standard Identification Number, used to populate Amazon reviews and Kindle Instant Preview. (optional)', 'mybooktable'); ?></p>
+				<div class="mbt_unique_identifier_input">
+					<input type="text" name="mbt_unique_id_asin" id="mbt_unique_id_asin" value="<?php echo($asin); ?>" class="mbt_feedback_refresh mbt_feedback_colorize" data-refresh-action="mbt_asin_preview" data-element="mbt_unique_id_asin,mbt_post_id"/>
+					<div class="mbt_feedback"><?php echo(mbt_asin_preview_feedback(array('mbt_unique_id_asin' => $asin, 'mbt_post_id' => $post->ID))); ?></div>
+				</div>
+				<p class="description"><?php _e('This is the Amazon Standard Identification Number, used to populate Amazon reviews and Kindle Instant Preview.', 'mybooktable'); ?></p>
 			</td>
 		</tr>
 		<tr>
-			<th><label for="mbt_sample"><?php _e('Sample Chapter', 'mybooktable'); ?></label></th>
-			<td>
-				<input type="text" id="mbt_sample_url" name="mbt_sample_url" value="<?php echo(get_post_meta($post->ID, "mbt_sample_url", true)); ?>" />
-				<input id="mbt_upload_sample_button" type="button" class="button" value="<?php _e('Upload', 'mybooktable'); ?>" />
-				<p class="description"><?php _e('Upload a sample chapter from your book to give viewers a preview. We recommend using a .pdf format for the sample chapter. (optional)', 'mybooktable'); ?></p>
-			</td>
-		</tr>
-		<tr>
-			<th><label for="mbt_book_length"><?php _e('Book Length', 'mybooktable'); ?></label></th>
-			<td>
-				<input type="text" name="mbt_book_length" id="mbt_book_length" value="<?php echo(get_post_meta($post->ID, "mbt_book_length", true)); ?>" />
-				<p class="description"><?php _e('Is this book a short story, a complete novel, or an epic drama? (optional)', 'mybooktable'); ?></p>
-			</td>
-		</tr>
-		<tr>
-			<th><label for="mbt_price"><?php _e('List Price', 'mybooktable'); ?></label></th>
-			<td>
-				<input type="text" name="mbt_price" id="mbt_price" value="<?php echo(get_post_meta($post->ID, "mbt_price", true)); ?>" />
-				<p class="description"><?php _e('You can typically find the list price just above the ISBN barcode on the back cover of the book. (optional)', 'mybooktable'); ?></p>
-			</td>
-		</tr>
-		<tr>
-			<th><label for="mbt_sale_price"><?php _e('Sale Price', 'mybooktable'); ?></label></th>
-			<td>
-				<input type="text" name="mbt_sale_price" id="mbt_sale_price" value="<?php echo(get_post_meta($post->ID, "mbt_sale_price", true)); ?>" />
-				<p class="description"><?php _e('Setting a sale price will cross through the price field and show this price as well. (optional)', 'mybooktable'); ?></p>
-			</td>
-		</tr>
-		<tr>
-			<th><label for="mbt_publisher_name"><?php _e('Publisher Name', 'mybooktable'); ?></label></th>
-			<td>
-				<input type="text" name="mbt_publisher_name" id="mbt_publisher_name" value="<?php echo(get_post_meta($post->ID, "mbt_publisher_name", true)); ?>" />
-				<p class="description"><?php _e('(optional)', 'mybooktable'); ?></p>
-			</td>
-		</tr>
-		<tr>
-			<th><label for="mbt_publisher_url"><?php _e('Publisher URL', 'mybooktable'); ?></label></th>
-			<td>
-				<input type="text" name="mbt_publisher_url" id="mbt_publisher_url" value="<?php echo(get_post_meta($post->ID, "mbt_publisher_url", true)); ?>" />
-				<p class="description"><?php _e('Setting a publisher URL will turn the "Publisher Name" into a link to this address. (optional)', 'mybooktable'); ?></p>
-			</td>
-		</tr>
-		<tr>
-			<th><label for="mbt_publication_year"><?php _e('Publication Year', 'mybooktable'); ?></label></th>
-			<td>
-				<input type="text" name="mbt_publication_year" id="mbt_publication_year" value="<?php echo(get_post_meta($post->ID, "mbt_publication_year", true)); ?>" />
-				<p class="description"><?php _e('(optional)', 'mybooktable'); ?></p>
-			</td>
-		</tr>
-		<tr>
-			<th><label for="mbt_publication_year"><?php _e('Kindle Instant Preview', 'mybooktable'); ?></label></th>
-			<td>
-				<input type="checkbox" name="mbt_show_instant_preview" id="mbt_show_instant_preview" <?php echo(get_post_meta($post->ID, "mbt_show_instant_preview", true) !== "no" ? 'checked="checked"' : ''); ?> >
-				<p class="description"><?php _e('Displays a free instant preview of your book from Amazon (optional)', 'mybooktable'); ?></p>
+			<td class="mbt_show_unique_identifier_container">
+				<?php $show_unique_id = get_post_meta($post->ID, 'mbt_show_unique_id', true) !== 'no' ? 'yes' : 'no'; ?>
+				<input type="checkbox" name="mbt_show_unique_id" id="mbt_show_unique_id" <?php checked($show_unique_id, 'yes'); ?> >
+				<label for="mbt_show_unique_id"><?php _e('Show ISBN/ASIN on book page?', 'mybooktable'); ?></label>
 			</td>
 		</tr>
 	</table>
+	<div class="mbt_metadata_fields">
+		<?php foreach($metadata as $section_name => $section) {
+			echo('<div class="mbt-accordion"><h4>'.$section_name.'</h4><div>');
+			foreach($section as $field_id => $field_data) {
+				echo('<div class="mbt_metadata_field">');
+				echo('<label for="'.$field_id.'">'.$field_data['name'].':</label>');
+				echo(call_user_func_array($field_data['type'], array($post->ID, $field_id, $field_data)));
+				if(!empty($field_data['desc'])) { echo('<p class="description">'.$field_data['desc'].'</p>'); }
+				echo('</div>');
+			}
+			echo('</div></div>');
+		} ?>
+	</div>
 <?php
 }
 
@@ -225,15 +311,16 @@ function mbt_save_metadata_metabox($post_id) {
 	if(get_post_type($post_id) == 'mbt_book') {
 		if(isset($_REQUEST['mbt_unique_id_asin'])) { update_post_meta($post_id, 'mbt_unique_id_asin', preg_replace('/[^A-Za-z0-9]/', '', $_REQUEST['mbt_unique_id_asin'])); }
 		if(isset($_REQUEST['mbt_unique_id_isbn'])) { update_post_meta($post_id, 'mbt_unique_id_isbn', preg_replace('/[^0-9Xx]/', '', $_REQUEST['mbt_unique_id_isbn'])); }
-		if(isset($_REQUEST['mbt_book_image_id'])) { update_post_meta($post_id, 'mbt_book_image_id', $_REQUEST['mbt_book_image_id']); }
-		if(isset($_REQUEST['mbt_sample_url'])) { update_post_meta($post_id, 'mbt_sample_url', $_REQUEST['mbt_sample_url']); }
-		if(isset($_REQUEST['mbt_book_length'])) { update_post_meta($post_id, 'mbt_book_length', $_REQUEST['mbt_book_length']); }
-		if(isset($_REQUEST['mbt_price'])) { update_post_meta($post_id, 'mbt_price', $_REQUEST['mbt_price']); }
-		if(isset($_REQUEST['mbt_sale_price'])) { update_post_meta($post_id, 'mbt_sale_price', $_REQUEST['mbt_sale_price']); }
-		if(isset($_REQUEST['mbt_publisher_name'])) { update_post_meta($post_id, 'mbt_publisher_name', $_REQUEST['mbt_publisher_name']); }
-		if(isset($_REQUEST['mbt_publisher_url'])) { update_post_meta($post_id, 'mbt_publisher_url', $_REQUEST['mbt_publisher_url']); }
-		if(isset($_REQUEST['mbt_publication_year'])) { update_post_meta($post_id, 'mbt_publication_year', $_REQUEST['mbt_publication_year']); }
-		update_post_meta($post_id, 'mbt_show_instant_preview', isset($_REQUEST['mbt_show_instant_preview']) ? 'yes' : 'no');
+		update_post_meta($post_id, 'mbt_show_unique_id', isset($_REQUEST['mbt_show_unique_id']) ? 'yes' : 'no');
+
+		$metadata = mbt_get_metadata_fields();
+		foreach($metadata as $section_name => $section) {
+			foreach($section as $field_id => $field_data) {
+				$value = isset($_REQUEST[$field_id]) ? $_REQUEST[$field_id] : null;
+				if($field_data['type'] == 'mbt_metadata_checkbox') { $value = $value === null ? 'no' : 'yes'; }
+				update_post_meta($post_id, $field_id, $value);
+			}
+		}
 	}
 }
 
@@ -276,17 +363,17 @@ function mbt_buybuttons_metabox($post) {
 		echo('<a href="admin.php?page=mbt_settings&mbt_setup_default_affiliates=1">'.__('Activate Amazon and Barnes &amp; Noble Buttons').'</a>');
 	}
 
-	echo('<div class="mbt-buybuttons-note">'.mbt_get_upgrade_message(false, __('Want more options? Upgrade your MyBookTable and get the Universal Buy Button.', 'mybooktable')).'</div>');
+	echo('<div class="mbt-buybuttons-note">'.mbt_get_upgrade_message(false, __('Want more options? Upgrade your MyBookTable and get the Universal Buy Button.', 'mybooktable'), '').'</div>');
 
 	$stores = mbt_get_stores();
 	uasort($stores, create_function('$a,$b', 'return strcasecmp($a["name"],$b["name"]);'));
-	echo('Choose One:');
+	echo('<label for="mbt_store_selector">Choose One:</label> ');
 	echo('<select id="mbt_store_selector">');
 	echo('<option value="">'.__('-- Choose One --').'</option>');
 	foreach($stores as $slug => $store) {
 		echo('<option value="'.$slug.'">'.$store['name'].'</option>');
 	}
-	echo('</select>');
+	echo('</select> ');
 	echo('<button id="mbt_buybutton_adder" class="button">'.__('Add').'</button>');
 
 	echo('<div id="mbt_buybutton_editors">');
@@ -320,7 +407,7 @@ function mbt_save_buybuttons_metabox($post_id) {
 			foreach($buybuttons as $buybutton) {
 				if($buybutton['store'] == 'amazon') {
 					$asin = mbt_get_amazon_AISN($buybutton['url']);
-					update_post_meta($post_id, 'mbt_unique_id_asin', empty($asin) ? '' : $asin);
+					if(!empty($asin)) { update_post_meta($post_id, 'mbt_unique_id_asin', $asin); }
 					break;
 				}
 			}

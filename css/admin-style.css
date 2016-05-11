@@ -3,9 +3,112 @@
 /* Metaboxes                                               */
 /*---------------------------------------------------------*/
 
-.mbt_metadata_metabox th {
+#mbt_metadata .inside {
+	padding: 0;
+	margin: 0;
+	border: 1px solid #ddd;
+	border-top: none;
+	border-bottom: 1px solid #eee;
+
+	font-size: 14px;
+	line-height: 1.3;
+}
+
+#mbt_metadata table {
+    border-spacing: 0;
+    width: 100%;
+}
+
+#mbt_metadata .hndle {
+    border-bottom: 1px solid #ddd;
+}
+
+#mbt_metadata .mbt_cover_image_container {
+	text-align: center;
+	padding: 15px;
+	background: #fff;
+	border-right: 1px solid #ccc;
+	border-bottom: 1px solid #ccc;
+}
+
+#mbt_metadata .mbt_unique_identifier_container {
+	padding: 15px 25px;
+	background: #f5f5f5;
+	border-bottom: 1px solid #ccc;
+}
+
+#mbt_metadata .mbt_show_unique_identifier_container {
+	padding: 10px 17px;
+	background: #f5f5f5;
+	border-bottom: 1px solid #ccc;
+}
+
+#mbt_metadata .mbt_unique_identifier_container .description {
+	padding-top: 10px;
+}
+
+#mbt_metadata .mbt_unique_identifier_container .mbt_unique_identifier_input {
+	display: block;
+	margin-left: 70px;
+	text-align: center;
+}
+
+#mbt_metadata .mbt_unique_identifier_container .mbt_unique_identifier_input .mbt_feedback {
+	font-size: 18px;
+	margin-top: 5px;
+}
+
+#mbt_metadata .mbt_unique_identifier_container .mbt_unique_identifier_input input {
+	width: 100%;
+	font-size: 20px;
+}
+
+#mbt_metadata .mbt_unique_identifier_container label {
+	display: block;
+	float: left;
+	font-size: 20px;
+	font-weight: bold;
+	width: 70px;
+	padding-top: 5px;
+}
+
+#mbt_metadata .mbt-cover-image-title {
+	margin: .5em 0;
+}
+
+#mbt_metadata .mbt-book-image {
+	height: 200px;
+}
+
+.mbt_metadata_fields {
+	padding: 15px;
+}
+
+.mbt_metadata_fields .mbt_metadata_field {
+	padding-bottom: 10px;
+}
+.mbt_metadata_fields .mbt_metadata_field:last-child {
+	padding-bottom: 0px;
+}
+
+.mbt_metadata_fields .mbt_metadata_field label {
+	padding-right: 10px;
 	font-weight: bold;
 }
+
+/* Star rating CSS */
+
+div.mbt_star_rating_container { display: inline-block; vertical-align: middle; }
+div.rating-cancel,div.star-rating{float:left;width:17px;height:15px;text-indent:-999em;cursor:pointer;display:block;background:transparent;overflow:hidden}
+div.rating-cancel,div.rating-cancel a{transition:none;background:url('../images/delete.gif') no-repeat 0 -16px}
+div.star-rating,div.star-rating a{transition:none;background:url('../images/star.gif') no-repeat 0 0px}
+div.rating-cancel a,div.star-rating a{transition:none;display:block;width:16px;height:100%;background-position:0 0px;border:0}
+div.star-rating-on a{background-position:0 -32px!important}
+div.star-rating-hover a{background-position:0 -16px}
+div.star-rating-readonly a{cursor:default !important}
+div.star-rating{background:transparent!important;overflow:hidden!important}
+
+/* seo metabox */
 
 .mbt_seo_metabox th {
 	width:18%;
@@ -23,22 +126,7 @@
 	color: red;
 }
 
-#mbt_metadata .mbt-cover-image-title {
-	margin: .5em 0;
-}
-
-#mbt_metadata .mbt-book-image {
-	height: 200px;
-}
-
-#mbt_metadata .form-table td {
-	vertical-align: top;
-}
-
-#mbt_metadata .mbt-unique-id-type {
-	margin: 0 10px 5px 0;
-	display: inline-block;
-}
+/* buybuttons metabox */
 
 #mbt_buybuttons .mbt-buybuttons-note {
 	color: gray;
@@ -415,6 +503,11 @@
 	color: #46773F;
 }
 
+input[type=text].mbt_admin_input_success {
+	background: #DCE5B5;
+	border: 1px solid #BEC4A6;
+}
+
 /* failure */
 
 .mbt_admin_message_failure {
@@ -433,6 +526,11 @@
 	color: #AD4B40;
 }
 
+input[type=text].mbt_admin_input_failure {
+	background: #FFC1D0;
+	border: 1px solid #D3AEB7;
+}
+
 /* warning */
 
 .mbt_admin_message_warning {
@@ -449,6 +547,11 @@
 }
 .mbt_admin_message_warning a:hover {
 	color: #B78622;
+}
+
+input[type=text].mbt_admin_input_warning {
+	background: #F8ECD8;
+	border: 1px solid #E9C277;
 }
 
 /* affiliate settings */
