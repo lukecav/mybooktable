@@ -144,18 +144,21 @@ function mbt_do_feedback_colorize(element) {
 	}
 }
 
+function mbt_make_feedback_spinner(element) {
+	var loading_size = {'width': 18, 'height': 18};
+	if(element.children().length > 0) {
+		child = jQuery(element.children()[0]);
+		loading_size = {'width': Math.max(child.width(), loading_size['width']), 'height': Math.max(child.height(), loading_size['height'])};
+	}
+	element.empty().append(jQuery('<div class="mbt_feedback_loading"><div class="mbt_feedback_spinner"></div></div>').css(loading_size));
+}
+
 function mbt_do_feedback_refresh(element) {
 	if(!element.attr('disabled')) {
 		element.attr('disabled', 'disabled');
 		if(element.attr('type') == 'radio') { jQuery('input[name='+element.attr('name')+']').attr('disabled', 'disabled'); }
 		var feedback = element.parent().find('.mbt_feedback');
-
-		var loading_size = {'width': 18, 'height': 18};
-		if(feedback.children().length > 0) {
-			child = jQuery(feedback.children()[0]);
-			loading_size = {'width': Math.max(child.width(), loading_size['width']), 'height': Math.max(child.height(), loading_size['height'])};
-		}
-		feedback.empty().append(jQuery('<div class="mbt_feedback_loading"><div class="mbt_feedback_spinner"></div></div>').css(loading_size));
+		mbt_make_feedback_spinner(feedback);
 
 		var data = null;
 		if(element.attr('data-element') === 'self') {

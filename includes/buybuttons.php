@@ -276,6 +276,19 @@ function mbt_get_cj_affiliate_link($url, $website_id) {
 
 
 /*---------------------------------------------------------*/
+/* Genius Link Validation                                  */
+/*---------------------------------------------------------*/
+
+function mbt_is_genius_link($url) {
+	if(empty($url)) { return false; }
+	$parsed = parse_url($url);
+	if(empty($parsed['host']) or empty($parsed['path'])) { return false; }
+	return (strcasecmp($parsed['host'], 'geni.us') == 0 or strcasecmp($parsed['host'], 'target.georiot.com') == 0);
+}
+
+
+
+/*---------------------------------------------------------*/
 /* Amazon Buy Buttons                                      */
 /*---------------------------------------------------------*/
 
@@ -289,7 +302,7 @@ add_action('mbt_init', 'mbt_amazon_buybuttons_init');
 function mbt_get_amazon_AISN($url) {
 	$matches = array();
 	preg_match("/((dp%2F)|(dp\/)|(dp\/product\/)|(\/ASIN\/)|(gp\/product\/)|(exec\/obidos\/tg\/detail\/\-\/)|(asins=))([A-Z0-9]{10})/", $url, $matches);
-	return empty($matches) ? '' : $matches[9];
+	return empty($matches[9]) ? '' : $matches[9];
 }
 
 function mbt_get_amazon_tld($url) {
@@ -299,7 +312,7 @@ function mbt_get_amazon_tld($url) {
 }
 
 function mbt_filter_amazon_buybutton_data($data, $store) {
-	if(($data['store'] == 'amazon' or $data['store'] == 'kindle') and !empty($data['url'])) {
+	if(($data['store'] == 'amazon' or $data['store'] == 'kindle') and !empty($data['url']) and !mbt_is_genius_link($data['url'])) {
 		$tld = mbt_get_amazon_tld($data['url']);
 		$aisn = mbt_get_amazon_AISN($data['url']);
 		$data['url'] = empty($aisn) ? '' : 'http://www.amazon.'.$tld.'/dp/'.$aisn.'?tag=ammbt-20';
@@ -310,7 +323,9 @@ function mbt_filter_amazon_buybutton_data($data, $store) {
 function mbt_amazon_buybutton_preview() {
 	if(empty($_REQUEST['data'])) { die(); }
 	$id = mbt_get_amazon_AISN($_REQUEST['data']);
-	if(empty($id)) {
+	if(mbt_is_genius_link($_REQUEST['data'])) {
+		echo('<span class="mbt_admin_message_success">'.__('Valid Genius Link', 'mybooktable').'</span>');
+	} else if(empty($id)) {
 		echo('<span class="mbt_admin_message_failure">'.__('Invalid Amazon product link', 'mybooktable').'</span>');
 	} else {
 		echo('<span class="mbt_admin_message_success">'.__('Valid Amazon product link', 'mybooktable').'</span>');
@@ -345,7 +360,7 @@ function mbt_audible_buybuttons_init() {
 add_action('mbt_init', 'mbt_audible_buybuttons_init');
 
 function mbt_filter_audible_buybutton_data($data, $store) {
-	if($data['store'] == 'audible' and !empty($data['url'])) {
+	if($data['store'] == 'audible' and !empty($data['url']) and !mbt_is_genius_link($data['url'])) {
 		$data['url'] = mbt_get_cj_affiliate_link($data['url'], 7737731);
 	}
 	return $data;
@@ -371,7 +386,7 @@ function mbt_is_bbn_url_valid($url) {
 function mbt_get_bnn_identifier($url) { return ' '; }
 
 function mbt_filter_bnn_buybutton_data($data, $store) {
-	if(($data['store'] == 'bnn' or $data['store'] == 'nook') and !empty($data['url'])) {
+	if(($data['store'] == 'bnn' or $data['store'] == 'nook') and !empty($data['url']) and !mbt_is_genius_link($data['url'])) {
 		$data['url'] = mbt_get_cj_affiliate_link($data['url'], 7737731);
 	}
 	return $data;
@@ -379,7 +394,9 @@ function mbt_filter_bnn_buybutton_data($data, $store) {
 
 function mbt_bnn_buybutton_preview() {
 	if(empty($_REQUEST['data'])) { die(); }
-	if(!mbt_is_bbn_url_valid($_REQUEST['data'])) {
+	if(mbt_is_genius_link($_REQUEST['data'])) {
+		echo('<span class="mbt_admin_message_success">'.__('Valid Genius Link', 'mybooktable').'</span>');
+	} else if(!mbt_is_bbn_url_valid($_REQUEST['data'])) {
 		echo('<span class="mbt_admin_message_failure">'.__('Invalid Barnes &amp; Noble product link', 'mybooktable').'</span>');
 	} else {
 		echo('<span class="mbt_admin_message_success">'.__('Valid Barnes &amp; Noble product link', 'mybooktable').'</span>');
@@ -414,7 +431,7 @@ function mbt_kobo_buybuttons_init() {
 add_action('mbt_init', 'mbt_kobo_buybuttons_init');
 
 function mbt_filter_kobo_buybutton_data($data, $store) {
-	if($data['store'] == 'kobo' and !empty($data['url'])) {
+	if($data['store'] == 'kobo' and !empty($data['url']) and !mbt_is_genius_link($data['url'])) {
 		$data['url'] = 'http://click.linksynergy.com/deeplink?id=W1PQs9y/1/c&mid=37217&murl='.urlencode($data['url']);
 	}
 	return $data;
@@ -482,14 +499,16 @@ function mbt_apple_buybuttons_init() {
 add_action('mbt_init', 'mbt_apple_buybuttons_init');
 
 function mbt_filter_apple_buybuttons_data($data, $store) {
-	if(($data['store'] == 'ibooks' or $data['store'] == 'itunes') and !empty($data['url']) and !mbt_get_setting('disable_itunes_affiliates')) {
+	if(($data['store'] == 'ibooks' or $data['store'] == 'itunes') and !empty($data['url']) and !mbt_is_genius_link($data['url']) and !mbt_get_setting('disable_itunes_affiliates')) {
 		$token = mbt_get_setting('itunes_affiliate_token');
 		if(empty($token)) { $token = '1l3vwPw'; }
 		$host = parse_url($data['url'], PHP_URL_HOST);
-		if(stripos($host, 'itunes.apple.com') !== false and stripos($host, 'geo') === false) {
-			$data['url'] = str_replace($host, 'geo.'.$host, $data['url']);
+		if(stripos($host, 'itunes.apple.com') !== false) {
+			if(stripos($host, 'geo') === false) { $data['url'] = str_replace($host, 'geo.'.$host, $data['url']); }
+			$data['url'] .= (parse_url($data['url'], PHP_URL_QUERY) ? '&' : '?') . 'uo=8&at='.$token;
+		} else {
+			$data['url'] = '';
 		}
-		$data['url'] .= (parse_url($data['url'], PHP_URL_QUERY) ? '&' : '?') . 'uo=8&at='.$token;
 	}
 	return $data;
 }

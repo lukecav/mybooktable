@@ -923,7 +923,7 @@ function mbt_get_reviews_box($post_id) {
 	$output = '';
 	$reviews_boxes = mbt_get_reviews_boxes();
 	$current_reviews = mbt_get_setting('reviews_box');
-	if(!empty($reviews_boxes[$current_reviews])) {
+	if(!empty($reviews_boxes[$current_reviews]['callback'])) {
 		$unique_id = get_post_meta($post_id, 'mbt_unique_id_asin', true).get_post_meta($post_id, 'mbt_unique_id_isbn', true);
 		$cache_id = 'mbt_'.$current_reviews.'_reviews_'.$post_id.'_'.$unique_id;
 		if(false === ($output = get_transient($cache_id))) {

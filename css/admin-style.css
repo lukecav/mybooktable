@@ -441,13 +441,13 @@ div.star-rating{background:transparent!important;overflow:hidden!important}
 	display: inline-block;
 }
 
-.mbt_feedback .mbt_feedback_loading {
+.mbt_feedback_loading {
 	position: relative;
 	vertical-align: top;
 	display: inline-block;
 }
 
-.mbt_feedback .mbt_feedback_spinner {
+.mbt_feedback_loading .mbt_feedback_spinner {
 	vertical-align: top;
 	position: absolute;
 	top: 50%;
