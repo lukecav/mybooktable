@@ -3,6 +3,26 @@
 /* Metaboxes                                               */
 /*---------------------------------------------------------*/
 
+.post-php.post-type-mbt_book .description {
+    margin: 7px 0 0 0;
+}
+
+#mbt_displaymode_field:before {
+	content: "\f177";
+	font: 400 20px/1 dashicons;
+	speak: none;
+	display: inline-block;
+	padding: 0 2px 0 0;
+	top: 4px;
+	left: -1px;
+	position: relative;
+	vertical-align: top;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+	text-decoration: none!important;
+	color: #82878c;
+}
+
 #mbt_metadata .inside {
 	padding: 0;
 	margin: 0;
@@ -184,10 +204,75 @@ div.star-rating{background:transparent!important;overflow:hidden!important}
 	margin-right: 15px;
 }
 
+#mbt_buybuttons .mbt_buybutton_editor textarea {
+	width: 100%;
+}
+
 #mbt_series_order .mbt-helper-description, #mbt_book_order .mbt-helper-description {
 	color: #666;
 	font-style: italic;
 }
+
+/* Endorsements Metabox */
+
+.mbt_endorsement_editor label {
+	font-weight: bold;
+}
+
+.mbt_endorsement_image_title {
+    margin: 0 0 5px 0;
+    display: block;
+}
+
+.mbt_endorsement_image_field {
+    min-height: 80px;
+    width: 100px;
+    margin-right: 10px;
+    float: left;
+    text-align: center;
+    padding: 5px;
+}
+
+.mbt_endorsement_name_field {
+	margin-right: 10px;
+	display: inline-block;
+}
+
+.mbt_endorsement_name_url_field {
+	display: inline-block;
+}
+
+.mbt_endorsement_image_field img {
+	width: 100%;
+}
+
+.mbt_endorsements_metabox .mbt_endorsements_editors .mbt_endorsement_editor {
+	border: 1px solid #DFDFDF;
+	border-radius: 5px;
+	margin: 5px;
+	background: #F5F5F5;
+}
+
+.mbt_endorsements_metabox .mbt_endorsements_editors .mbt_endorsement_editor .mbt_endorsement_header {
+	background: #ececec;
+	border-radius: 5px 5px 0px 0px;
+	padding: 5px;
+	cursor: move;
+}
+
+.mbt_endorsements_metabox .mbt_endorsements_editors .mbt_endorsement_editor textarea {
+	width: 60%;
+}
+
+.mbt_endorsements_metabox .mbt_endorsements_editors .mbt_endorsement_editor .mbt_endorsement_remover {
+	float: right;
+}
+
+.mbt_endorsements_metabox .mbt_endorsements_editors .mbt_endorsement_editor .mbt_endorsement_content {
+	padding: 5px;
+}
+
+
 
 /*---------------------------------------------------------*/
 /* Dashboard Page                                          */

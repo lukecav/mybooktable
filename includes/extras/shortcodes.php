@@ -110,7 +110,7 @@ function mbt_mybooktable_shortcode($attrs) {
 			} else if(!empty($attrs['display']) and $attrs['display'] === 'buybuttons') {
 				?>
 				<div id="mbt-container">
-					<div class="mbt-book">
+					<div class="<?php mbt_the_book_class('shortcode-summary'); ?>">
 						<div class="mbt-book-buybuttons">
 							<?php mbt_the_buybuttons(false, (!empty($attrs['buybutton_shadowbox']) and $attrs['buybutton_shadowbox'] === 'true') ? true : null); ?>
 							<div style="clear:both;"></div>
@@ -121,7 +121,7 @@ function mbt_mybooktable_shortcode($attrs) {
 			} else if(!empty($attrs['display']) and $attrs['display'] === 'cover+buybuttons') {
 				?>
 				<div id="mbt-container">
-					<div class="mbt-book">
+					<div class="<?php mbt_the_book_class('shortcode-cover+buybuttons'); ?>">
 						<div class="mbt-book-images">
 							<?php mbt_the_book_image(); ?>
 						</div>

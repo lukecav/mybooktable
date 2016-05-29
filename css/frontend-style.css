@@ -306,6 +306,22 @@
 
 
 /*---------------------------------------------------------*/
+/* Book Video Sample                                       */
+/*---------------------------------------------------------*/
+
+.mbt-book .mbt-book-video-sample {
+    margin-top: 30px;
+    clear: both;
+    float: left;
+}
+
+.mbt-book .mbt-book-video-sample .jetpack-video-wrapper {
+	margin: 0;
+}
+
+
+
+/*---------------------------------------------------------*/
 /* Book Overview                                           */
 /*---------------------------------------------------------*/
 
@@ -333,6 +349,29 @@
 	letter-spacing: 0;
 	text-transform: none;
 }
+
+
+
+/*---------------------------------------------------------*/
+/* Endorsements                                            */
+/*---------------------------------------------------------*/
+
+.mbt-endorsement {
+	padding: 5px 10px;
+	margin-bottom: 10px;
+}
+
+.mbt-endorsement img {
+	width: 100px;
+	margin-right: 20px;
+	float: left;
+}
+
+.mbt-endorsement .mbt-endorsement-name {
+	margin-top: 15px;
+	opacity: 0.8;
+}
+
 
 
 

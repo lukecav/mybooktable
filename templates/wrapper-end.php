@@ -2,8 +2,16 @@
 
 $template = get_option('template');
 
-if($template == 'twentyfourteen') {
+if($template == 'twentythirteen') {
+	echo('</div></article></div></div>');
+	get_sidebar();
+	get_footer();
+} elseif($template == 'twentyfourteen') {
 	echo('</div></div></div>');
+	get_sidebar();
+	get_footer();
+} else if($template == 'twentyfifteen') {
+	echo('</div></article></main></div>');
 	get_sidebar();
 	get_footer();
 } else if(function_exists('woo_content_before')) {

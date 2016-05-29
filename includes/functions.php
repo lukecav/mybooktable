@@ -116,6 +116,10 @@ function mbt_is_mbt_admin_page() {
 		($pagenow == 'edit-tags.php' and $screen->taxonomy == 'mbt_genre') or
 		($pagenow == 'edit-tags.php' and $screen->taxonomy == 'mbt_series') or
 		($pagenow == 'edit-tags.php' and $screen->taxonomy == 'mbt_tag') or
+		($pagenow == 'term.php' and $screen->taxonomy == 'mbt_author') or
+		($pagenow == 'term.php' and $screen->taxonomy == 'mbt_genre') or
+		($pagenow == 'term.php' and $screen->taxonomy == 'mbt_series') or
+		($pagenow == 'term.php' and $screen->taxonomy == 'mbt_tag') or
 		($pagenow == 'admin.php' and $screen->id == 'mybooktable_page_mbt_import') or
 		($pagenow == 'admin.php' and $screen->id == 'mybooktable_page_mbt_sort_books') or
 		($pagenow == 'admin.php' and $screen->id == 'toplevel_page_mbt_dashboard') or
@@ -244,6 +248,10 @@ function mbt_copy_and_insert_attachment($path) {
 	wp_update_attachment_metadata($attach_id, $attach_data);
 
 	return $attach_id;
+}
+
+function mbt_get_book_display_modes() {
+	return apply_filters('mbt_display_modes', array());
 }
 
 

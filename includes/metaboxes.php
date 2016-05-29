@@ -2,7 +2,8 @@
 
 function mbt_metaboxes_init() {
 	add_action('wp_ajax_mbt_buybuttons_metabox', 'mbt_buybuttons_metabox_ajax');
-	add_action('wp_ajax_mbt_metadata_metabox', 'mbt_metadata_metabox_ajax');
+	add_action('wp_ajax_mbt_book_image_preview', 'mbt_book_image_preview_ajax');
+	add_action('wp_ajax_mbt_endorsement_image_preview', 'mbt_endorsement_image_preview_ajax');
 	add_action('wp_ajax_mbt_isbn_preview', 'mbt_isbn_preview_ajax');
 	add_action('wp_ajax_mbt_asin_preview', 'mbt_asin_preview_ajax');
 	add_action('admin_enqueue_scripts', 'mbt_enqueue_metabox_js');
@@ -10,8 +11,11 @@ function mbt_metaboxes_init() {
 	add_action('save_post', 'mbt_save_metadata_metabox');
 	add_action('save_post', 'mbt_save_buybuttons_metabox');
 	add_action('save_post', 'mbt_save_series_order_metabox');
+	add_action('save_post', 'mbt_save_display_mode_field');
+	add_action('save_post', 'mbt_save_endorsements_metabox');
 
 	add_action('add_meta_boxes', 'mbt_add_metaboxes', 9);
+	add_action('post_submitbox_misc_actions', 'mbt_add_display_mode_field');
 }
 add_action('mbt_init', 'mbt_metaboxes_init');
 
@@ -20,6 +24,7 @@ function mbt_add_metaboxes() {
 	add_meta_box('mbt_metadata', __('Book Details', 'mybooktable'), 'mbt_metadata_metabox', 'mbt_book', 'normal', 'high');
 	add_meta_box('mbt_buybuttons', __('Buy Buttons', 'mybooktable'), 'mbt_buybuttons_metabox', 'mbt_book', 'normal', 'high');
 	add_meta_box('mbt_overview', __('Book Overview', 'mybooktable'), 'mbt_overview_metabox', 'mbt_book', 'normal', 'high');
+	add_meta_box('mbt_endorsements', __('Endorsements', 'mybooktable'), 'mbt_endorsements_metabox', 'mbt_book', 'normal', 'high');
 	add_meta_box('mbt_series_order', __('Series Order', 'mybooktable'), 'mbt_series_order_metabox', 'mbt_book', 'side', 'default');
 }
 
@@ -28,9 +33,46 @@ function mbt_enqueue_metabox_js() {
 
 	wp_enqueue_script('mbt-metaboxes', plugins_url('js/metaboxes.js', dirname(__FILE__)), array('jquery'), MBT_VERSION);
 	wp_enqueue_script('mbt-star-ratings', plugins_url('js/lib/jquery.rating.js', dirname(__FILE__)), array('jquery'), MBT_VERSION);
-	wp_localize_script('mbt-metaboxes', 'mbt_metabox_i18n', array(
-		'author_helptext' => '<p class="description"><a href="'.admin_url('edit-tags.php?taxonomy=mbt_author&post_type=mbt_book').'" target="_blank">'.__('Set the priority (order) of the authors.', 'mybooktable').'</a></p>'
-	));
+	add_action('admin_head', 'mbt_override_authors_metabox');
+}
+
+function mbt_override_authors_metabox() {
+	?>
+		<script type="text/javascript">
+			jQuery(document).ready(function() {
+				jQuery('#mbt_authordiv .inside').append(jQuery('<p class="description"><a href="<?php echo(admin_url('edit-tags.php?taxonomy=mbt_author&post_type=mbt_book')); ?>" target="_blank"><?php _e('Set the priority (order) of the authors.', 'mybooktable'); ?></a></p>'));
+			});
+		</script>
+	<?php
+}
+
+
+
+
+/*---------------------------------------------------------*/
+/* Publish Metabox                                         */
+/*---------------------------------------------------------*/
+
+function mbt_add_display_mode_field($post) {
+	$display_modes = mbt_get_book_display_modes();
+	if(empty($display_modes)) { return; }
+	$current_mode = get_post_meta($post->ID, 'mbt_display_mode', true);
+	?>
+	<div class="misc-pub-section misc-pub-displaymode" id="mbt_displaymode_field">
+	<label for="mbt_display_mode">Display Mode:</span>
+	<select name="mbt_display_mode" id="mbt_display_mode">
+		<option value="" <?php selected($current_mode, ''); ?> ><?php _e('Default', 'mybooktable');?></option>
+		<?php foreach($display_modes as $display_mode_id => $display_mode) { ?>
+			<option value="<?php echo($display_mode_id); ?>" <?php selected($display_mode_id, $current_mode); ?> ><?php echo($display_mode['name']); ?></option>
+		<?php } ?>
+	</select>
+	</div>
+	<?php
+}
+
+function mbt_save_display_mode_field($post_id) {
+	if((defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) || get_post_status($post_id) == 'auto-draft' || get_post_type($post_id) !== 'mbt_book') { return; }
+	if(isset($_REQUEST['mbt_display_mode'])) { update_post_meta($post_id, 'mbt_display_mode', $_REQUEST['mbt_display_mode']); }
 }
 
 
@@ -40,9 +82,10 @@ function mbt_enqueue_metabox_js() {
 /*---------------------------------------------------------*/
 
 function mbt_book_blurb_metabox($post) {
+	do_action('mbt_before_book_blurb_metabox', $post);
 ?>
 	<label class="screen-reader-text" for="excerpt"><?php _e('Excerpt', 'mybooktable'); ?></label><textarea rows="1" cols="40" name="excerpt" id="excerpt"><?php echo($post->post_excerpt); ?></textarea>
-	<p>
+	<p class="description">
 	<?php printf(__('Book Blurbs are hand-crafted summaries of your book. The goal of a book blurb is to convince strangers that they need buy your book in 100 words or less. Answer the question "why would I want to read this book?" <a href="%s" target="_blank">Learn more about writing your book blurb.</a>', 'mybooktable'), admin_url('admin.php?page=mbt_help&mbt_video_tutorial=book_blurbs')); ?>
 	</p>
 <?php
@@ -56,7 +99,7 @@ function mbt_book_blurb_metabox($post) {
 
 function mbt_overview_metabox($post) {
 	wp_editor($post->post_content, 'content', array('dfw' => true, 'tabfocus_elements' => 'sample-permalink,post-preview', 'editor_height' => 360) );
-	echo('<p>');
+	echo('<p class="description">');
 	_e('Book Overview is a longer description of your book. This typically includes all the text from the back cover of the book plus, endorsements and any other promotional materials from interior flaps or initial pages. This is also a good place to embed a book trailer if you have one.', 'mybooktable');
 	echo('</p>');
 }
@@ -67,11 +110,11 @@ function mbt_overview_metabox($post) {
 /* Metadata Metabox                                        */
 /*---------------------------------------------------------*/
 
-function mbt_metadata_metabox_ajax() {
+function mbt_book_image_preview_ajax() {
 	if(isset($_REQUEST['image_id'])) {
 		$image = wp_get_attachment_image_src($_REQUEST['image_id'], 'mbt_book_image');
 		list($src, $width, $height) = $image ? $image : mbt_get_placeholder_image_src();
-		echo('<img src="'.$src.'" class="mbt-book-image">');
+		echo($src);
 	}
 	die();
 }
@@ -165,6 +208,12 @@ function mbt_metadata_star_rating($post_id, $field_id, $data) {
 function mbt_get_metadata_fields() {
 	return array(
 		'Book Samples' => array(
+			'mbt_show_instant_preview' => array(
+				'type' => 'mbt_metadata_checkbox',
+				'name' => __('Kindle Instant Preview', 'mybooktable'),
+				'desc' => __('Displays a free instant preview of your book from Amazon.', 'mybooktable'),
+				'default' => 'yes',
+			),
 			'mbt_sample_url' => array(
 				'type' => 'mbt_metadata_upload',
 				'name' => __('Sample Chapter', 'mybooktable'),
@@ -175,11 +224,10 @@ function mbt_get_metadata_fields() {
 				'name' => __('Audio Sample', 'mybooktable'),
 				'desc' => __('Upload a sample from your audiobook to give viewers a preview. We recommend using a .mp3 format for the sample.', 'mybooktable'),
 			),
-			'mbt_show_instant_preview' => array(
-				'type' => 'mbt_metadata_checkbox',
-				'name' => __('Kindle Instant Preview', 'mybooktable'),
-				'desc' => __('Displays a free instant preview of your book from Amazon.', 'mybooktable'),
-				'default' => 'yes',
+			'mbt_sample_video' => array(
+				'type' => 'mbt_metadata_text',
+				'name' => __('Book Trailer', 'mybooktable'),
+				'desc' => __('Paste in the URL of a YouTube or Vimeo video that shows off your book.', 'mybooktable'),
 			),
 		),
 		'Price' => array(
@@ -285,7 +333,7 @@ function mbt_metadata_metabox($post) {
 			<td class="mbt_show_unique_identifier_container">
 				<?php $show_unique_id = get_post_meta($post->ID, 'mbt_show_unique_id', true) !== 'no' ? 'yes' : 'no'; ?>
 				<input type="checkbox" name="mbt_show_unique_id" id="mbt_show_unique_id" <?php checked($show_unique_id, 'yes'); ?> >
-				<label for="mbt_show_unique_id"><?php _e('Show ISBN/ASIN on book page?', 'mybooktable'); ?></label>
+				<label for="mbt_show_unique_id"><?php _e('Show ISBN/ASIN on book page', 'mybooktable'); ?></label>
 			</td>
 		</tr>
 	</table>
@@ -436,4 +484,37 @@ function mbt_save_series_order_metabox($post_id) {
 	if(get_post_type($post_id) == "mbt_book") {
 		update_post_meta($post_id, "mbt_series_order", $_REQUEST["mbt_series_order"]);
 	}
+}
+
+
+
+/*---------------------------------------------------------*/
+/* Endorsements Metabox                                    */
+/*---------------------------------------------------------*/
+
+function mbt_endorsement_image_preview_ajax() {
+	if(isset($_REQUEST['image_id'])) {
+		$image = wp_get_attachment_image_src($_REQUEST['image_id'], 'mbt_endorsement_image');
+		echo($image ? $image[0] : plugins_url('images/person-placeholder.png', dirname(__FILE__)));
+	}
+	die();
+}
+
+function mbt_endorsements_metabox($post) {
+	$endorsements = get_post_meta($post->ID, 'mbt_endorsements', true);
+	if(empty($endorsements)) { $endorsements = array(); }
+	?>
+		<div class="mbt_endorsements_metabox">
+			<div class="button button-primary mbt_endorsement_adder">Add Endorsement</div>
+			<input type="hidden" class="mbt_endorsements" name="mbt_endorsements" value='<?php echo(str_replace('\'', '&#39;', json_encode($endorsements))); ?>'>
+			<div class="mbt_endorsements_editors"></div>
+			<p class="description">This is where you post endorsements from folks who have reccommended your book.</p>
+		</div>
+	<?php
+}
+
+function mbt_save_endorsements_metabox($post_id) {
+	if((defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) || get_post_status($post_id) == 'auto-draft' || get_post_type($post_id) !== 'mbt_book') { return; }
+
+	if(isset($_REQUEST['mbt_endorsements'])) { update_post_meta($post_id, 'mbt_endorsements', json_decode(str_replace('\\\\', '\\', str_replace('\"', '"', str_replace('\\\'', '\'', $_REQUEST['mbt_endorsements']))), true)); }
 }

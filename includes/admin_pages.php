@@ -58,7 +58,7 @@ function mbt_add_admin_pages() {
 }
 
 function mbt_upgrade_link_redirect() {
-	wp_redirect('https://www.authormedia.com/mybooktable', 301);
+	wp_redirect('http://www.authormedia.com/mybooktable', 301);
 	exit();
 }
 

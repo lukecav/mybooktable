@@ -31,17 +31,17 @@ function mbt_compat_custom_page_content($content) {
 
 	if(!empty($mbt_in_custom_page_content)) { return $content; }
 
-	$template = '';
+	$action = '';
 
 	if((mbt_is_booktable_page() and $wp_query->post->ID == mbt_get_setting('booktable_page')) or (mbt_is_archive_query() and $wp_query->post->ID == -1)) {
-		$template = mbt_locate_template('archive-book/content.php');
+		$action = 'mbt_book_archive_content';
 		remove_action('mbt_book_archive_header_title', 'mbt_do_book_archive_header_title');
 	} else if(is_singular('mbt_book')) {
-		$template = mbt_locate_template('single-book/content.php');
+		$action = 'mbt_single_book_content';
 		remove_action('mbt_single_book_title', 'mbt_do_single_book_title');
 	}
 
-	if($template) {
+	if($action) {
 		//tweak $wp_current_filter in order to allow jetpack sharing to work
 		global $wp_current_filter;
 		$content_filter = array_pop($wp_current_filter);
@@ -49,7 +49,7 @@ function mbt_compat_custom_page_content($content) {
 		$mbt_in_custom_page_content = true;
 		ob_start();
 
-		include($template);
+		do_action($action);
 
 		$content = ob_get_contents();
 		ob_end_clean();

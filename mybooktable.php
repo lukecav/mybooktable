@@ -95,10 +95,6 @@ function mbt_init() {
 	mbt_customize_plugins_page();
 	if(mbt_detect_deactivation()) { return; }
 
-	//deprecated legacy functionality
-	if(function_exists('mbtdev_init') and mbt_get_setting('dev_active') and version_compare(MBTDEV_VERSION, '1.2.0') < 0) { add_action('mbt_init', 'mbtdev_init'); }
-	else if(function_exists('mbtpro_init') and mbt_get_setting('pro_active') and version_compare(MBTPRO_VERSION, '1.2.0') < 0) { add_action('mbt_init', 'mbtpro_init'); }
-
 	do_action('mbt_init');
 }
 add_action('plugins_loaded', 'mbt_init');

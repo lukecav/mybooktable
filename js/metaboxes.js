@@ -62,21 +62,108 @@ jQuery(document).ready(function() {
 	jQuery("#mbt_book_image_id").change(function() {
 		jQuery.post(ajaxurl,
 			{
-				action: 'mbt_metadata_metabox',
+				action: 'mbt_book_image_preview',
 				image_id: jQuery('#mbt_book_image_id').val(),
 			},
 			function(response) {
+				jQuery('#mbt_metadata .mbt-book-image').remove();
 				if(response) {
-					jQuery('#mbt_metadata .mbt-book-image').after(jQuery(response)).remove();
+					jQuery('#mbt_metadata .mbt-cover-image-title').after(jQuery('<img src="'+response+'" class="mbt-book-image">'));
 				}
 			}
 		);
 	});
 
 	/*---------------------------------------------------------*/
-	/* Taxonomy Help                                           */
+	/* Endorsements Metabox                                    */
 	/*---------------------------------------------------------*/
 
-	jQuery('#mbt_authordiv .inside').append(jQuery(mbt_metabox_i18n.author_helptext));
+	var editors = jQuery('.mbt_endorsements_editors');
+	var endorsement_id = 0;
+
+	function new_endorsement() {
+		var id = endorsement_id++;
+
+		src = '';
+		src += '<div class="mbt_endorsement_editor">';
+		src += '	<div class="mbt_endorsement_header">';
+		src += '		<button class="mbt_endorsement_remover button">Remove</button>';
+		src += '		<div style="clear:both"></div>';
+		src += '	</div>';
+		src += '	<div class="mbt_endorsement_content">';
+		src += '		<div class="mbt_endorsement_image_field">';
+		src += '			<label class="mbt_endorsement_image_title">Image:</label>';
+		src += '			<div class="mbt_endorsement_image_preview_'+id+'"></div>';
+		src += '			<input type="hidden" class="mbt_endorsement_image" id="mbt_endorsement_image_'+id+'" value="" />';
+		src += '			<input class="mbt_endorsement_image_upload button" data-upload-property="id" data-upload-target="mbt_endorsement_image_'+id+'" type="button" value="Choose" />';
+		src += '		</div>';
+		src += '		<div class="mbt_endorsement_content_field">';
+		src += '			<label>Endorsement:<br><textarea class="mbt_endorsement_content_text"></textarea></label>';
+		src += '		</div>';
+		src += '		<div class="mbt_endorsement_name_field">';
+		src += '			<label>Name: <input type="text" class="mbt_endorsement_name" value="" autocomplete="off"></label>';
+		src += '		</div>';
+		src += '		<div class="mbt_endorsement_name_url_field">';
+		src += '			<label>Name URL: <input type="text" class="mbt_endorsement_name_url" value="" autocomplete="off"></label>';
+		src += '		</div>';
+		src += '		<div style="clear:both"></div>';
+		src += '	</div>';
+		src += '</div>';
+
+		new_item = jQuery(src);
+		editors.prepend(new_item);
+
+		new_item.find('.mbt_endorsement_image_upload').mbt_upload_button();
+		new_item.find('.mbt_endorsement_image').change(function() {
+			jQuery.post(ajaxurl,
+				{
+					action: 'mbt_endorsement_image_preview',
+					image_id: jQuery('#mbt_endorsement_image_'+id).val(),
+				},
+				function(response) {
+					jQuery('.mbt_endorsement_image_preview_'+id).empty();
+					if(response) {
+						jQuery('.mbt_endorsement_image_preview_'+id).html('<img src="'+response+'">');
+					}
+				}
+			);
+		});
+
+		return new_item;
+	}
+
+	function load_endorsements() {
+		var items = JSON.parse(jQuery('.mbt_endorsements').val());
+		for(var i = items.length - 1; i >= 0; i--) {
+			var element = new_endorsement();
+
+			element.find('.mbt_endorsement_image').val(items[i]['image_id']).trigger('change');
+			element.find('.mbt_endorsement_content_text').val(items[i]['content']);
+			element.find('.mbt_endorsement_name').val(items[i]['name']);
+			element.find('.mbt_endorsement_name_url').val(items[i]['name_url']);
+		};
+	}
+
+	function save_endorsements() {
+		var items = [];
+		editors.find('.mbt_endorsement_editor').each(function(i, e) {
+			var element = jQuery(e);
+			var new_item = {}
+
+			new_item['image_id'] = element.find('.mbt_endorsement_image').val();
+			new_item['content'] = element.find('.mbt_endorsement_content_text').val();
+			new_item['name'] = element.find('.mbt_endorsement_name').val();
+			new_item['name_url'] = element.find('.mbt_endorsement_name_url').val();
+
+			items.push(new_item);
+		});
+		jQuery('.mbt_endorsements').val(JSON.stringify(items));
+	}
+
+	jQuery('.mbt_endorsement_adder').click(new_endorsement);
+	editors.sortable({cancel: '.mbt_endorsement_content,.mbt_endorsement_title,.mbt_endorsement_remover'});
+	editors.on('click', '.mbt_endorsement_remover', function() { jQuery(this).parents('.mbt_endorsement_editor').remove(); });
+	jQuery('input[type="submit"]').click(save_endorsements);
+	load_endorsements();
 
 });
