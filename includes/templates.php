@@ -42,23 +42,38 @@ function mbt_templates_init() {
 		add_action('mbt_after_book_archive_loop', 'mbt_the_book_archive_pagination');
 
 		//single book hooks
-		add_action('mbt_single_book_content', 'mbt_do_single_book_content');
-		add_action('mbt_before_single_book', 'mbt_do_before_single_book', 0);
-		add_action('mbt_after_single_book', 'mbt_do_after_single_book', 100);
-		add_action('mbt_single_book_images', 'mbt_do_single_book_images');
-		add_action('mbt_single_book_title', 'mbt_do_single_book_title');
-		add_action('mbt_single_book_price', 'mbt_do_single_book_price');
-		add_action('mbt_single_book_meta', 'mbt_do_single_book_meta');
-		add_action('mbt_single_book_blurb', 'mbt_do_single_book_blurb');
-		add_action('mbt_single_book_buybuttons', 'mbt_do_single_book_buybuttons');
-		add_action('mbt_single_book_overview', 'mbt_do_single_book_overview');
-		add_action('mbt_single_book_overview', 'mbt_the_book_video_sample', 5);
-		add_action('mbt_after_single_book', 'mbt_the_book_endorsements', 20);
-		add_action('mbt_after_single_book', 'mbt_the_about_author', 30);
-		add_action('mbt_after_single_book', 'mbt_the_kindle_instant_preview_box', 50);
-		add_action('mbt_after_single_book', 'mbt_the_reviews_box', 70);
-		if(mbt_get_setting('show_series')) { add_action('mbt_after_single_book', 'mbt_the_book_series_box', 40); }
-		if(mbt_get_setting('show_find_bookstore')) { add_action('mbt_after_single_book', 'mbt_the_find_bookstore_box', 60); }
+		add_action('mbt_single_book_storefront_content', 'mbt_do_single_book_storefront_content');
+		add_action('mbt_before_single_book_storefront', 'mbt_do_before_single_book_storefront', 0);
+		add_action('mbt_after_single_book_storefront', 'mbt_do_after_single_book_storefront', 100);
+		add_action('mbt_single_book_storefront_images', 'mbt_do_single_book_storefront_images');
+		add_action('mbt_single_book_storefront_title', 'mbt_do_single_book_storefront_title');
+		add_action('mbt_single_book_storefront_price', 'mbt_do_single_book_storefront_price');
+		add_action('mbt_single_book_storefront_meta', 'mbt_do_single_book_storefront_meta');
+		add_action('mbt_single_book_storefront_blurb', 'mbt_do_single_book_storefront_blurb');
+		add_action('mbt_single_book_storefront_buybuttons', 'mbt_do_single_book_storefront_buybuttons');
+		add_action('mbt_single_book_storefront_overview', 'mbt_do_single_book_storefront_overview');
+		add_action('mbt_single_book_storefront_overview', 'mbt_the_book_video_sample', 5);
+		add_action('mbt_single_book_storefront_overview', 'mbt_the_book_endorsements', 30);
+
+		add_action('mbt_single_book_singlecolumn_content', 'mbt_do_single_book_singlecolumn_content');
+		add_action('mbt_before_single_book_singlecolumn', 'mbt_do_before_single_book_singlecolumn', 0);
+		add_action('mbt_after_single_book_singlecolumn', 'mbt_do_after_single_book_singlecolumn', 100);
+		add_action('mbt_single_book_singlecolumn_title', 'mbt_do_single_book_singlecolumn_title');
+		add_action('mbt_single_book_singlecolumn_images', 'mbt_do_single_book_singlecolumn_images');
+		add_action('mbt_single_book_singlecolumn_teaser', 'mbt_do_single_book_singlecolumn_teaser');
+		add_action('mbt_single_book_singlecolumn_blurb', 'mbt_do_single_book_singlecolumn_blurb');
+		add_action('mbt_single_book_singlecolumn_purchase', 'mbt_do_single_book_singlecolumn_purchase');
+		add_action('mbt_single_book_singlecolumn_overview', 'mbt_do_single_book_singlecolumn_overview');
+		add_action('mbt_single_book_singlecolumn_socialmedia', 'mbt_do_single_book_singlecolumn_socialmedia');
+		add_action('mbt_single_book_singlecolumn_overview', 'mbt_the_book_video_sample', 5);
+		add_action('mbt_single_book_singlecolumn_overview', 'mbt_do_single_book_singlecolumn_meta', 12);
+		add_action('mbt_single_book_singlecolumn_overview', 'mbt_the_book_endorsements', 30);
+
+		add_action('mbt_after_single_book', 'mbt_the_kindle_instant_preview_box', 60);
+		add_action('mbt_after_single_book', 'mbt_the_reviews_box', 80);
+		if(mbt_get_setting('show_about_author')) { add_action('mbt_after_single_book', 'mbt_the_book_about_author', 40); }
+		if(mbt_get_setting('show_series')) { add_action('mbt_after_single_book', 'mbt_the_book_series_box', 50); }
+		if(mbt_get_setting('show_find_bookstore')) { add_action('mbt_after_single_book', 'mbt_the_find_bookstore_box', 70); }
 		if(!mbt_get_setting('hide_domc_notice')) { add_action('mbt_after_single_book', 'mbt_the_domc_notice', 90); }
 
 		//book excerpt hooks
@@ -72,9 +87,9 @@ function mbt_templates_init() {
 		add_action('mbt_book_excerpt_buybuttons', 'mbt_do_book_excerpt_buybuttons');
 
 		//social media hooks
-		if(mbt_get_setting('enable_socialmedia_badges_single_book')) { add_action('mbt_single_book_title', 'mbt_do_single_book_socialmedia_badges', 5); }
+		if(mbt_get_setting('enable_socialmedia_badges_single_book')) { add_action('mbt_single_book_storefront_title', 'mbt_do_single_book_storefront_socialmedia_badges', 5); }
 		if(mbt_get_setting('enable_socialmedia_badges_book_excerpt')) { add_action('mbt_book_excerpt_title', 'mbt_do_book_excerpt_socialmedia_badges', 5); }
-		if(mbt_get_setting('enable_socialmedia_bar_single_book')) { add_action('mbt_single_book_overview', 'mbt_do_single_book_socialmedia_bar', 20); }
+		if(mbt_get_setting('enable_socialmedia_bar_single_book')) { add_action('mbt_single_book_storefront_overview', 'mbt_do_single_book_storefront_socialmedia_bar', 20); }
 	}
 }
 add_action('mbt_init', 'mbt_templates_init');
@@ -85,10 +100,12 @@ add_action('mbt_init', 'mbt_templates_init');
 /* Template Overload Functions                             */
 /*---------------------------------------------------------*/
 function mbt_load_book_templates($template) {
+	global $post;
+
 	if(mbt_is_booktable_page() or is_post_type_archive('mbt_book') or is_tax('mbt_author') or is_tax('mbt_genre') or is_tax('mbt_series') or is_tax('mbt_tag')) {
 		$template = mbt_locate_template('archive-book.php');
 	} else if(is_singular('mbt_book')) {
-		$template = mbt_locate_template('single-book.php');
+		$template = mbt_locate_template('single-book-'.mbt_get_book_display_mode($post->ID).'.php');
 	}
 
 	return $template;
@@ -140,7 +157,8 @@ function mbt_enqueue_frontend_scripts() {
 }
 
 function mbt_enqueue_scripts() {
-	wp_enqueue_script('mbt-frontend-js', plugins_url('js/frontend.js', dirname(__FILE__)), array('jquery'), MBT_VERSION, true);
+	wp_enqueue_script('jquery-ui-accordion');
+	wp_enqueue_script('mbt-frontend-js', plugins_url('js/frontend.js', dirname(__FILE__)), array('jquery', 'jquery-ui-accordion'), MBT_VERSION, true);
 	wp_enqueue_script('mbt-google-maps', 'https://maps.googleapis.com/maps/api/js?v=3.exp', array(), MBT_VERSION, true);
 	wp_enqueue_script('mbt-shadowbox', plugins_url('js/lib/jquery.colorbox.min.js', dirname(__FILE__)), array('jquery'), MBT_VERSION, true);
 }
@@ -286,48 +304,80 @@ function mbt_do_book_archive_no_results() {
 /*---------------------------------------------------------*/
 /* Single Book Template Functions                          */
 /*---------------------------------------------------------*/
-function mbt_do_single_book_content() {
-	global $post;
-	$display_mode = get_post_meta($post->ID, 'mbt_display_mode', true);
-	$display_modes = mbt_get_book_display_modes();
-	if(!empty($display_modes[$display_mode])) {
-		call_user_func_array($display_modes[$display_mode]['render'], array($post));
-	} else {
-		mbt_include_template("single-book/content.php");
-	}
+
+/* storefront mode */
+
+function mbt_do_single_book_storefront_content() {
+	mbt_include_template("single-book-storefront/content.php");
 }
-function mbt_do_before_single_book() {
-	mbt_include_template("single-book/before.php");
+function mbt_do_before_single_book_storefront() {
+	mbt_include_template("single-book-storefront/before.php");
 }
-function mbt_do_after_single_book() {
-	mbt_include_template("single-book/after.php");
+function mbt_do_after_single_book_storefront() {
+	mbt_include_template("single-book-storefront/after.php");
 }
-function mbt_do_single_book_images() {
-	mbt_include_template("single-book/images.php");
+function mbt_do_single_book_storefront_images() {
+	mbt_include_template("single-book-storefront/images.php");
 }
-function mbt_do_single_book_title() {
-	mbt_include_template("single-book/title.php");
+function mbt_do_single_book_storefront_title() {
+	mbt_include_template("single-book-storefront/title.php");
 }
-function mbt_do_single_book_price() {
-	mbt_include_template("single-book/price.php");
+function mbt_do_single_book_storefront_price() {
+	mbt_include_template("single-book-storefront/price.php");
 }
-function mbt_do_single_book_meta() {
-	mbt_include_template("single-book/meta.php");
+function mbt_do_single_book_storefront_meta() {
+	mbt_include_template("single-book-storefront/meta.php");
 }
-function mbt_do_single_book_blurb() {
-	mbt_include_template("single-book/blurb.php");
+function mbt_do_single_book_storefront_blurb() {
+	mbt_include_template("single-book-storefront/blurb.php");
 }
-function mbt_do_single_book_buybuttons() {
-	mbt_include_template("single-book/buybuttons.php");
+function mbt_do_single_book_storefront_buybuttons() {
+	mbt_include_template("single-book-storefront/buybuttons.php");
 }
-function mbt_do_single_book_overview() {
-	mbt_include_template("single-book/overview.php");
+function mbt_do_single_book_storefront_overview() {
+	mbt_include_template("single-book-storefront/overview.php");
 }
-function mbt_do_single_book_socialmedia_badges() {
-	mbt_include_template("single-book/socialmedia-badges.php");
+function mbt_do_single_book_storefront_socialmedia_badges() {
+	mbt_include_template("single-book-storefront/socialmedia-badges.php");
 }
-function mbt_do_single_book_socialmedia_bar() {
-	mbt_include_template("single-book/socialmedia-bar.php");
+function mbt_do_single_book_storefront_socialmedia_bar() {
+	mbt_include_template("single-book-storefront/socialmedia-bar.php");
+}
+
+/* singlecolumn mode */
+
+function mbt_do_single_book_singlecolumn_content() {
+	mbt_include_template("single-book-singlecolumn/content.php");
+}
+function mbt_do_before_single_book_singlecolumn() {
+	mbt_include_template("single-book-singlecolumn/before.php");
+}
+function mbt_do_after_single_book_singlecolumn() {
+	mbt_include_template("single-book-singlecolumn/after.php");
+}
+function mbt_do_single_book_singlecolumn_title() {
+	mbt_include_template("single-book-singlecolumn/title.php");
+}
+function mbt_do_single_book_singlecolumn_images() {
+	mbt_include_template("single-book-singlecolumn/images.php");
+}
+function mbt_do_single_book_singlecolumn_teaser() {
+	mbt_include_template("single-book-singlecolumn/teaser.php");
+}
+function mbt_do_single_book_singlecolumn_blurb() {
+	mbt_include_template("single-book-singlecolumn/blurb.php");
+}
+function mbt_do_single_book_singlecolumn_meta() {
+	mbt_include_template("single-book-singlecolumn/meta.php");
+}
+function mbt_do_single_book_singlecolumn_overview() {
+	mbt_include_template("single-book-singlecolumn/overview.php");
+}
+function mbt_do_single_book_singlecolumn_purchase() {
+	mbt_include_template("single-book-singlecolumn/purchase.php");
+}
+function mbt_do_single_book_singlecolumn_socialmedia() {
+	mbt_include_template("single-book-singlecolumn/socialmedia.php");
 }
 
 
@@ -816,7 +866,7 @@ function mbt_get_the_term_list($post_id, $tax, $name, $name_plural, $type) {
 	$terms = get_the_terms($post_id, $tax);
 	if(is_wp_error($terms) or empty($terms)){ return ''; }
 
-	if($type == 'author') {
+	if($tax == 'mbt_author') {
 		$sortfunc = function($a, $b) {
 			$a = mbt_get_author_priority($a->term_id);
 			$b = mbt_get_author_priority($b->term_id);
@@ -914,7 +964,7 @@ function mbt_get_kindle_instant_preview_box($post_id) {
 	$asin = get_post_meta($post_id, 'mbt_unique_id_asin', true);
 	if($asin) {
 		$url = 'https://read.amazon.com/kp/card?asin='.$asin.'&preview=inline&linkCode=kpe&ref_=cm_sw_r_kb_dp_Ol2Ywb1Y4HHHK&tag=ammbt-20';
-		$output = '<iframe id="mbt_kindle_instant_preview_box" src="'.$url.'" frameborder="0"></iframe>';
+		$output = '<iframe class="mbt_kindle_instant_preview_box" src="'.$url.'" frameborder="0"></iframe>';
 	}
 	return apply_filters('mbt_get_kindle_instant_preview_box', $output, $post_id);
 }
@@ -998,12 +1048,15 @@ function mbt_get_book_endorsements($post_id) {
 			if(empty($endorsement['content'])) { continue; }
 			$output .= '<div class="mbt-endorsement">';
 			$image = wp_get_attachment_image_src($endorsement['image_id'], 'mbt_endorsement_image');
-			if(!empty($image)) { $output .= '<img src="'.$image[0].'">'; }
-			$output .= '	<div class="mbt-endorsement-content">'.$endorsement['content'].'</div>';
-			$output .= '	<div class="mbt-endorsement-name">&ndash; '.(empty($endorsement['name_url']) ? '' : '<a href="'.$endorsement['name_url'].'">').$endorsement['name'].(empty($endorsement['name_url']) ? '' : '</a>').'</div>';
+			if(!empty($image)) { $output .= '<div class="mbt-endorsement-image"><img src="'.$image[0].'"></div>'; }
+			$output .= '	<div class="mbt-endorsement-content">';
+			$output .=			$endorsement['content'];
+			$output .= '		<div class="mbt-endorsement-name">&ndash; '.(empty($endorsement['name_url']) ? '' : '<a href="'.$endorsement['name_url'].'">').$endorsement['name'].(empty($endorsement['name_url']) ? '' : '</a>').'</div>';
+			$output .= '	</div>';
 			$output .= '	<div style="clear:both"></div>';
 			$output .= '</div>';
 		}
+		$output .= '<div style="clear:both"></div>';
 		$output .= '</div>';
 	}
 	return apply_filters('mbt_get_book_endorsements', $output, $post_id);
@@ -1015,11 +1068,74 @@ function mbt_the_book_endorsements() {
 
 
 
-function mbt_get_about_author($post_id) {
+function mbt_get_book_about_author($post_id) {
 	$output = '';
-	return apply_filters('mbt_get_about_author', $output, $post_id);
+
+	$terms = get_the_terms($post_id, 'mbt_author');
+	if(is_wp_error($terms) or empty($terms)) { return ''; }
+
+	//sort by priority
+	$sortfunc = function($a, $b) {
+		$a = mbt_get_author_priority($a->term_id);
+		$b = mbt_get_author_priority($b->term_id);
+		return ($a > $b) ? -1 : (($a < $b) ? 1 : 0);
+	};
+	usort($terms, $sortfunc);
+
+	//select first author with description and highest priority
+	$author = reset($terms);
+	foreach($terms as $term) {
+		if(mbt_get_author_priority($term->term_id) < mbt_get_author_priority($author->term_id)) { break; }
+		if(!empty($term->description)) { $author = $term; break; }
+	}
+	if(empty($author->description)) { return ''; }
+
+	$image = mbt_get_taxonomy_image('mbt_author', $author->term_id);
+
+	$output .= '<div class="mbt-book-about-author">';
+	$output .= '	<h3 class="mbt-book-about-author-title">'.__('About the Author', 'mybooktable').'</h3>';
+	$output .= '	<div class="mbt-book-about-author-content">';
+	if(!empty($image)) {
+	$output .= '		<div class="mbt-book-about-author-image"><img src="'.$image.'"></div>';
+	$output .= '		<div class="mbt-book-about-author-right">';
+	}
+	$output .= '			<div class="mbt-book-about-author-name">'.$author->name.'</div>';
+	$output .= '			<div class="mbt-book-about-author-desc">'.wpautop($author->description).'</div>';
+	if(!empty($image)) {
+	$output .= '		</div>';
+	}
+	$output .= '	</div>';
+	$output .= '</div>';
+
+	return apply_filters('mbt_get_book_about_author', $output, $post_id);
 }
-function mbt_the_about_author() {
+function mbt_the_book_about_author() {
 	global $post;
-	echo(mbt_get_about_author($post->ID));
+	echo(mbt_get_book_about_author($post->ID));
+}
+
+
+
+function mbt_get_book_teaser($post_id) {
+	$output = '';
+	if(get_post_meta($post_id, 'mbt_book_teaser', true)) {
+		$output .= '<h1 class="mbt-book-teaser">'.get_post_meta($post_id, 'mbt_book_teaser', true).'</h1>';
+	}
+	return apply_filters('mbt_get_book_teaser', $output, $post_id);
+}
+function mbt_the_book_teaser() {
+	global $post;
+	echo(mbt_get_book_teaser($post->ID));
+}
+
+
+
+// Call to action button
+function mbt_get_book_cta_button($post_id) {
+	$output = '<a href="#mbt-book-purchase" class="mbt-book-purchase-button">Order Now!</a>';
+	return apply_filters('mbt_get_book_cta_button', $output, $post_id);
+}
+function mbt_the_book_cta_button() {
+	global $post;
+	echo(mbt_get_book_cta_button($post->ID));
 }

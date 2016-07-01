@@ -120,12 +120,13 @@ function mbt_save_settings_page() {
 
 		mbt_update_setting('style_pack', $_REQUEST['mbt_style_pack']);
 		mbt_update_setting('image_size', $_REQUEST['mbt_image_size']);
-		mbt_update_setting('reviews_box', $_REQUEST['mbt_reviews_box']);
+		mbt_update_setting('reviews_box', isset($_REQUEST['mbt_reviews_box']) ? $_REQUEST['mbt_reviews_box'] : 'none');
 		mbt_update_setting('buybutton_shadowbox', $_REQUEST['mbt_buybutton_shadowbox']);
 		mbt_update_setting('enable_breadcrumbs', isset($_REQUEST['mbt_enable_breadcrumbs']));
 		mbt_update_setting('show_series', isset($_REQUEST['mbt_show_series']));
 		mbt_update_setting('show_find_bookstore', isset($_REQUEST['mbt_show_find_bookstore']));
 		mbt_update_setting('show_find_bookstore_buybuttons_shadowbox', isset($_REQUEST['mbt_show_find_bookstore_buybuttons_shadowbox']));
+		mbt_update_setting('show_about_author', isset($_REQUEST['mbt_show_about_author']));
 		mbt_update_setting('hide_domc_notice', isset($_REQUEST['mbt_hide_domc_notice']));
 		mbt_update_setting('domc_notice_text', wp_unslash($_REQUEST['mbt_domc_notice_text']));
 		mbt_update_setting('posts_per_page', $_REQUEST['mbt_posts_per_page']);
@@ -473,12 +474,12 @@ function mbt_render_settings_page() {
 									?>
 									<p class="description"><?php _e('Select the reviews box that will be displayed under each book with a valid ISBN.', 'mybooktable'); ?></p>
 									<div class="mbt-check-reviews">
+										<div class="mbt-check-reviews-checking">Checking&hellip;<div class="mbt-check-reviews-spinner"></div></div>
+										<div class="mbt-check-reviews-results"></div>
 										<div class="mbt-check-reviews-begin">
 											<div class="mbt-check-reviews-button button"><?php _e('Check Reviews', 'mybooktable'); ?></div>
 											<span class="description"> - <?php _e('Use this tool to check if your books will be able to display reviews.', 'mybooktable'); ?></span>
 										</div>
-										<div class="mbt-check-reviews-checking">Checking&hellip;<div class="mbt-check-reviews-spinner"></div></div>
-										<div class="mbt-check-reviews-results"></div>
 									</div>
 								</td>
 							</tr>
@@ -507,7 +508,7 @@ function mbt_render_settings_page() {
 									<label for="mbt_show_find_bookstore"><?php _e('Show on Book Pages', 'mybooktable'); ?></label><br>
 									<input type="checkbox" name="mbt_show_find_bookstore_buybuttons_shadowbox" id="mbt_show_find_bookstore_buybuttons_shadowbox" <?php checked(mbt_get_setting('show_find_bookstore_buybuttons_shadowbox'), true); ?> >
 									<label for="mbt_show_find_bookstore_buybuttons_shadowbox"><?php _e('Show in Buy Buttons Shadow Box', 'mybooktable'); ?></label>
-									<p class="description"><?php _e('If checked, a box that helps your readers find places to buy your book will display under each book.', 'mybooktable'); ?></p>
+									<p class="description"><?php _e('If checked, show a box that helps your readers find places to buy your book will display under each book.', 'mybooktable'); ?></p>
 								</td>
 							</tr>
 							<tr>
@@ -516,6 +517,14 @@ function mbt_render_settings_page() {
 									<input type="checkbox" name="mbt_show_series" id="mbt_show_series" <?php checked(mbt_get_setting('show_series'), true); ?> >
 									<label for="mbt_show_series"><?php _e('Show books', 'mybooktable'); ?></label>
 									<p class="description"><?php _e('If checked, the other books in the same series will display under the book on that book\'s page.', 'mybooktable'); ?></p>
+								</td>
+							</tr>
+							<tr>
+								<th><?php _e('"About the Author" Box', 'mybooktable'); ?></th>
+								<td>
+									<input type="checkbox" name="mbt_show_about_author" id="mbt_show_about_author" <?php checked(mbt_get_setting('show_about_author'), true); ?> >
+									<label for="mbt_show_about_author"><?php _e('Show on Book Pages', 'mybooktable'); ?></label><br>
+									<p class="description"><?php _e('If checked, show a box on the book page that displays information about the book author.', 'mybooktable'); ?></p>
 								</td>
 							</tr>
 						</tbody>
@@ -598,6 +607,23 @@ function mbt_amazon_web_services_general_settings_render() {
 	<?php
 }
 add_action('mbt_integrate_settings_render', 'mbt_amazon_web_services_general_settings_render');
+
+function mbt_genius_link_integration_general_settings_render() {
+	?>
+	<table class="form-table">
+		<tbody>
+			<tr>
+				<th style="color: #666"><?php _e('Genius Link', 'mybooktable'); ?></th>
+				<td>
+					<input type="text" disabled="true" value="" class="regular-text">
+					<p class="description"><?php echo(mbt_get_upgrade_message()); ?></p>
+				</td>
+			</tr>
+		</tbody>
+	</table>
+	<?php
+}
+add_action('mbt_integrate_settings_render', 'mbt_genius_link_integration_general_settings_render');
 
 function mbt_render_setup_default_affiliates_page() {
 ?>

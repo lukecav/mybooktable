@@ -3,6 +3,26 @@
 /* Metaboxes                                               */
 /*---------------------------------------------------------*/
 
+.mbt_book_teaser_field {
+	display: none;
+}
+
+.mbt_book_teaser_field label {
+	font-size: 14px;
+	font-weight: bold;
+	float: left;
+	margin: 6px 0 0 2px;
+}
+
+.mbt_book_teaser_field .mbt_book_teaser_input {
+	margin-left: 92px;
+	display: block;
+}
+
+.mbt_book_teaser_field input {
+	width: 100%;
+}
+
 .post-php.post-type-mbt_book .description {
     margin: 7px 0 0 0;
 }
@@ -262,6 +282,11 @@ div.star-rating{background:transparent!important;overflow:hidden!important}
 
 .mbt_endorsements_metabox .mbt_endorsements_editors .mbt_endorsement_editor textarea {
 	width: 60%;
+	font-weight: normal;
+}
+
+.mbt_endorsements_metabox .mbt_endorsements_editors .mbt_endorsement_editor input {
+	font-weight: normal;
 }
 
 .mbt_endorsements_metabox .mbt_endorsements_editors .mbt_endorsement_editor .mbt_endorsement_remover {
@@ -487,6 +512,7 @@ div.star-rating{background:transparent!important;overflow:hidden!important}
 	overflow-y: scroll;
 	border: 1px solid #ccc;
 	border-radius: 2px;
+    margin-bottom: 10px;
 }
 
 #mbt-check-reviews-results-list {

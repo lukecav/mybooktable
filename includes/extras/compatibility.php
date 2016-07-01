@@ -6,9 +6,6 @@
 
 function mbt_compat_init() {
 	if(mbt_get_setting('compatibility_mode')) {
-		//override page content
-		add_filter('the_content', 'mbt_compat_custom_page_content', 999, 2);
-
 		//modify the post query
 		add_action('pre_get_posts', 'mbt_compat_pre_get_posts', 30);
 		add_action('wp', 'mbt_compat_override_query_posts', -999);
@@ -37,8 +34,7 @@ function mbt_compat_custom_page_content($content) {
 		$action = 'mbt_book_archive_content';
 		remove_action('mbt_book_archive_header_title', 'mbt_do_book_archive_header_title');
 	} else if(is_singular('mbt_book')) {
-		$action = 'mbt_single_book_content';
-		remove_action('mbt_single_book_title', 'mbt_do_single_book_title');
+		$action = 'mbt_single_book_'.mbt_get_book_display_mode($wp_query->post->ID).'_content';
 	}
 
 	if($action) {
@@ -63,9 +59,14 @@ function mbt_compat_custom_page_content($content) {
 }
 
 function mbt_compat_load_book_templates($template) {
+	global $post;
 	if(is_singular('mbt_book') or mbt_is_archive_query()) {
+		if(is_singular('mbt_book') and !mbt_book_display_mode_supports(mbt_get_book_display_mode($post->ID), 'compatability')) { return mbt_load_book_templates($template); }
 		$template = locate_template('page.php');
 		if(empty($template)) { $template = locate_template('index.php'); }
+		add_filter('the_content', 'mbt_compat_custom_page_content', 999, 2);
+	} else if(mbt_is_booktable_page()) {
+		add_filter('the_content', 'mbt_compat_custom_page_content', 999, 2);
 	}
 	return $template;
 }
@@ -92,9 +93,6 @@ function mbt_compat_pre_get_posts($query) {
 
 function mbt_compat_override_query_posts() {
 	if(mbt_is_archive_query()) {
-		//If ID is -1 Jetpack will freak out. It looks at $post->ID and then calls get_post on it...
-		add_filter('jetpack_enable_open_graph', '__return_false');
-
 		//ID must be -1, not 0, or get_post_meta will (inexplicably) return false instead of "", which some themes (such as Divi theme) can't handle. There is no hook in get_post_meta to prevent this.
 		$post = new WP_Post((object)array(
 			"ID" => -1,
@@ -122,6 +120,9 @@ function mbt_compat_override_query_posts() {
 			"comment_count" => "0",
 			"filter" => "raw",
 		));
+
+		// This solves the get_post($post->ID) error when ID is -1!
+		wp_cache_set(-1, $post, 'posts');
 
 		global $wp_query;
 		$wp_query->post = $post;

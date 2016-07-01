@@ -1,6 +1,33 @@
 jQuery(document).ready(function() {
 
 	/*---------------------------------------------------------*/
+	/* Book Display Mode                                       */
+	/*---------------------------------------------------------*/
+
+	if(jQuery('#mbt_display_modes').length > 0) {
+		var book_display_modes = {};
+		try { book_display_modes = JSON.parse(jQuery('#mbt_display_modes').val()); } catch(err) {}
+
+		function update_display_mode() {
+			var supports_teaser = false;
+			var display_mode = jQuery('#mbt_display_mode').val();
+			if(book_display_modes[display_mode]) {
+				var display_mode_supports = book_display_modes[display_mode].supports;
+				supports_teaser = display_mode_supports.indexOf('teaser') !== -1;
+			}
+
+			if(supports_teaser) {
+				jQuery('.mbt_book_teaser_field').show();
+			} else {
+				jQuery('.mbt_book_teaser_field').hide();
+			}
+		}
+
+		update_display_mode();
+		jQuery('#mbt_display_mode').change(update_display_mode);
+	}
+
+	/*---------------------------------------------------------*/
 	/* Buy Buttons Metabox                                     */
 	/*---------------------------------------------------------*/
 
@@ -56,9 +83,10 @@ jQuery(document).ready(function() {
 	});
 
 	/*---------------------------------------------------------*/
-	/* Book Image                                              */
+	/* Details Metabox                                         */
 	/*---------------------------------------------------------*/
 
+	// book image
 	jQuery("#mbt_book_image_id").change(function() {
 		jQuery.post(ajaxurl,
 			{
@@ -73,6 +101,11 @@ jQuery(document).ready(function() {
 			}
 		);
 	});
+
+	// kindle instant preview asin warning
+	if(jQuery('#mbt_show_instant_preview_asin_warning').length > 0) {
+		jQuery('#mbt_unique_id_asin').change(function() { jQuery('#mbt_show_instant_preview_asin_warning').remove(); });
+	}
 
 	/*---------------------------------------------------------*/
 	/* Endorsements Metabox                                    */
@@ -160,10 +193,12 @@ jQuery(document).ready(function() {
 		jQuery('.mbt_endorsements').val(JSON.stringify(items));
 	}
 
-	jQuery('.mbt_endorsement_adder').click(new_endorsement);
-	editors.sortable({cancel: '.mbt_endorsement_content,.mbt_endorsement_title,.mbt_endorsement_remover'});
-	editors.on('click', '.mbt_endorsement_remover', function() { jQuery(this).parents('.mbt_endorsement_editor').remove(); });
-	jQuery('input[type="submit"]').click(save_endorsements);
-	load_endorsements();
+	if(jQuery('.mbt_endorsements').length > 0) {
+		jQuery('.mbt_endorsement_adder').click(new_endorsement);
+		editors.sortable({cancel: '.mbt_endorsement_content,.mbt_endorsement_title,.mbt_endorsement_remover'});
+		editors.on('click', '.mbt_endorsement_remover', function() { jQuery(this).parents('.mbt_endorsement_editor').remove(); });
+		jQuery('input[type="submit"]').click(save_endorsements);
+		load_endorsements();
+	}
 
 });

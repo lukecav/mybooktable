@@ -46,4 +46,19 @@ jQuery(document).ready(function() {
 		});
 	});
 
+	/*---------------------------------------------------------*/
+	/* Social Media Buttons                                    */
+	/*---------------------------------------------------------*/
+
+	jQuery('.mbt-book .mbt-book-share-buttons .mbt-book-share-button').click(function() {
+		window.open(jQuery(this).attr('href'), '_blank','height=500,width=500');
+		return false;
+	});
+
+	/*---------------------------------------------------------*/
+	/* Single Column Mode                                      */
+	/*---------------------------------------------------------*/
+
+	jQuery('.mbt-book.mbt-display-mode-singlecolumn .mbt-book-meta').accordion({collapsible: true, active: false, heightStyle: 'content'});
+
 });

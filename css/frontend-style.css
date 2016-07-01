@@ -62,6 +62,7 @@
 
 .mbt-book .mbt-book-images .mbt-book-image {
 	width: 100%;
+	height: auto;
 	border-radius: 0px;
 	box-shadow: none;
 	border: none;
@@ -310,9 +311,9 @@
 /*---------------------------------------------------------*/
 
 .mbt-book .mbt-book-video-sample {
-    margin-top: 30px;
-    clear: both;
-    float: left;
+	margin-top: 30px;
+	clear: both;
+	float: left;
 }
 
 .mbt-book .mbt-book-video-sample .jetpack-video-wrapper {
@@ -343,7 +344,6 @@
 	padding-bottom: 15px;
 
 	font-size: 25px;
-	color: black;
 	font-weight: normal;
 	line-height: 1.3;
 	letter-spacing: 0;
@@ -356,22 +356,75 @@
 /* Endorsements                                            */
 /*---------------------------------------------------------*/
 
-.mbt-endorsement {
-	padding: 5px 10px;
-	margin-bottom: 10px;
+.mbt-book-endorsements {
+	padding-top: 15px;
 }
 
-.mbt-endorsement img {
-	width: 100px;
-	margin-right: 20px;
-	float: left;
+.mbt-book-endorsements .mbt-book-endorsements-title {
+	margin: 0;
+	padding: 0;
+	padding-bottom: 15px;
+	font-size: 25px;
+	font-weight: normal;
+	line-height: 1.3;
+	letter-spacing: 0;
+	text-transform: none;
 }
 
-.mbt-endorsement .mbt-endorsement-name {
-	margin-top: 15px;
+.mbt-book-endorsements .mbt-endorsement {
+	padding: 20px 0 0;
+	clear: both;
+}
+.mbt-book-endorsements .mbt-endorsement:first-of-type {
+	padding-top: 0;
+}
+
+.mbt-book-endorsements .mbt-endorsement .mbt-endorsement-image {
+	width: 17%;
+	padding: 0 2.5%;
+}
+
+.mbt-book-endorsements .mbt-endorsement .mbt-endorsement-image img {
+	width: 100%;
+	height: auto;
+	border-radius: 0px;
+	box-shadow: none;
+	border: none;
+	background: transparent;
+	padding: 0;
+	margin: 0;
+}
+
+.mbt-book-endorsements .mbt-endorsement .mbt-endorsement-content {
+	width: 73%;
+	padding: 0.7em 2.5% 0;
+	line-height: 1.7;
+}
+
+.mbt-book-endorsements .mbt-endorsement .mbt-endorsement-name {
+	padding-top: 0.7em;
+	line-height: 1;
 	opacity: 0.8;
 }
 
+.mbt-book-endorsements .mbt-endorsement:nth-child(even) .mbt-endorsement-image {
+	float: left;
+}
+.mbt-book-endorsements .mbt-endorsement:nth-child(even) .mbt-endorsement-content {
+	float: right;
+}
+.mbt-book-endorsements .mbt-endorsement:nth-child(even) .mbt-endorsement-name {
+	text-align: left;
+}
+.mbt-book-endorsements .mbt-endorsement:nth-child(odd) .mbt-endorsement-image {
+	float: right;
+}
+.mbt-book-endorsements .mbt-endorsement:nth-child(odd) .mbt-endorsement-content {
+	float: left;
+}
+.mbt-book-endorsements .mbt-endorsement:nth-child(odd) .mbt-endorsement-name {
+	text-align: right;
+}
 
 
 
@@ -387,6 +440,53 @@
 .mbt-book .mbt-book-socialmedia-badges {
 	float: right;
 	padding-left: 5px;
+}
+
+.mbt-book-share-buttons {
+	text-align: center;
+}
+
+.mbt-book-share-buttons .mbt-book-share-button {
+	padding: 10px 30px 10px 65px;
+	font-size: 20px;
+	line-height: 1.7;
+	color: white;
+	text-decoration: none;
+	display: inline-block;
+	margin: 0 15px 15px;
+	background-repeat: no-repeat;
+	background-position: 20px 10px;
+	cursor: pointer;
+	-webkit-touch-callout: none;
+	-webkit-user-select: none;
+	-khtml-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+}
+.mbt-book-share-buttons .mbt-book-share-button:hover {
+	color: white;
+}
+.mbt-book-share-buttons .mbt-book-share-button:active {
+	color: white;
+}
+.mbt-book-share-buttons .mbt-book-share-button:visited {
+	color: white;
+}
+
+.mbt-book-share-buttons .mbt-book-share-facebook {
+	background-color: #4861a3;
+	background-image: url('../images/facebook.png');
+}
+
+.mbt-book-share-buttons .mbt-book-share-twitter {
+	background-color: #00acee;
+	background-image: url('../images/twitter.png');
+}
+
+.mbt-book-share-buttons .mbt-book-share-googleplus {
+	background-color: #d8420e;
+	background-image: url('../images/googleplus.png');
 }
 
 
@@ -460,8 +560,8 @@
 /* Amazon Kindle Instant Preview Box                       */
 /*---------------------------------------------------------*/
 
-.mbt-book #mbt_kindle_instant_preview_box {
-    margin: 15px 10px 5px 10px;
+.mbt-book .mbt_kindle_instant_preview_box {
+	margin: 15px 10px 5px 10px;
 	width: 100%;
 	height: 300px;
 }
@@ -545,6 +645,230 @@
 }
 .mbt-book #goodreads-widget iframe {
 	width: 100%;
+}
+
+
+/*---------------------------------------------------------*/
+/* About the Author Box                                    */
+/*---------------------------------------------------------*/
+
+.mbt-book .mbt-book-about-author {
+	padding-top: 15px;
+}
+
+.mbt-book .mbt-book-about-author .mbt-book-about-author-title {
+	margin: 0;
+	padding: 0;
+	padding-bottom: 15px;
+	font-size: 25px;
+	font-weight: normal;
+	line-height: 1.3;
+	letter-spacing: 0;
+	text-transform: none;
+}
+
+.mbt-book .mbt-book-about-author .mbt-book-about-author-image {
+	float: left;
+	width: 30%;
+}
+
+.mbt-book .mbt-book-about-author .mbt-book-about-author-image img {
+	width: 100%;
+	height: auto;
+	border-radius: 0px;
+	box-shadow: none;
+	border: none;
+	background: transparent;
+	padding: 0;
+	margin: 0;
+}
+
+.mbt-book .mbt-book-about-author .mbt-book-about-author-right {
+	float: left;
+	padding-left: 5%;
+	width: 65%;
+}
+
+.mbt-book .mbt-book-about-author .mbt-book-about-author-name {
+	font-size: 1.5em;
+	line-height: 1;
+	padding-bottom: 0.5em;
+}
+
+.mbt-book .mbt-book-about-author .mbt-book-about-author-desc p {
+	line-height: 1.7em;
+	padding: 0;
+	margin-bottom: 0.9em;
+}
+
+
+
+/*---------------------------------------------------------*/
+/* Single Column Mode Styling                              */
+/*---------------------------------------------------------*/
+
+.mbt-book.mbt-display-mode-singlecolumn .mbt-book-title {
+	margin: 0;
+	padding-bottom: 30px;
+}
+
+.mbt-book.mbt-display-mode-singlecolumn .mbt-book-images {
+	width: 35%;
+}
+
+.mbt-book.mbt-display-mode-singlecolumn .mbt-book-right {
+	width: 65%;
+	text-align: center;
+}
+
+.mbt-book.mbt-display-mode-singlecolumn .mbt-book-teaser {
+	margin: 0 0 20px 30px;
+	padding: 0;
+	font-size: 30px;
+	font-weight: bold;
+	text-align: left;
+}
+
+.mbt-book.mbt-display-mode-singlecolumn .mbt-book-blurb {
+	background: none;
+	border: none;
+	padding: 0;
+	margin: 0 0 0 30px;
+	font-size: 20px;
+	text-align: left;
+}
+
+.mbt-book.mbt-display-mode-singlecolumn .mbt-book-meta {
+	margin: 12px 0 0 0;
+	clear: both;
+}
+
+.mbt-book.mbt-display-mode-singlecolumn .mbt-book-meta .mbt-book-meta-title {
+	background: white;
+	color: #666;
+	display: inline-block;
+	padding-right: 5px;
+	font-size: 18px;
+	font-weight: bold;
+	cursor: pointer;
+	outline: none;
+	border: 1px solid #bbb;
+	border-radius: 4px;
+}
+
+.mbt-book.mbt-display-mode-singlecolumn .mbt-book-meta .mbt-book-meta-title .ui-accordion-header-icon {
+	display: none;
+}
+
+.mbt-book.mbt-display-mode-singlecolumn .mbt-book-meta .mbt-book-meta-title.ui-state-active {
+	display: block;
+	color: #333;
+	border-bottom: none;
+	border-bottom-left-radius: 0;
+	border-bottom-right-radius: 0;
+}
+
+.mbt-book.mbt-display-mode-singlecolumn .mbt-book-meta .mbt-book-meta-title:before {
+	content: '+';
+	display: inline-block;
+	width: 20px;
+	text-align: center;
+	font-weight: normal;
+}
+
+.mbt-book.mbt-display-mode-singlecolumn .mbt-book-meta .mbt-book-meta-title.ui-state-active:before {
+	content: '\2013';
+}
+
+.mbt-book.mbt-display-mode-singlecolumn .mbt-book-meta .ui-widget-content {
+	background: white;
+	padding: 5px 10px;
+	border: 1px solid #bbb;
+	box-shadow: 0px 2px 2px rgba(0,0,0,0.2);
+	border-radius: 4px;
+	border-top-left-radius: 0;
+	border-top-right-radius: 0;
+}
+
+.mbt-book.mbt-display-mode-singlecolumn .mbt-book-purchase-button {
+	border: none;
+	box-shadow: none;
+	outline: none;
+	display: inline-block;
+
+	font-size: 18px;
+	text-align: center;
+	color: white;
+	cursor: pointer;
+	-webkit-transition: all 0.3s ease;
+	-o-transition: all 0.3s ease;
+	transition: all 0.3s ease;
+	font-weight: bold;
+	text-decoration: none;
+	font-style: normal;
+
+	padding: 10px 40px;
+	border-radius: 10px;
+	margin: 15px;
+	line-height: 1.2;
+	border-bottom: 5px inset rgba(0,0,0,0.3);
+
+	background-color: #64ACF3;
+}
+.mbt-book.mbt-display-mode-singlecolumn .mbt-book-purchase-button:hover {
+	border-bottom: 5px inset rgba(0,0,0,0.15);
+}
+
+.mbt-book.mbt-display-mode-singlecolumn .mbt-book-purchase {
+	text-align: center;
+}
+
+.mbt-book.mbt-display-mode-singlecolumn .mbt-book-buybuttons {
+	margin: 0 30px;
+	display: inline-block;
+}
+
+.mbt-book.mbt-display-mode-singlecolumn .mbt-book-video-sample {
+	margin-top: 30px;
+	padding-top: 30px;
+	border-top: 1px solid #E0E2E2;
+}
+
+.mbt-book.mbt-display-mode-singlecolumn .mbt-book-overview p:last-child {
+	margin-bottom: 0px;
+}
+
+.mbt-book.mbt-display-mode-singlecolumn .mbt-book-overview,
+.mbt-book.mbt-display-mode-singlecolumn .mbt-book-endorsements,
+.mbt-book.mbt-display-mode-singlecolumn .mbt-book-purchase,
+.mbt-book.mbt-display-mode-singlecolumn .mbt-book-share,
+.mbt-book.mbt-display-mode-singlecolumn .mbt-book-about-author {
+	display: block;
+	clear: both;
+	float: left;
+	margin: 0;
+	margin-top: 30px;
+	border: none;
+	border-top: 1px solid #E0E2E2;
+	padding: 0;
+	padding-top: 20px;
+	width: 100%;
+}
+
+.mbt-book.mbt-display-mode-singlecolumn .mbt-book-overview-title,
+.mbt-book.mbt-display-mode-singlecolumn .mbt-book-endorsements-title,
+.mbt-book.mbt-display-mode-singlecolumn .mbt-book-purchase-title,
+.mbt-book.mbt-display-mode-singlecolumn .mbt-book-share-title,
+.mbt-book.mbt-display-mode-singlecolumn .mbt-book-about-author-title {
+	font-size: 30px;
+	font-weight: bold;
+	text-align: center;
+	margin: 0;
+	padding: 0;
+	padding-bottom: 15px;
+	line-height: 1.3;
+	letter-spacing: 0;
+	text-transform: none;
 }
 
 

@@ -70,6 +70,10 @@ function mbt_is_socialmedia_active() {
 	return apply_filters('mbt_is_socialmedia_active', $active);
 }
 
+function mbt_is_in_compatability_mode() {
+	return (bool)mbt_get_setting('compatibility_mode');
+}
+
 function mbt_save_taxonomy_image($taxonomy, $term, $url) {
 	$taxonomy_images = get_option($taxonomy."_meta");
 	if(empty($taxonomy_images)) { $taxonomy_images = array(); }
@@ -250,8 +254,98 @@ function mbt_copy_and_insert_attachment($path) {
 	return $attach_id;
 }
 
+
+
+/*---------------------------------------------------------*/
+/* Display Modes                                           */
+/*---------------------------------------------------------*/
+
 function mbt_get_book_display_modes() {
-	return apply_filters('mbt_display_modes', array());
+	$modes = apply_filters('mbt_display_modes', array());
+	foreach($modes as $slug => $mode) {
+		if(empty($modes[$slug]['name'])) { $modes[$slug]['name'] = 'Unnamed'; }
+		if(empty($modes[$slug]['supports'])) { $modes[$slug]['supports'] = array(); }
+	}
+	return $modes;
+}
+
+function mbt_add_default_book_display_modes($modes) {
+	$modes['storefront'] = array('name' => 'Storefront', 'supports' => array('compatability'));
+	$modes['singlecolumn'] = array('name' => 'Single Column', 'supports' => array('teaser', 'compatability'));
+	return $modes;
+}
+add_filter('mbt_display_modes', 'mbt_add_default_book_display_modes');
+
+function mbt_get_default_book_display_mode() {
+	return apply_filters('mbt_default_book_display_mode', 'storefront');
+}
+
+function mbt_get_book_display_mode($post_id) {
+	$display_mode = get_post_meta($post_id, 'mbt_display_mode', true);
+	$display_modes = mbt_get_book_display_modes();
+	if(empty($display_modes[$display_mode])) { $display_mode = mbt_get_default_book_display_mode(); }
+	return $display_mode;
+}
+
+function mbt_book_display_mode_supports($display_mode, $supports) {
+	$display_modes = mbt_get_book_display_modes();
+	if(empty($display_modes[$display_mode])) { $display_mode = mbt_get_default_book_display_mode(); }
+	return array_search($supports, $display_modes[$display_mode]['supports']) !== FALSE;
+}
+
+add_action('admin_footer-edit.php', 'mbt_book_bulk_change_display_mode_admin_footer');
+function mbt_book_bulk_change_display_mode_admin_footer() {
+	$display_modes = mbt_get_book_display_modes();
+	global $post_type;
+	if($post_type == 'mbt_book') {
+		?>
+		<script type="text/javascript">
+			jQuery(document).ready(function() {
+				<?php foreach($display_modes as $slug => $mode) { ?>
+				jQuery('<option>').val('mbt-switch-mode-<?php echo($slug); ?>').text('<?php printf(__('Switch to %s mode'), $mode['name']); ?>').appendTo('#bulk-action-selector-top');
+				jQuery('<option>').val('mbt-switch-mode-<?php echo($slug); ?>').text('<?php printf(__('Switch to %s mode'), $mode['name']); ?>').appendTo('#bulk-action-selector-bottom');
+				<?php } ?>
+			});
+		</script>
+	<?php
+	}
+}
+
+add_action('load-edit.php', 'mbt_book_bulk_change_display_mode_action');
+function mbt_book_bulk_change_display_mode_action() {
+	$wp_list_table = _get_list_table('WP_Posts_List_Table');
+	$action = $wp_list_table->current_action();
+
+	if(substr($action, 0, 16) == 'mbt-switch-mode-') {
+		check_admin_referer('bulk-posts');
+
+		$selected_mode = substr($action, 16);
+
+		$display_modes = mbt_get_book_display_modes();
+		if(empty($display_modes[$selected_mode])) { return; }
+
+		$post_ids = array_map('intval', isset($_REQUEST['post']) ? $_REQUEST['post'] : array());
+		if(empty($post_ids)) { return; }
+
+		$books_updated = 0;
+		foreach($post_ids as $post_id) {
+			update_post_meta($post_id, 'mbt_display_mode', $selected_mode);
+
+			$books_updated++;
+		}
+
+		wp_redirect(add_query_arg(array('paged' => $wp_list_table->get_pagenum(), 'mbt-books-updated' => $books_updated), admin_url('edit.php?post_type=mbt_book')));
+		exit();
+	}
+}
+
+add_action('admin_notices', 'mbt_book_bulk_change_display_mode_admin_notices');
+function mbt_book_bulk_change_display_mode_admin_notices() {
+	global $post_type, $pagenow;
+	if($pagenow == 'edit.php' && $post_type == 'mbt_book' && isset($_REQUEST['mbt-books-updated']) && (int)$_REQUEST['mbt-books-updated']) {
+		$message = sprintf(_n('Book updated.', '%s books updated.', $_REQUEST['mbt-books-updated']), number_format_i18n($_REQUEST['mbt-books-updated']));
+		echo('<div class="updated"><p>'.$message.'</p></div>');
+	}
 }
 
 
@@ -303,6 +397,7 @@ function mbt_import_book($book) {
 		'sale_price' => '',
 		'show_instant_preview' => '',
 		'series_order' => '',
+		'display_mode' => '',
 	);
 	$book = array_merge($defaults, $book);
 	if(!empty($book['unique_id'])) { $book['unique_id_isbn'] = $book['unique_id']; }
@@ -330,6 +425,7 @@ function mbt_import_book($book) {
 		if(!empty($book['sale_price'])) { update_post_meta($post_id, 'mbt_sale_price', $book['sale_price']); }
 		if(!empty($book['show_instant_preview'])) { update_post_meta($post_id, 'mbt_show_instant_preview', $book['show_instant_preview']); }
 		if(!empty($book['series_order'])) { update_post_meta($post_id, 'mbt_series_order', $book['series_order']); }
+		if(!empty($book['display_mode'])) { update_post_meta($post_id, 'mbt_display_mode', $book['display_mode']); }
 	} else {
 		$post_id = wp_insert_post(array(
 			'post_title' => $book['title'],
@@ -355,6 +451,7 @@ function mbt_import_book($book) {
 		update_post_meta($post_id, 'mbt_sale_price', $book['sale_price']);
 		update_post_meta($post_id, 'mbt_show_instant_preview', $book['show_instant_preview']);
 		update_post_meta($post_id, 'mbt_series_order', $book['series_order']);
+		update_post_meta($post_id, 'mbt_display_mode', $book['display_mode']);
 
 		if(!empty($book['source_id'])) { update_post_meta($book['source_id'], 'mbt_imported_book_id', $post_id); }
 	}
@@ -580,21 +677,27 @@ function mbt_track_event($name, $instance=false) {
 function mbt_send_tracking_data() {
 	if(mbt_get_setting('allow_tracking') !== 'yes') { return; }
 
-	$books_query = new WP_Query(array('post_type' => 'mbt_book'));
+	$books_query = new WP_Query(array('post_type' => 'mbt_book', 'posts_per_page' => -1));
 	$books = $books_query->posts;
 
 	$book_metas = array_map(create_function('$post', 'return get_post_custom($post->ID);'), $books);
+
 	$num_sample_chapters = 0;
 	$num_prices = 0;
 	$num_isbns = 0;
 	$num_asins = 0;
 	$num_publisher_names = 0;
+	$display_mode_usage = array();
 	foreach($book_metas as $meta) {
 		if(!empty($meta['mbt_sample_url'][0])) { $num_sample_chapters++; }
 		if(!empty($meta['mbt_price'][0])) { $num_prices++; }
 		if(!empty($meta['mbt_unique_id_isbn'][0])) { $num_isbns++; }
 		if(!empty($meta['mbt_unique_id_asin'][0])) { $num_asins++; }
 		if(!empty($meta['mbt_publisher_name'][0])) { $num_publisher_names++; }
+		if(!empty($meta['mbt_display_mode'][0])) {
+			$mode = $meta['mbt_display_mode'][0];
+			if(!isset($display_modes[$mode])) { $display_modes[$mode] = 1; } else { $display_modes[$mode] += 1; }
+		}
 	}
 
 	$stores = mbt_get_stores();
@@ -605,8 +708,9 @@ function mbt_send_tracking_data() {
 			$buybuttons = maybe_unserialize($meta['mbt_buybuttons'][0]);
 			if(is_array($buybuttons)) {
 				foreach($buybuttons as $buybutton) {
-					$buybuttons_stats[$buybutton['store']]++;
-					$buybuttons_display[$buybutton['display']]++;
+					$store = $buybutton['store']; $display = $buybutton['display'];
+					if(!isset($buybuttons_stats[$store])) { $buybuttons_stats[$store] = 0; } else { $buybuttons_stats[$store] += 1; }
+					if(!isset($buybuttons_display[$display])) { $buybuttons_display[$display] = 0; } else { $buybuttons_display[$display] += 1; }
 				}
 			}
 		}
@@ -618,6 +722,8 @@ function mbt_send_tracking_data() {
 	$goodreads_integration = mbt_get_setting('goodreads_developer_key');
 	$aws_integration = mbt_get_setting('aws_access_key_id');
 	$mailchimp_integration = mbt_get_setting('mailchimp_api_key');
+	$email_updates_list = mbt_get_setting('email_updates_list');
+	$genius_link_integration = mbt_get_setting('genius_link_tsid');
 
 	$data = array(
 		'id' => mbt_get_tracking_data('id'),
@@ -644,6 +750,7 @@ function mbt_send_tracking_data() {
 			'product_name' => mbt_get_setting('product_name'),
 			'hide_domc_notice' => mbt_get_setting('hide_domc_notice'),
 			'using_goodreads_integration' => !empty($goodreads_integration),
+			'display_mode_usage' => $display_modes,
 		),
 		'upgrade' => array(
 			'name' => mbt_get_upgrade(),
@@ -654,10 +761,12 @@ function mbt_send_tracking_data() {
 				'using_cj_affiliates' => !empty($cj_affiliates),
 				'using_aws_integration' => !empty($aws_integration),
 				'using_mailchimp_integration' => !empty($mailchimp_integration),
+				'using_genius_link_integration' => !empty($genius_link_integration),
 				'disable_amazon_affiliates' => mbt_get_setting('disable_amazon_affiliates'),
 				'disable_linkshare_affiliates' => mbt_get_setting('disable_linkshare_affiliates'),
 				'disable_cj_affiliates' => mbt_get_setting('disable_cj_affiliates'),
 				'enable_gridview' => mbt_get_setting('enable_gridview'),
+				'using_email_updates_box' => !empty($email_updates_list),
 			)
 		),
 		'statistics' => array(

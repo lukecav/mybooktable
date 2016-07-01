@@ -112,6 +112,7 @@ jQuery(document).ready(function() {
 
 	jQuery('.mbt-check-reviews-button').click(function() {
 		jQuery('.mbt-check-reviews-begin').hide();
+		jQuery('.mbt-check-reviews-results').hide();
 		jQuery('.mbt-check-reviews-checking').show();
 		jQuery.post(ajaxurl,
 			{
@@ -120,6 +121,7 @@ jQuery(document).ready(function() {
 			},
 			function(response) {
 				jQuery('.mbt-check-reviews-checking').hide();
+				jQuery('.mbt-check-reviews-begin').show();
 				jQuery('.mbt-check-reviews-results').show().html(response);
 			}
 		);

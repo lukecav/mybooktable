@@ -101,6 +101,7 @@ function mbt_custom_importer_filter_book($book, $import_type) {
 		$book_matches = $book_matches and ($book['sale_price'] === get_post_meta($existing_book->ID, 'mbt_sale_price', true));
 		$book_matches = $book_matches and ($book['show_instant_preview'] === get_post_meta($existing_book->ID, 'mbt_show_instant_preview', true));
 		$book_matches = $book_matches and ($book['series_order'] === get_post_meta($existing_book->ID, 'mbt_series_order', true));
+		$book_matches = $book_matches and ($book['display_mode'] === get_post_meta($existing_book->ID, 'mbt_display_mode', true));
 		if($book_matches) { return sprintf(__('Book "%s" already exists', 'mybooktable'), $book['title']); }
 	}
 
@@ -181,6 +182,7 @@ function mbt_detect_custom_export_download() {
 		$new_book['sale_price'] = get_post_meta($book->ID, 'mbt_sale_price', true);
 		$new_book['show_instant_preview'] = get_post_meta($book->ID, 'mbt_show_instant_preview', true);
 		$new_book['series_order'] = get_post_meta($book->ID, 'mbt_series_order', true);
+		$new_book['display_mode'] = get_post_meta($book->ID, 'mbt_display_mode', true);
 		$books[] = $new_book;
 	}
 	$data['books'] = $books;

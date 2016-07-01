@@ -283,7 +283,7 @@ function mbt_is_genius_link($url) {
 	if(empty($url)) { return false; }
 	$parsed = parse_url($url);
 	if(empty($parsed['host']) or empty($parsed['path'])) { return false; }
-	return (strcasecmp($parsed['host'], 'geni.us') == 0 or strcasecmp($parsed['host'], 'target.georiot.com') == 0);
+	return (strcasecmp($parsed['host'], 'buy.geni.us') == 0 or strcasecmp($parsed['host'], 'geni.us') == 0 or strcasecmp($parsed['host'], 'target.georiot.com') == 0);
 }
 
 

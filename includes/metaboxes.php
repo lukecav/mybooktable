@@ -8,6 +8,7 @@ function mbt_metaboxes_init() {
 	add_action('wp_ajax_mbt_asin_preview', 'mbt_asin_preview_ajax');
 	add_action('admin_enqueue_scripts', 'mbt_enqueue_metabox_js');
 
+	add_action('save_post', 'mbt_save_book_blurb_metabox');
 	add_action('save_post', 'mbt_save_metadata_metabox');
 	add_action('save_post', 'mbt_save_buybuttons_metabox');
 	add_action('save_post', 'mbt_save_series_order_metabox');
@@ -57,11 +58,12 @@ function mbt_add_display_mode_field($post) {
 	$display_modes = mbt_get_book_display_modes();
 	if(empty($display_modes)) { return; }
 	$current_mode = get_post_meta($post->ID, 'mbt_display_mode', true);
+	if(empty($display_modes[$current_mode])) { $current_mode = mbt_get_default_book_display_mode(); }
 	?>
 	<div class="misc-pub-section misc-pub-displaymode" id="mbt_displaymode_field">
+	<input type="hidden" id="mbt_display_modes" value='<?php echo(str_replace('\'', '&#39;', json_encode($display_modes))); ?>'>
 	<label for="mbt_display_mode">Display Mode:</span>
 	<select name="mbt_display_mode" id="mbt_display_mode">
-		<option value="" <?php selected($current_mode, ''); ?> ><?php _e('Default', 'mybooktable');?></option>
 		<?php foreach($display_modes as $display_mode_id => $display_mode) { ?>
 			<option value="<?php echo($display_mode_id); ?>" <?php selected($display_mode_id, $current_mode); ?> ><?php echo($display_mode['name']); ?></option>
 		<?php } ?>
@@ -82,13 +84,21 @@ function mbt_save_display_mode_field($post_id) {
 /*---------------------------------------------------------*/
 
 function mbt_book_blurb_metabox($post) {
-	do_action('mbt_before_book_blurb_metabox', $post);
 ?>
+	<div class="mbt_book_teaser_field">
+		<label for="mbt_book_teaser"><?php _e('Teaser Text:', 'mybooktable'); ?></label>
+		<div class="mbt_book_teaser_input"><input type="text" name="mbt_book_teaser" id="mbt_book_teaser" value="<?php echo(get_post_meta($post->ID, 'mbt_book_teaser', true)); ?>"></div>
+	</div>
 	<label class="screen-reader-text" for="excerpt"><?php _e('Excerpt', 'mybooktable'); ?></label><textarea rows="1" cols="40" name="excerpt" id="excerpt"><?php echo($post->post_excerpt); ?></textarea>
 	<p class="description">
 	<?php printf(__('Book Blurbs are hand-crafted summaries of your book. The goal of a book blurb is to convince strangers that they need buy your book in 100 words or less. Answer the question "why would I want to read this book?" <a href="%s" target="_blank">Learn more about writing your book blurb.</a>', 'mybooktable'), admin_url('admin.php?page=mbt_help&mbt_video_tutorial=book_blurbs')); ?>
 	</p>
 <?php
+}
+
+function mbt_save_book_blurb_metabox($post_id) {
+	if((defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) || get_post_status($post_id) == 'auto-draft' || get_post_type($post_id) !== 'mbt_book') { return; }
+	if(isset($_REQUEST['mbt_book_teaser'])) { update_post_meta($post_id, 'mbt_book_teaser', $_REQUEST['mbt_book_teaser']); }
 }
 
 
@@ -185,6 +195,13 @@ function mbt_metadata_checkbox($post_id, $field_id, $data) {
 	return '<input type="checkbox" name="'.$field_id.'" id="'.$field_id.'" '.checked($value, 'yes', false).'>';
 }
 
+function mbt_metadata_kindle_instant_preview($post_id, $field_id, $data) {
+	$output = mbt_metadata_checkbox($post_id, $field_id, $data);
+	$asin = get_post_meta($post_id, 'mbt_unique_id_asin', true);
+	$output .= empty($asin) ? '<br><span class="mbt_admin_message_warning" id="mbt_show_instant_preview_asin_warning">'.__('Cannot show Kindle Instant Preview without a valid ASIN.', 'mybooktable').'</span>' : '';
+	return $output;
+}
+
 function mbt_metadata_upload($post_id, $field_id, $data) {
 	$output = '';
 	$output .= '<input type="text" name="'.$field_id.'" id="'.$field_id.'" value="'.get_post_meta($post_id, $field_id, true).'" /> ';
@@ -209,7 +226,7 @@ function mbt_get_metadata_fields() {
 	return array(
 		'Book Samples' => array(
 			'mbt_show_instant_preview' => array(
-				'type' => 'mbt_metadata_checkbox',
+				'type' => 'mbt_metadata_kindle_instant_preview',
 				'name' => __('Kindle Instant Preview', 'mybooktable'),
 				'desc' => __('Displays a free instant preview of your book from Amazon.', 'mybooktable'),
 				'default' => 'yes',
@@ -453,7 +470,7 @@ function mbt_save_buybuttons_metabox($post_id) {
 		// auto-populate book asin
 		if(get_post_meta($post_id, 'mbt_show_instant_preview', true) == 'yes' and get_post_meta($post_id, 'mbt_unique_id_asin', true) == '') {
 			foreach($buybuttons as $buybutton) {
-				if($buybutton['store'] == 'amazon') {
+				if($buybutton['store'] == 'amazon' or $buybutton['store'] == 'kindle') {
 					$asin = mbt_get_amazon_AISN($buybutton['url']);
 					if(!empty($asin)) { update_post_meta($post_id, 'mbt_unique_id_asin', $asin); }
 					break;
