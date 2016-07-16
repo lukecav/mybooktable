@@ -55,10 +55,4 @@ jQuery(document).ready(function() {
 		return false;
 	});
 
-	/*---------------------------------------------------------*/
-	/* Single Column Mode                                      */
-	/*---------------------------------------------------------*/
-
-	jQuery('.mbt-book.mbt-display-mode-singlecolumn .mbt-book-meta').accordion({collapsible: true, active: false, heightStyle: 'content'});
-
 });

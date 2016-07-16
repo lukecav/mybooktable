@@ -121,7 +121,7 @@ function mbt_mybooktable_shortcode($attrs) {
 			} else if(!empty($attrs['display']) and $attrs['display'] === 'cover+buybuttons') {
 				?>
 				<div id="mbt-container">
-					<div class="<?php mbt_the_book_class('shortcode-cover+buybuttons'); ?>">
+					<div class="<?php mbt_the_book_class('shortcode-cover-buybuttons'); ?>">
 						<div class="mbt-book-images">
 							<?php mbt_the_book_image(); ?>
 						</div>
@@ -186,6 +186,14 @@ function mbt_add_authormedia_shortcodes($shortcodes) {
 		'mybooktable' => array(
 			'title'			=> __('All Books', 'mybooktable'),
 			'description'	=> __('List all your books in an embedded book listing.', 'mybooktable'),
+			'settings'		=> array(
+				'header'	=> array(
+					'title'			=> __('Header', 'mybooktable'),
+					'description'	=> 'Shows the book table title and description above the book listing',
+					'type'			=> 'dropdown',
+					'choices'		=> array('show' => 'Shown', 'hidden' => 'Hidden')
+				)
+			)
 		),
 		'mybooktable-series' => array(
 			'title'			=> __('All Books in Series', 'mybooktable'),
@@ -202,6 +210,12 @@ function mbt_add_authormedia_shortcodes($shortcodes) {
 					'default'		=> false,
 					'type'			=> 'checkbox',
 					'description'	=> 'Shows book covers in a responsive grid. (requires Professional or Developer Upgrade)'
+				),
+				'header'	=> array(
+					'title'			=> __('Header', 'mybooktable'),
+					'description'	=> 'Shows the taxonomy title and description above the book listing',
+					'type'			=> 'dropdown',
+					'choices'		=> array('show' => 'Shown', 'hidden' => 'Hidden')
 				)
 			)
 		),
@@ -220,6 +234,12 @@ function mbt_add_authormedia_shortcodes($shortcodes) {
 					'default'		=> false,
 					'type'			=> 'checkbox',
 					'description'	=> 'Shows book covers in a responsive grid. (requires Professional or Developer Upgrade)'
+				),
+				'header'	=> array(
+					'title'			=> __('Header', 'mybooktable'),
+					'description'	=> 'Shows the taxonomy title and description above the book listing',
+					'type'			=> 'dropdown',
+					'choices'		=> array('show' => 'Shown', 'hidden' => 'Hidden')
 				)
 			)
 		),
@@ -238,6 +258,12 @@ function mbt_add_authormedia_shortcodes($shortcodes) {
 					'default'		=> false,
 					'type'			=> 'checkbox',
 					'description'	=> 'Shows book covers in a responsive grid. (requires Professional or Developer Upgrade)'
+				),
+				'header'	=> array(
+					'title'			=> __('Header', 'mybooktable'),
+					'description'	=> 'Shows the taxonomy title and description above the book listing',
+					'type'			=> 'dropdown',
+					'choices'		=> array('show' => 'Shown', 'hidden' => 'Hidden')
 				)
 			)
 		),
@@ -256,6 +282,12 @@ function mbt_add_authormedia_shortcodes($shortcodes) {
 					'default'		=> false,
 					'type'			=> 'checkbox',
 					'description'	=> 'Shows book covers in a responsive grid. (requires Professional or Developer Upgrade)'
+				),
+				'header'	=> array(
+					'title'			=> __('Header', 'mybooktable'),
+					'description'	=> 'Shows the taxonomy title and description above the book listing',
+					'type'			=> 'dropdown',
+					'choices'		=> array('show' => 'Shown', 'hidden' => 'Hidden')
 				)
 			)
 		),

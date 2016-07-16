@@ -23,11 +23,48 @@
 	width: 100%;
 }
 
+.mbt_overview_image_field {
+	display: none;
+	margin-bottom: 10px;
+	font-size: 14px;
+}
+
+.mbt_overview_image_field label {
+	font-weight: bold;
+	vertical-align: middle;
+}
+
+.mbt_overview_image_field .mbt_overview_image_preview {
+	display: inline-block;
+	vertical-align: middle;
+	margin: 0 5px 0 3px;
+}
+
+.mbt_overview_image_field input.button {
+	vertical-align: middle;
+}
+
 .post-php.post-type-mbt_book .description {
     margin: 7px 0 0 0;
 }
 
-#mbt_displaymode_field:before {
+#mbt_post_author_field:before {
+	content: "\f110";
+	font: 400 20px/1 dashicons;
+	speak: none;
+	display: inline-block;
+	padding: 0 2px 0 0;
+	top: 4px;
+	left: -1px;
+	position: relative;
+	vertical-align: top;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+	text-decoration: none!important;
+	color: #82878c;
+}
+
+#mbt_display_mode_field:before {
 	content: "\f177";
 	font: 400 20px/1 dashicons;
 	speak: none;
@@ -41,6 +78,18 @@
 	-moz-osx-font-smoothing: grayscale;
 	text-decoration: none!important;
 	color: #82878c;
+}
+
+@media only screen and (min-width: 850px) {
+	#mbt_post_author {
+		width: 140px;
+		margin-left: 5px;
+	}
+
+	#mbt_display_mode {
+		width: 130px;
+		margin-left: 5px;
+	}
 }
 
 #mbt_metadata .inside {
@@ -246,7 +295,7 @@ div.star-rating{background:transparent!important;overflow:hidden!important}
 
 .mbt_endorsement_image_field {
     min-height: 80px;
-    width: 100px;
+    width: 110px;
     margin-right: 10px;
     float: left;
     text-align: center;

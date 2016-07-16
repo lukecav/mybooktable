@@ -358,6 +358,7 @@
 
 .mbt-book-endorsements {
 	padding-top: 15px;
+    font-size: 14px;
 }
 
 .mbt-book-endorsements .mbt-book-endorsements-title {
@@ -396,33 +397,37 @@
 }
 
 .mbt-book-endorsements .mbt-endorsement .mbt-endorsement-content {
-	width: 73%;
 	padding: 0.7em 2.5% 0;
 	line-height: 1.7;
+}
+
+.mbt-book-endorsements .mbt-endorsement .mbt-endorsement-image+.mbt-endorsement-content {
+	width: 73%;
 }
 
 .mbt-book-endorsements .mbt-endorsement .mbt-endorsement-name {
 	padding-top: 0.7em;
 	line-height: 1;
 	opacity: 0.8;
+	text-align: right;
 }
 
-.mbt-book-endorsements .mbt-endorsement:nth-child(even) .mbt-endorsement-image {
+.mbt-book-endorsements .mbt-endorsement:nth-child(odd) .mbt-endorsement-image {
 	float: left;
 }
-.mbt-book-endorsements .mbt-endorsement:nth-child(even) .mbt-endorsement-content {
+.mbt-book-endorsements .mbt-endorsement:nth-child(odd) .mbt-endorsement-image+.mbt-endorsement-content {
 	float: right;
 }
-.mbt-book-endorsements .mbt-endorsement:nth-child(even) .mbt-endorsement-name {
+.mbt-book-endorsements .mbt-endorsement:nth-child(odd) .mbt-endorsement-image+.mbt-endorsement-content .mbt-endorsement-name {
 	text-align: left;
 }
-.mbt-book-endorsements .mbt-endorsement:nth-child(odd) .mbt-endorsement-image {
+.mbt-book-endorsements .mbt-endorsement:nth-child(even) .mbt-endorsement-image {
 	float: right;
 }
-.mbt-book-endorsements .mbt-endorsement:nth-child(odd) .mbt-endorsement-content {
+.mbt-book-endorsements .mbt-endorsement:nth-child(even) .mbt-endorsement-image+.mbt-endorsement-content {
 	float: left;
 }
-.mbt-book-endorsements .mbt-endorsement:nth-child(odd) .mbt-endorsement-name {
+.mbt-book-endorsements .mbt-endorsement:nth-child(even) .mbt-endorsement-image+.mbt-endorsement-content .mbt-endorsement-name {
 	text-align: right;
 }
 
@@ -457,6 +462,7 @@
 	background-repeat: no-repeat;
 	background-position: 20px 10px;
 	cursor: pointer;
+    border: none;
 	-webkit-touch-callout: none;
 	-webkit-user-select: none;
 	-khtml-user-select: none;
@@ -654,6 +660,7 @@
 
 .mbt-book .mbt-book-about-author {
 	padding-top: 15px;
+    font-size: 14px;
 }
 
 .mbt-book .mbt-book-about-author .mbt-book-about-author-title {
@@ -704,93 +711,43 @@
 
 
 /*---------------------------------------------------------*/
-/* Single Column Mode Styling                              */
+/* Hero Page Mode Styling                                  */
 /*---------------------------------------------------------*/
 
-.mbt-book.mbt-display-mode-singlecolumn .mbt-book-title {
+.mbt-book.mbt-book-single.mbt-display-mode-heropage .mbt-book-title {
 	margin: 0;
 	padding-bottom: 30px;
 }
 
-.mbt-book.mbt-display-mode-singlecolumn .mbt-book-images {
+.mbt-book.mbt-book-single.mbt-display-mode-heropage .mbt-book-images {
 	width: 35%;
 }
 
-.mbt-book.mbt-display-mode-singlecolumn .mbt-book-right {
+.mbt-book.mbt-book-single.mbt-display-mode-heropage .mbt-book-right {
 	width: 65%;
 	text-align: center;
 }
 
-.mbt-book.mbt-display-mode-singlecolumn .mbt-book-teaser {
+.mbt-book.mbt-book-single.mbt-display-mode-heropage .mbt-book-teaser {
 	margin: 0 0 20px 30px;
 	padding: 0;
-	font-size: 30px;
+	font-size: 20px;
 	font-weight: bold;
 	text-align: left;
+	line-height: 1.5;
 }
 
-.mbt-book.mbt-display-mode-singlecolumn .mbt-book-blurb {
+.mbt-book.mbt-book-single.mbt-display-mode-heropage .mbt-book-blurb {
 	background: none;
 	border: none;
 	padding: 0;
 	margin: 0 0 0 30px;
-	font-size: 20px;
-	text-align: left;
-}
-
-.mbt-book.mbt-display-mode-singlecolumn .mbt-book-meta {
-	margin: 12px 0 0 0;
-	clear: both;
-}
-
-.mbt-book.mbt-display-mode-singlecolumn .mbt-book-meta .mbt-book-meta-title {
-	background: white;
-	color: #666;
-	display: inline-block;
-	padding-right: 5px;
 	font-size: 18px;
-	font-weight: bold;
-	cursor: pointer;
-	outline: none;
-	border: 1px solid #bbb;
-	border-radius: 4px;
+	text-align: left;
+	line-height: 1.5;
 }
 
-.mbt-book.mbt-display-mode-singlecolumn .mbt-book-meta .mbt-book-meta-title .ui-accordion-header-icon {
-	display: none;
-}
-
-.mbt-book.mbt-display-mode-singlecolumn .mbt-book-meta .mbt-book-meta-title.ui-state-active {
-	display: block;
-	color: #333;
-	border-bottom: none;
-	border-bottom-left-radius: 0;
-	border-bottom-right-radius: 0;
-}
-
-.mbt-book.mbt-display-mode-singlecolumn .mbt-book-meta .mbt-book-meta-title:before {
-	content: '+';
-	display: inline-block;
-	width: 20px;
-	text-align: center;
-	font-weight: normal;
-}
-
-.mbt-book.mbt-display-mode-singlecolumn .mbt-book-meta .mbt-book-meta-title.ui-state-active:before {
-	content: '\2013';
-}
-
-.mbt-book.mbt-display-mode-singlecolumn .mbt-book-meta .ui-widget-content {
-	background: white;
-	padding: 5px 10px;
-	border: 1px solid #bbb;
-	box-shadow: 0px 2px 2px rgba(0,0,0,0.2);
-	border-radius: 4px;
-	border-top-left-radius: 0;
-	border-top-right-radius: 0;
-}
-
-.mbt-book.mbt-display-mode-singlecolumn .mbt-book-purchase-button {
+.mbt-book.mbt-book-single.mbt-display-mode-heropage .mbt-book-purchase-button {
 	border: none;
 	box-shadow: none;
 	outline: none;
@@ -810,39 +767,60 @@
 	padding: 10px 40px;
 	border-radius: 10px;
 	margin: 15px;
+    margin-top: 22px;
 	line-height: 1.2;
 	border-bottom: 5px inset rgba(0,0,0,0.3);
 
 	background-color: #64ACF3;
 }
-.mbt-book.mbt-display-mode-singlecolumn .mbt-book-purchase-button:hover {
+.mbt-book.mbt-book-single.mbt-display-mode-heropage .mbt-book-purchase-button:hover {
 	border-bottom: 5px inset rgba(0,0,0,0.15);
 }
 
-.mbt-book.mbt-display-mode-singlecolumn .mbt-book-purchase {
+.mbt-book.mbt-book-single.mbt-display-mode-heropage .mbt-book-purchase {
 	text-align: center;
 }
 
-.mbt-book.mbt-display-mode-singlecolumn .mbt-book-buybuttons {
+.mbt-book.mbt-book-single.mbt-display-mode-heropage .mbt-book-buybuttons {
 	margin: 0 30px;
 	display: inline-block;
 }
 
-.mbt-book.mbt-display-mode-singlecolumn .mbt-book-video-sample {
+.mbt-book.mbt-book-single.mbt-display-mode-heropage .mbt-book-video-sample {
 	margin-top: 30px;
 	padding-top: 30px;
 	border-top: 1px solid #E0E2E2;
 }
 
-.mbt-book.mbt-display-mode-singlecolumn .mbt-book-overview p:last-child {
+.mbt-book.mbt-book-single.mbt-display-mode-heropage .mbt-book-overview p {
+    line-height: 1.7em;
+    padding: 0;
+    margin: 0;
+    margin-bottom: 0.9em;
+}
+
+.mbt-book.mbt-book-single.mbt-display-mode-heropage .mbt-book-overview p:last-child {
 	margin-bottom: 0px;
 }
 
-.mbt-book.mbt-display-mode-singlecolumn .mbt-book-overview,
-.mbt-book.mbt-display-mode-singlecolumn .mbt-book-endorsements,
-.mbt-book.mbt-display-mode-singlecolumn .mbt-book-purchase,
-.mbt-book.mbt-display-mode-singlecolumn .mbt-book-share,
-.mbt-book.mbt-display-mode-singlecolumn .mbt-book-about-author {
+.mbt-book.mbt-book-single.mbt-display-mode-heropage .mbt-book-overview ul li {
+	list-style-type: disc;
+	list-style-position: inside;
+	padding: 0;
+	margin: 0 0 0.7em 0;
+}
+
+.mbt-book.mbt-book-single.mbt-display-mode-heropage .mbt-book-meta .mbt-book-meta-items {
+	font-size: 16px;
+	line-height: 1.5;
+}
+
+.mbt-book.mbt-book-single.mbt-display-mode-heropage .mbt-book-overview,
+.mbt-book.mbt-book-single.mbt-display-mode-heropage .mbt-book-endorsements,
+.mbt-book.mbt-book-single.mbt-display-mode-heropage .mbt-book-purchase,
+.mbt-book.mbt-book-single.mbt-display-mode-heropage .mbt-book-share,
+.mbt-book.mbt-book-single.mbt-display-mode-heropage .mbt-book-about-author,
+.mbt-book.mbt-book-single.mbt-display-mode-heropage .mbt-book-meta {
 	display: block;
 	clear: both;
 	float: left;
@@ -853,13 +831,16 @@
 	padding: 0;
 	padding-top: 20px;
 	width: 100%;
+	font-size: 16px;
+	line-height: 1;
 }
 
-.mbt-book.mbt-display-mode-singlecolumn .mbt-book-overview-title,
-.mbt-book.mbt-display-mode-singlecolumn .mbt-book-endorsements-title,
-.mbt-book.mbt-display-mode-singlecolumn .mbt-book-purchase-title,
-.mbt-book.mbt-display-mode-singlecolumn .mbt-book-share-title,
-.mbt-book.mbt-display-mode-singlecolumn .mbt-book-about-author-title {
+.mbt-book.mbt-book-single.mbt-display-mode-heropage .mbt-book-overview-title,
+.mbt-book.mbt-book-single.mbt-display-mode-heropage .mbt-book-endorsements-title,
+.mbt-book.mbt-book-single.mbt-display-mode-heropage .mbt-book-purchase-title,
+.mbt-book.mbt-book-single.mbt-display-mode-heropage .mbt-book-share-title,
+.mbt-book.mbt-book-single.mbt-display-mode-heropage .mbt-book-about-author-title,
+.mbt-book.mbt-book-single.mbt-display-mode-heropage .mbt-book-meta-title {
 	font-size: 30px;
 	font-weight: bold;
 	text-align: center;

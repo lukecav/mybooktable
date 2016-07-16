@@ -81,6 +81,17 @@ jQuery(document).ready(function() {
 
 	jQuery('.mbt_upload_button').mbt_upload_button();
 
+	jQuery.fn.mbt_upload_clear_button = function() {
+		jQuery(this).each(function(i, e) {
+			var element = jQuery(e);
+			element.on('click', function() {
+				jQuery('#'+element.attr('data-upload-target')).val('').trigger('change');
+			});
+		});
+	}
+
+	jQuery('.mbt_upload_clear_button').mbt_upload_clear_button();
+
 	/*---------------------------------------------------------*/
 	/* Book Import Page                                        */
 	/*---------------------------------------------------------*/

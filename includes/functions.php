@@ -34,6 +34,7 @@ function mbt_reset_settings() {
 		'show_series' => true,
 		'show_find_bookstore' => true,
 		'show_find_bookstore_buybuttons_shadowbox' => true,
+		'show_about_author' => true,
 		'book_button_size' => 'medium',
 		'listing_button_size' => 'medium',
 		'widget_button_size' => 'medium',
@@ -202,12 +203,18 @@ function mbt_download_and_insert_attachment($url) {
 	$filename = preg_replace('/[^A-Za-z0-9_.]/', '', $filename);
 	$upload_dir = wp_upload_dir();
 	$filepath = $upload_dir['path'].'/'.$filename;
+	$fileurl = $upload_dir['url'].'/'.$filename;
+
+	if($wp_filesystem->exists($filepath)) {
+		$existing_id = $wpdb->get_var($wpdb->prepare("SELECT ID FROM $wpdb->posts WHERE guid=%s", $fileurl));
+		if(!empty($existing_id)) { return $existing_id; } else { return 0; }
+	}
 
 	if(!$wp_filesystem->put_contents($filepath, $file_data, FS_CHMOD_FILE)) { return 0; }
 
 	$filetype = wp_check_filetype(basename($filepath), null);
 	$attachment = array(
-		'guid'           => $upload_dir['url'].'/'.$filename,
+		'guid'           => $fileurl,
 		'post_mime_type' => $filetype['type'],
 		'post_title'     => preg_replace('/\.[^.]+$/', '', $filename),
 		'post_content'   => '',
@@ -227,18 +234,24 @@ function mbt_copy_and_insert_attachment($path) {
 	$nonce_url = wp_nonce_url('admin.php', 'mbt_copy_and_insert_attachment');
 	$output = mbt_get_wp_filesystem($nonce_url);
 	if(!empty($output)) { return 0;	}
-	global $wp_filesystem;
+	global $wp_filesystem, $wpdb;
 
 	$filename = basename($path);
 	$filename = preg_replace('/[^A-Za-z0-9_.]/', '', $filename);
 	$upload_dir = wp_upload_dir();
 	$filepath = $upload_dir['path'].'/'.$filename;
+	$fileurl = $upload_dir['url'].'/'.$filename;
+
+	if($wp_filesystem->exists($filepath)) {
+		$existing_id = $wpdb->get_var($wpdb->prepare("SELECT ID FROM $wpdb->posts WHERE guid=%s", $fileurl));
+		if(!empty($existing_id)) { return $existing_id; } else { return 0; }
+	}
 
 	if(!$wp_filesystem->copy($path, $filepath, false, FS_CHMOD_FILE)) { return 0; }
 
 	$filetype = wp_check_filetype(basename($filepath), null);
 	$attachment = array(
-		'guid'           => $upload_dir['url'].'/'.$filename,
+		'guid'           => $fileurl,
 		'post_mime_type' => $filetype['type'],
 		'post_title'     => preg_replace('/\.[^.]+$/', '', $filename),
 		'post_content'   => '',
@@ -271,13 +284,13 @@ function mbt_get_book_display_modes() {
 
 function mbt_add_default_book_display_modes($modes) {
 	$modes['storefront'] = array('name' => 'Storefront', 'supports' => array('compatability'));
-	$modes['singlecolumn'] = array('name' => 'Single Column', 'supports' => array('teaser', 'compatability'));
+	$modes['heropage'] = array('name' => 'Hero Page', 'supports' => array('teaser', 'compatability'));
 	return $modes;
 }
 add_filter('mbt_display_modes', 'mbt_add_default_book_display_modes');
 
 function mbt_get_default_book_display_mode() {
-	return apply_filters('mbt_default_book_display_mode', 'storefront');
+	return apply_filters('mbt_default_book_display_mode', 'heropage');
 }
 
 function mbt_get_book_display_mode($post_id) {

@@ -10,16 +10,25 @@ jQuery(document).ready(function() {
 
 		function update_display_mode() {
 			var supports_teaser = false;
+			var supports_overview_image = false;
+
 			var display_mode = jQuery('#mbt_display_mode').val();
 			if(book_display_modes[display_mode]) {
 				var display_mode_supports = book_display_modes[display_mode].supports;
 				supports_teaser = display_mode_supports.indexOf('teaser') !== -1;
+				supports_overview_image = display_mode_supports.indexOf('overview_image') !== -1;
 			}
 
 			if(supports_teaser) {
 				jQuery('.mbt_book_teaser_field').show();
 			} else {
 				jQuery('.mbt_book_teaser_field').hide();
+			}
+
+			if(supports_overview_image) {
+				jQuery('.mbt_overview_image_field').show();
+			} else {
+				jQuery('.mbt_overview_image_field').hide();
 			}
 		}
 
@@ -108,6 +117,22 @@ jQuery(document).ready(function() {
 	}
 
 	/*---------------------------------------------------------*/
+	/* Overview Metabox                                        */
+	/*---------------------------------------------------------*/
+
+	jQuery("#mbt_overview_image").change(function() {
+		jQuery.post(ajaxurl,
+			{
+				action: 'mbt_overview_image_preview',
+				image_id: jQuery('#mbt_overview_image').val(),
+			},
+			function(response) {
+				jQuery('.mbt_overview_image_preview').html(response);
+			}
+		);
+	});
+
+	/*---------------------------------------------------------*/
 	/* Endorsements Metabox                                    */
 	/*---------------------------------------------------------*/
 
@@ -129,6 +154,7 @@ jQuery(document).ready(function() {
 		src += '			<div class="mbt_endorsement_image_preview_'+id+'"></div>';
 		src += '			<input type="hidden" class="mbt_endorsement_image" id="mbt_endorsement_image_'+id+'" value="" />';
 		src += '			<input class="mbt_endorsement_image_upload button" data-upload-property="id" data-upload-target="mbt_endorsement_image_'+id+'" type="button" value="Choose" />';
+		src += '			<input class="mbt_endorsement_image_upload_clear button" data-upload-target="mbt_endorsement_image_'+id+'" type="button" value="X" />';
 		src += '		</div>';
 		src += '		<div class="mbt_endorsement_content_field">';
 		src += '			<label>Endorsement:<br><textarea class="mbt_endorsement_content_text"></textarea></label>';
@@ -147,6 +173,7 @@ jQuery(document).ready(function() {
 		editors.prepend(new_item);
 
 		new_item.find('.mbt_endorsement_image_upload').mbt_upload_button();
+		new_item.find('.mbt_endorsement_image_upload_clear').mbt_upload_clear_button();
 		new_item.find('.mbt_endorsement_image').change(function() {
 			jQuery.post(ajaxurl,
 				{
@@ -160,7 +187,7 @@ jQuery(document).ready(function() {
 					}
 				}
 			);
-		});
+		}).trigger('change');
 
 		return new_item;
 	}
@@ -200,5 +227,29 @@ jQuery(document).ready(function() {
 		jQuery('input[type="submit"]').click(save_endorsements);
 		load_endorsements();
 	}
+
+	/*---------------------------------------------------------*/
+	/* Authors Metabox                                         */
+	/*---------------------------------------------------------*/
+
+	function update_main_author_link() {
+		authors = [];
+		jQuery('input[name="tax_input[mbt_author][]"]:checked').each(function(i, e) {
+			authors.push(jQuery(e).val());
+		});
+		console.log(authors);
+		jQuery.post(ajaxurl,
+			{
+				action: 'mbt_main_author_url',
+				authors: authors,
+			},
+			function(response) {
+				console.log(response);
+				jQuery('#mbt_main_author_link').attr('href', response);
+			}
+		);
+	}
+	jQuery('input[name="tax_input[mbt_author][]"]').change(update_main_author_link);
+	update_main_author_link();
 
 });

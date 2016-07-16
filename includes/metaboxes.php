@@ -6,16 +6,21 @@ function mbt_metaboxes_init() {
 	add_action('wp_ajax_mbt_endorsement_image_preview', 'mbt_endorsement_image_preview_ajax');
 	add_action('wp_ajax_mbt_isbn_preview', 'mbt_isbn_preview_ajax');
 	add_action('wp_ajax_mbt_asin_preview', 'mbt_asin_preview_ajax');
+	add_action('wp_ajax_mbt_overview_image_preview', 'mbt_overview_image_preview_ajax');
+	add_action('wp_ajax_mbt_main_author_url', 'mbt_main_author_url_ajax');
 	add_action('admin_enqueue_scripts', 'mbt_enqueue_metabox_js');
 
 	add_action('save_post', 'mbt_save_book_blurb_metabox');
 	add_action('save_post', 'mbt_save_metadata_metabox');
 	add_action('save_post', 'mbt_save_buybuttons_metabox');
 	add_action('save_post', 'mbt_save_series_order_metabox');
-	add_action('save_post', 'mbt_save_display_mode_field');
 	add_action('save_post', 'mbt_save_endorsements_metabox');
+	add_action('save_post', 'mbt_save_overview_metabox');
+	add_action('save_post', 'mbt_save_display_mode_field');
+	add_action('save_post', 'mbt_save_post_author_field');
 
 	add_action('add_meta_boxes', 'mbt_add_metaboxes', 9);
+	add_action('post_submitbox_misc_actions', 'mbt_add_post_author_field');
 	add_action('post_submitbox_misc_actions', 'mbt_add_display_mode_field');
 }
 add_action('mbt_init', 'mbt_metaboxes_init');
@@ -24,7 +29,7 @@ function mbt_add_metaboxes() {
 	add_meta_box('mbt_blurb', __('Book Blurb', 'mybooktable'), 'mbt_book_blurb_metabox', 'mbt_book', 'normal', 'high');
 	add_meta_box('mbt_metadata', __('Book Details', 'mybooktable'), 'mbt_metadata_metabox', 'mbt_book', 'normal', 'high');
 	add_meta_box('mbt_buybuttons', __('Buy Buttons', 'mybooktable'), 'mbt_buybuttons_metabox', 'mbt_book', 'normal', 'high');
-	add_meta_box('mbt_overview', __('Book Overview', 'mybooktable'), 'mbt_overview_metabox', 'mbt_book', 'normal', 'high');
+	add_meta_box('mbt_overview', __('About the Book', 'mybooktable'), 'mbt_overview_metabox', 'mbt_book', 'normal', 'high');
 	add_meta_box('mbt_endorsements', __('Endorsements', 'mybooktable'), 'mbt_endorsements_metabox', 'mbt_book', 'normal', 'high');
 	add_meta_box('mbt_series_order', __('Series Order', 'mybooktable'), 'mbt_series_order_metabox', 'mbt_book', 'side', 'default');
 }
@@ -41,11 +46,34 @@ function mbt_override_authors_metabox() {
 	?>
 		<script type="text/javascript">
 			jQuery(document).ready(function() {
-				jQuery('#mbt_authordiv .inside').append(jQuery('<p class="description"><a href="<?php echo(admin_url('edit-tags.php?taxonomy=mbt_author&post_type=mbt_book')); ?>" target="_blank"><?php _e('Set the priority (order) of the authors.', 'mybooktable'); ?></a></p>'));
+				jQuery('#mbt_authordiv .inside').append(jQuery('<p class="description"><a href="<?php echo(admin_url('edit-tags.php?taxonomy=mbt_author&post_type=mbt_book')); ?>" target="_blank"><?php _e('Set the priority (order) of the authors', 'mybooktable'); ?></a></p>'));
+				jQuery('#mbt_authordiv .inside').append(jQuery('<p class="description"><a id="mbt_main_author_link" href="<?php echo(admin_url('edit-tags.php?taxonomy=mbt_author&post_type=mbt_book')); ?>" target="_blank"><?php _e('Edit the main author bio', 'mybooktable'); ?></a></p>'));
 			});
 		</script>
 	<?php
 }
+
+function mbt_main_author_url_ajax() {
+	$main_author = NULL;
+	if(!empty($_REQUEST['authors'])) {
+		$authors = $_REQUEST['authors'];
+		$sortfunc = function($a, $b) {
+			$a = mbt_get_author_priority($a);
+			$b = mbt_get_author_priority($b);
+			return ($a > $b) ? -1 : (($a < $b) ? 1 : 0);
+		};
+		usort($authors, $sortfunc);
+		$main_author = $authors[0];
+	}
+	if(empty($main_author)) {
+		echo(admin_url('edit-tags.php?taxonomy=mbt_author&post_type=mbt_book'));
+	} else {
+		echo(admin_url('term.php?taxonomy=mbt_author&post_type=mbt_book&tag_ID='.$main_author));
+	}
+	die();
+}
+
+
 
 
 
@@ -60,7 +88,7 @@ function mbt_add_display_mode_field($post) {
 	$current_mode = get_post_meta($post->ID, 'mbt_display_mode', true);
 	if(empty($display_modes[$current_mode])) { $current_mode = mbt_get_default_book_display_mode(); }
 	?>
-	<div class="misc-pub-section misc-pub-displaymode" id="mbt_displaymode_field">
+	<div class="misc-pub-section misc-pub-display-mode" id="mbt_display_mode_field">
 	<input type="hidden" id="mbt_display_modes" value='<?php echo(str_replace('\'', '&#39;', json_encode($display_modes))); ?>'>
 	<label for="mbt_display_mode">Display Mode:</span>
 	<select name="mbt_display_mode" id="mbt_display_mode">
@@ -75,6 +103,24 @@ function mbt_add_display_mode_field($post) {
 function mbt_save_display_mode_field($post_id) {
 	if((defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) || get_post_status($post_id) == 'auto-draft' || get_post_type($post_id) !== 'mbt_book') { return; }
 	if(isset($_REQUEST['mbt_display_mode'])) { update_post_meta($post_id, 'mbt_display_mode', $_REQUEST['mbt_display_mode']); }
+}
+
+function mbt_add_post_author_field($post) {
+	?>
+	<div class="misc-pub-section misc-pub-post-author" id="mbt_post_author_field">
+	<label for="mbt_post_author">Post Author:</span>
+	<select name="mbt_post_author" id="mbt_post_author">
+		<?php foreach(get_users() as $author) { ?>
+			<option value="<?php echo($author->ID); ?>" <?php selected($author->ID, $post->post_author); ?> ><?php echo($author->display_name); ?> (<?php echo($author->user_login); ?>)</option>
+		<?php } ?>
+	</select>
+	</div>
+	<?php
+}
+
+function mbt_save_post_author_field($post_id) {
+	if((defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) || get_post_status($post_id) == 'auto-draft' || get_post_type($post_id) !== 'mbt_book') { return; }
+	if(isset($_REQUEST['mbt_post_author'])) { global $wpdb; $wpdb->update($wpdb->posts, array('post_author' => $_REQUEST['mbt_post_author']), array('ID' => $post_id), array('%d'), array('%d')); }
 }
 
 
@@ -108,10 +154,34 @@ function mbt_save_book_blurb_metabox($post_id) {
 /*---------------------------------------------------------*/
 
 function mbt_overview_metabox($post) {
+	?>
+	<div class="mbt_overview_image_field">
+		<label for="mbt_overview_image"><?php _e('Image:', 'mybooktable'); ?></label>
+		<div class="mbt_overview_image_preview"><?php echo(mbt_get_overview_image_preview(get_post_meta($post->ID, 'mbt_overview_image', true))); ?></div>
+		<input type="hidden" id="mbt_overview_image" name="mbt_overview_image" value="<?php echo(get_post_meta($post->ID, 'mbt_overview_image', true)); ?>" />
+		<input class="button mbt_upload_button" data-upload-target="mbt_overview_image" data-upload-property="id" type="button" value="<?php _e('Choose', 'mybooktable'); ?>" />
+		<input class="button mbt_upload_clear_button" data-upload-target="mbt_overview_image" type="button" value="X" />
+	</div>
+	<?php
 	wp_editor($post->post_content, 'content', array('dfw' => true, 'tabfocus_elements' => 'sample-permalink,post-preview', 'editor_height' => 360) );
 	echo('<p class="description">');
-	_e('Book Overview is a longer description of your book. This typically includes all the text from the back cover of the book plus, endorsements and any other promotional materials from interior flaps or initial pages. This is also a good place to embed a book trailer if you have one.', 'mybooktable');
+	_e('The About the Book section is a longer description of your book. This typically includes all the text from the back cover of the book plus, endorsements and any other promotional materials from interior flaps or initial pages. This is also a good place to embed a book trailer if you have one.', 'mybooktable');
 	echo('</p>');
+}
+
+function mbt_save_overview_metabox($post_id) {
+	if((defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) || get_post_status($post_id) == 'auto-draft' || get_post_type($post_id) !== 'mbt_book') { return; }
+	if(isset($_REQUEST['mbt_overview_image'])) { update_post_meta($post_id, 'mbt_overview_image', $_REQUEST['mbt_overview_image']); }
+}
+
+function mbt_get_overview_image_preview($image_id) {
+	list($src, $width, $height) = wp_get_attachment_image_src($image_id);
+	return $src ? basename($src) : 'None';
+}
+
+function mbt_overview_image_preview_ajax() {
+	if(isset($_REQUEST['image_id'])) { echo(mbt_get_overview_image_preview($_REQUEST['image_id'])); }
+	die();
 }
 
 
@@ -169,7 +239,7 @@ function mbt_asin_preview_feedback($data) {
 
 	if(empty($asin)) {
 		if(get_post_status($post_id) === 'publish' and get_post_meta($post_id, 'mbt_show_instant_preview', true) === 'yes') {
-			$output = '<span class="mbt_admin_message_warning">'.__('Cannot show Kindle Instant Preview without a valid ASIN.', 'mybooktable').'</span>';
+			$output = '<span class="mbt_admin_message_warning">'.__('Cannot show Kindle Instant Preview without a valid ASIN.', 'mybooktable').' <a href="https://www.amazon.com/gp/help/customer/display.html?nodeId=200202190#find_asins" target="_blank">'.__('(Find your ASIN)', 'mybooktable').'</a>'.'</span>';
 		}
 	} else {
 		$matches = array();
@@ -198,7 +268,7 @@ function mbt_metadata_checkbox($post_id, $field_id, $data) {
 function mbt_metadata_kindle_instant_preview($post_id, $field_id, $data) {
 	$output = mbt_metadata_checkbox($post_id, $field_id, $data);
 	$asin = get_post_meta($post_id, 'mbt_unique_id_asin', true);
-	$output .= empty($asin) ? '<br><span class="mbt_admin_message_warning" id="mbt_show_instant_preview_asin_warning">'.__('Cannot show Kindle Instant Preview without a valid ASIN.', 'mybooktable').'</span>' : '';
+	$output .= empty($asin) ? '<br><span class="mbt_admin_message_warning" id="mbt_show_instant_preview_asin_warning">'.__('Cannot show Kindle Instant Preview without a valid ASIN.', 'mybooktable').' <a href="https://www.amazon.com/gp/help/customer/display.html?nodeId=200202190#find_asins" target="_blank">'.__('(Find your ASIN)', 'mybooktable').'</a>'.'</span>' : '';
 	return $output;
 }
 
@@ -324,6 +394,7 @@ function mbt_metadata_metabox($post) {
 				<?php mbt_the_book_image(); ?><br>
 				<input type="hidden" id="mbt_book_image_id" name="mbt_book_image_id" value="<?php echo(get_post_meta($post->ID, "mbt_book_image_id", true)); ?>" />
 				<input id="mbt_set_book_image_button" class="button mbt_upload_button" data-upload-target="mbt_book_image_id" data-upload-property="id" data-upload-title="<?php _e('Book Cover Image', 'mybooktable'); ?>" type="button" value="<?php _e('Set cover image', 'mybooktable'); ?>" />
+				<input id="mbt_clear_book_image_button" class="button mbt_upload_clear_button" data-upload-target="mbt_book_image_id" type="button" value="X" />
 			</td>
 			<td class="mbt_unique_identifier_container">
 				<label><?php _e('ISBN', 'mybooktable'); ?>:</label>
@@ -374,6 +445,7 @@ function mbt_save_metadata_metabox($post_id) {
 	if((defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) || get_post_status($post_id) == 'auto-draft') { return; }
 
 	if(get_post_type($post_id) == 'mbt_book') {
+		if(isset($_REQUEST['mbt_book_image_id'])) { update_post_meta($post_id, 'mbt_book_image_id', $_REQUEST['mbt_book_image_id']); }
 		if(isset($_REQUEST['mbt_unique_id_asin'])) { update_post_meta($post_id, 'mbt_unique_id_asin', preg_replace('/[^A-Za-z0-9]/', '', $_REQUEST['mbt_unique_id_asin'])); }
 		if(isset($_REQUEST['mbt_unique_id_isbn'])) { update_post_meta($post_id, 'mbt_unique_id_isbn', preg_replace('/[^0-9Xx]/', '', $_REQUEST['mbt_unique_id_isbn'])); }
 		update_post_meta($post_id, 'mbt_show_unique_id', isset($_REQUEST['mbt_show_unique_id']) ? 'yes' : 'no');
@@ -382,7 +454,7 @@ function mbt_save_metadata_metabox($post_id) {
 		foreach($metadata as $section_name => $section) {
 			foreach($section as $field_id => $field_data) {
 				$value = isset($_REQUEST[$field_id]) ? $_REQUEST[$field_id] : null;
-				if($field_data['type'] == 'mbt_metadata_checkbox') { $value = $value === null ? 'no' : 'yes'; }
+				if($field_data['type'] == 'mbt_metadata_checkbox' or $field_data['type'] == 'mbt_metadata_kindle_instant_preview') { $value = $value === null ? 'no' : 'yes'; }
 				update_post_meta($post_id, $field_id, $value);
 			}
 		}
@@ -468,7 +540,7 @@ function mbt_save_buybuttons_metabox($post_id) {
 		update_post_meta($post_id, 'mbt_buybuttons', $buybuttons);
 
 		// auto-populate book asin
-		if(get_post_meta($post_id, 'mbt_show_instant_preview', true) == 'yes' and get_post_meta($post_id, 'mbt_unique_id_asin', true) == '') {
+		if(get_post_meta($post_id, 'mbt_unique_id_asin', true) == '') {
 			foreach($buybuttons as $buybutton) {
 				if($buybutton['store'] == 'amazon' or $buybutton['store'] == 'kindle') {
 					$asin = mbt_get_amazon_AISN($buybutton['url']);
@@ -478,8 +550,6 @@ function mbt_save_buybuttons_metabox($post_id) {
 			}
 		}
 	}
-
-
 }
 
 
