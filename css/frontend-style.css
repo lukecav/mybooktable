@@ -358,7 +358,7 @@
 
 .mbt-book-endorsements {
 	padding-top: 15px;
-    font-size: 14px;
+	font-size: 14px;
 }
 
 .mbt-book-endorsements .mbt-book-endorsements-title {
@@ -429,6 +429,26 @@
 }
 .mbt-book-endorsements .mbt-endorsement:nth-child(even) .mbt-endorsement-image+.mbt-endorsement-content .mbt-endorsement-name {
 	text-align: right;
+}
+
+
+
+/*---------------------------------------------------------*/
+/* Book Club Box                                           */
+/*---------------------------------------------------------*/
+
+.mbt-book-bookclub-box .mbt-book-bookclub-video {
+	margin-bottom: 20px;
+}
+
+.mbt-book-bookclub-box ul {
+	list-style: inside disc;
+	padding: 0;
+	margin: 0;
+}
+.mbt-book-bookclub-box ul li {
+	padding: 0;
+	margin: 0 0 5px 0;
 }
 
 
@@ -817,6 +837,7 @@
 
 .mbt-book.mbt-book-single.mbt-display-mode-heropage .mbt-book-overview,
 .mbt-book.mbt-book-single.mbt-display-mode-heropage .mbt-book-endorsements,
+.mbt-book.mbt-book-single.mbt-display-mode-heropage .mbt-book-bookclub-box,
 .mbt-book.mbt-book-single.mbt-display-mode-heropage .mbt-book-purchase,
 .mbt-book.mbt-book-single.mbt-display-mode-heropage .mbt-book-share,
 .mbt-book.mbt-book-single.mbt-display-mode-heropage .mbt-book-about-author,
@@ -837,6 +858,7 @@
 
 .mbt-book.mbt-book-single.mbt-display-mode-heropage .mbt-book-overview-title,
 .mbt-book.mbt-book-single.mbt-display-mode-heropage .mbt-book-endorsements-title,
+.mbt-book.mbt-book-single.mbt-display-mode-heropage .mbt-book-bookclub-box-title,
 .mbt-book.mbt-book-single.mbt-display-mode-heropage .mbt-book-purchase-title,
 .mbt-book.mbt-book-single.mbt-display-mode-heropage .mbt-book-share-title,
 .mbt-book.mbt-book-single.mbt-display-mode-heropage .mbt-book-about-author-title,

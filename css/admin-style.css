@@ -45,7 +45,7 @@
 }
 
 .post-php.post-type-mbt_book .description {
-    margin: 7px 0 0 0;
+	margin: 7px 0 0 0;
 }
 
 #mbt_post_author_field:before {
@@ -104,12 +104,12 @@
 }
 
 #mbt_metadata table {
-    border-spacing: 0;
-    width: 100%;
+	border-spacing: 0;
+	width: 100%;
 }
 
 #mbt_metadata .hndle {
-    border-bottom: 1px solid #ddd;
+	border-bottom: 1px solid #ddd;
 }
 
 #mbt_metadata .mbt_cover_image_container {
@@ -289,17 +289,17 @@ div.star-rating{background:transparent!important;overflow:hidden!important}
 }
 
 .mbt_endorsement_image_title {
-    margin: 0 0 5px 0;
-    display: block;
+	margin: 0 0 5px 0;
+	display: block;
 }
 
 .mbt_endorsement_image_field {
-    min-height: 80px;
-    width: 110px;
-    margin-right: 10px;
-    float: left;
-    text-align: center;
-    padding: 5px;
+	min-height: 80px;
+	width: 110px;
+	margin-right: 10px;
+	float: left;
+	text-align: center;
+	padding: 5px;
 }
 
 .mbt_endorsement_name_field {
@@ -344,6 +344,60 @@ div.star-rating{background:transparent!important;overflow:hidden!important}
 
 .mbt_endorsements_metabox .mbt_endorsements_editors .mbt_endorsement_editor .mbt_endorsement_content {
 	padding: 5px;
+}
+
+/* Book Club Metabox */
+
+.mbt_bookclub_metabox .mbt_bookclub_resource_editor label {
+	font-weight: bold;
+}
+
+@media screen and (min-width: 500px) {
+	.mbt_bookclub_metabox .mbt_bookclub_resource_url_field input[type="text"],
+	.mbt_bookclub_metabox .mbt_bookclub_resource_text_field input[type="text"],
+	.mbt_bookclub_metabox #mbt_bookclub_video {
+		width: 350px;
+	}
+
+}
+
+.mbt_bookclub_metabox .mbt_bookclub_resource_editors .mbt_bookclub_resource_editor {
+	border: 1px solid #DFDFDF;
+	border-radius: 5px;
+	margin: 5px;
+	background: #F5F5F5;
+}
+
+.mbt_bookclub_metabox .mbt_bookclub_resource_editors .mbt_bookclub_resource_editor .mbt_bookclub_resource_header {
+	background: #ececec;
+	border-radius: 5px 5px 0px 0px;
+	padding: 5px;
+	cursor: move;
+}
+
+.mbt_bookclub_metabox .mbt_bookclub_resource_editors .mbt_bookclub_resource_editor textarea {
+	width: 60%;
+	font-weight: normal;
+}
+
+.mbt_bookclub_metabox .mbt_bookclub_resource_editors .mbt_bookclub_resource_editor input {
+	font-weight: normal;
+}
+
+.mbt_bookclub_metabox .mbt_bookclub_resource_editors .mbt_bookclub_resource_editor .mbt_bookclub_resource_remover {
+	float: right;
+}
+
+.mbt_bookclub_metabox .mbt_bookclub_resource_editors .mbt_bookclub_resource_editor .mbt_bookclub_resource_content {
+	padding: 5px;
+}
+
+.mbt_bookclub_metabox .mbt_bookclub_resources_description ul {
+	list-style: inside disc;
+}
+
+.mbt_bookclub_metabox .mbt_bookclub_video_title {
+	font-size: 1.2em;
 }
 
 
@@ -534,7 +588,7 @@ div.star-rating{background:transparent!important;overflow:hidden!important}
 
 .mbt-check-reviews-checking {
 	position: relative;
-    padding: 0 0 0 25px;
+	padding: 0 0 0 25px;
 }
 
 .mbt-check-reviews-checking .mbt-check-reviews-spinner {
@@ -561,7 +615,7 @@ div.star-rating{background:transparent!important;overflow:hidden!important}
 	overflow-y: scroll;
 	border: 1px solid #ccc;
 	border-radius: 2px;
-    margin-bottom: 10px;
+	margin-bottom: 10px;
 }
 
 #mbt-check-reviews-results-list {

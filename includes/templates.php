@@ -54,6 +54,7 @@ function mbt_templates_init() {
 		add_action('mbt_single_book_storefront_overview', 'mbt_do_single_book_storefront_overview');
 		add_action('mbt_single_book_storefront_overview', 'mbt_the_book_video_sample', 5);
 		add_action('mbt_single_book_storefront_overview', 'mbt_the_book_endorsements', 30);
+		add_action('mbt_single_book_storefront_overview', 'mbt_the_book_bookclub_box', 31);
 
 		add_action('mbt_single_book_heropage_content', 'mbt_do_single_book_heropage_content');
 		add_action('mbt_before_single_book_heropage', 'mbt_do_before_single_book_heropage', 0);
@@ -68,6 +69,7 @@ function mbt_templates_init() {
 		add_action('mbt_single_book_heropage_overview', 'mbt_the_book_video_sample', 5);
 		add_action('mbt_single_book_heropage_overview', 'mbt_do_single_book_heropage_meta', 12);
 		add_action('mbt_single_book_heropage_overview', 'mbt_the_book_endorsements', 30);
+		add_action('mbt_single_book_heropage_overview', 'mbt_the_book_bookclub_box', 31);
 
 		add_action('mbt_after_single_book', 'mbt_the_kindle_instant_preview_box', 60);
 		add_action('mbt_after_single_book', 'mbt_the_reviews_box', 80);
@@ -1140,4 +1142,32 @@ function mbt_get_book_cta_button($post_id) {
 function mbt_the_book_cta_button() {
 	global $post;
 	echo(mbt_get_book_cta_button($post->ID));
+}
+
+
+
+function mbt_get_book_bookclub_box($post_id) {
+	global $wp_embed;
+
+	$resources = get_post_meta($post_id, 'mbt_bookclub_resources', true);
+	$video = get_post_meta($post_id, 'mbt_bookclub_video', true);
+	$output = '';
+	if(!empty($resources) or !empty($video)) {
+		$output .= '<div style="clear:both"></div>';
+		$output .= '<div class="mbt-book-bookclub-box">';
+		$output .= '<h3 class="mbt-book-bookclub-box-title">'.__('Book Club Resources', 'mybooktable').'</h3>';
+		if(!empty($video)) { $output .= '<div class="mbt-book-bookclub-video">'.$wp_embed->shortcode(array('width'=>400, 'height'=>400), 'https://www.youtube.com/watch?v=BP1C-W8A69s').'</div>'; }
+		$resources_output = '';
+		foreach($resources as $resource) {
+			if(empty($resource['url'])) { continue; }
+			$resources_output .= '<li><a target="_blank" href="'.$resource['url'].'">'.(empty($resource['text']) ? 'Download Resource' : $resource['text']).'</a></li>';
+		}
+		if(!empty($resources_output)) { $output .= '<ul class="mbt-book-bookclub-resources">'.$resources_output.'</ul>'; }
+		$output .= '</div>';
+	}
+	return apply_filters('mbt_get_book_bookclub_box', $output, $post_id);
+}
+function mbt_the_book_bookclub_box() {
+	global $post;
+	echo(mbt_get_book_bookclub_box($post->ID));
 }

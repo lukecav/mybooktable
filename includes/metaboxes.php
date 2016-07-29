@@ -15,6 +15,7 @@ function mbt_metaboxes_init() {
 	add_action('save_post', 'mbt_save_buybuttons_metabox');
 	add_action('save_post', 'mbt_save_series_order_metabox');
 	add_action('save_post', 'mbt_save_endorsements_metabox');
+	add_action('save_post', 'mbt_save_bookclub_metabox');
 	add_action('save_post', 'mbt_save_overview_metabox');
 	add_action('save_post', 'mbt_save_display_mode_field');
 	add_action('save_post', 'mbt_save_post_author_field');
@@ -31,6 +32,7 @@ function mbt_add_metaboxes() {
 	add_meta_box('mbt_buybuttons', __('Buy Buttons', 'mybooktable'), 'mbt_buybuttons_metabox', 'mbt_book', 'normal', 'high');
 	add_meta_box('mbt_overview', __('About the Book', 'mybooktable'), 'mbt_overview_metabox', 'mbt_book', 'normal', 'high');
 	add_meta_box('mbt_endorsements', __('Endorsements', 'mybooktable'), 'mbt_endorsements_metabox', 'mbt_book', 'normal', 'high');
+	add_meta_box('mbt_bookclub', __('Book Club Resources', 'mybooktable'), 'mbt_bookclub_metabox', 'mbt_book', 'normal', 'low');
 	add_meta_box('mbt_series_order', __('Series Order', 'mybooktable'), 'mbt_series_order_metabox', 'mbt_book', 'side', 'default');
 }
 
@@ -604,4 +606,46 @@ function mbt_save_endorsements_metabox($post_id) {
 	if((defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) || get_post_status($post_id) == 'auto-draft' || get_post_type($post_id) !== 'mbt_book') { return; }
 
 	if(isset($_REQUEST['mbt_endorsements'])) { update_post_meta($post_id, 'mbt_endorsements', json_decode(str_replace('\\\\', '\\', str_replace('\"', '"', str_replace('\\\'', '\'', $_REQUEST['mbt_endorsements']))), true)); }
+}
+
+
+
+/*---------------------------------------------------------*/
+/* Book Club Metabox                                       */
+/*---------------------------------------------------------*/
+
+function mbt_bookclub_metabox($post) {
+	$video = get_post_meta($post->ID, 'mbt_bookclub_video', true);
+	$resources = get_post_meta($post->ID, 'mbt_bookclub_resources', true);
+	if(empty($resources)) { $resources = array(); }
+	?>
+		<div class="mbt_bookclub_metabox">
+			<div class="mbt_bookclub_resources_container">
+				<div class="mbt_bookclub_resources_description">
+					<p>The more resources you provide book clubs, the more they will want to read your book. Suggested materials include:</p>
+					<ul>
+						<li>PDF Download (Discussion Questions)</li>
+						<li>Bulk Ordering Link</li>
+						<li>Powerpoint Companion</li>
+						<li>Chapter Excerpts PDF</li>
+					</ul>
+				</div>
+				<div class="button button-primary mbt_bookclub_resource_adder">Add Resource</div>
+				<input type="hidden" class="mbt_bookclub_resources" name="mbt_bookclub_resources" value='<?php echo(str_replace('\'', '&#39;', json_encode($resources))); ?>'>
+				<div class="mbt_bookclub_resource_editors"></div>
+			</div>
+			<div class="mbt_bookclub_video_container">
+				<h4 class="mbt_bookclub_video_title">Video Companion</h4>
+				<p>insert help text here!</p>
+				<label>Video URL: <input type="text" name="mbt_bookclub_video" id="mbt_bookclub_video" value="<?php echo($video); ?>" /></label>
+			</div>
+		</div>
+	<?php
+}
+
+function mbt_save_bookclub_metabox($post_id) {
+	if((defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) || get_post_status($post_id) == 'auto-draft' || get_post_type($post_id) !== 'mbt_book') { return; }
+
+	if(isset($_REQUEST['mbt_bookclub_resources'])) { update_post_meta($post_id, 'mbt_bookclub_resources', json_decode(str_replace('\\\\', '\\', str_replace('\"', '"', str_replace('\\\'', '\'', $_REQUEST['mbt_bookclub_resources']))), true)); }
+	if(isset($_REQUEST['mbt_bookclub_video'])) { update_post_meta($post_id, 'mbt_bookclub_video', $_REQUEST['mbt_bookclub_video']); }
 }
