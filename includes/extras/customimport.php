@@ -146,7 +146,7 @@ function mbt_detect_custom_export_download() {
 				'name' => $term->name,
 				'slug' => $term->slug,
 				'description' => $term->description,
-				'parent' => $parent->name,
+				'parent' => empty($parent->name) ? '' : $parent->name,
 			);
 		}
 		$data[$tax_name] = $terms;

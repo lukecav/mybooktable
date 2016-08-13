@@ -438,6 +438,7 @@
 /*---------------------------------------------------------*/
 
 .mbt-book-bookclub-box .mbt-book-bookclub-video {
+    text-align: center;
 	margin-bottom: 20px;
 }
 
@@ -731,24 +732,24 @@
 
 
 /*---------------------------------------------------------*/
-/* Hero Page Mode Styling                                  */
+/* Single Column Page Mode Styling                         */
 /*---------------------------------------------------------*/
 
-.mbt-book.mbt-book-single.mbt-display-mode-heropage .mbt-book-title {
+.mbt-book.mbt-book-single.mbt-display-mode-singlecolumn .mbt-book-title {
 	margin: 0;
 	padding-bottom: 30px;
 }
 
-.mbt-book.mbt-book-single.mbt-display-mode-heropage .mbt-book-images {
+.mbt-book.mbt-book-single.mbt-display-mode-singlecolumn .mbt-book-images {
 	width: 35%;
 }
 
-.mbt-book.mbt-book-single.mbt-display-mode-heropage .mbt-book-right {
+.mbt-book.mbt-book-single.mbt-display-mode-singlecolumn .mbt-book-right {
 	width: 65%;
 	text-align: center;
 }
 
-.mbt-book.mbt-book-single.mbt-display-mode-heropage .mbt-book-teaser {
+.mbt-book.mbt-book-single.mbt-display-mode-singlecolumn .mbt-book-teaser {
 	margin: 0 0 20px 30px;
 	padding: 0;
 	font-size: 20px;
@@ -757,7 +758,7 @@
 	line-height: 1.5;
 }
 
-.mbt-book.mbt-book-single.mbt-display-mode-heropage .mbt-book-blurb {
+.mbt-book.mbt-book-single.mbt-display-mode-singlecolumn .mbt-book-blurb {
 	background: none;
 	border: none;
 	padding: 0;
@@ -767,7 +768,7 @@
 	line-height: 1.5;
 }
 
-.mbt-book.mbt-book-single.mbt-display-mode-heropage .mbt-book-purchase-button {
+.mbt-book.mbt-book-single.mbt-display-mode-singlecolumn .mbt-book-purchase-button {
 	border: none;
 	box-shadow: none;
 	outline: none;
@@ -793,55 +794,55 @@
 
 	background-color: #64ACF3;
 }
-.mbt-book.mbt-book-single.mbt-display-mode-heropage .mbt-book-purchase-button:hover {
+.mbt-book.mbt-book-single.mbt-display-mode-singlecolumn .mbt-book-purchase-button:hover {
 	border-bottom: 5px inset rgba(0,0,0,0.15);
 }
 
-.mbt-book.mbt-book-single.mbt-display-mode-heropage .mbt-book-purchase {
+.mbt-book.mbt-book-single.mbt-display-mode-singlecolumn .mbt-book-purchase {
 	text-align: center;
 }
 
-.mbt-book.mbt-book-single.mbt-display-mode-heropage .mbt-book-buybuttons {
+.mbt-book.mbt-book-single.mbt-display-mode-singlecolumn .mbt-book-buybuttons {
 	margin: 0 30px;
 	display: inline-block;
 }
 
-.mbt-book.mbt-book-single.mbt-display-mode-heropage .mbt-book-video-sample {
+.mbt-book.mbt-book-single.mbt-display-mode-singlecolumn .mbt-book-video-sample {
 	margin-top: 30px;
 	padding-top: 30px;
 	border-top: 1px solid #E0E2E2;
 }
 
-.mbt-book.mbt-book-single.mbt-display-mode-heropage .mbt-book-overview p {
+.mbt-book.mbt-book-single.mbt-display-mode-singlecolumn .mbt-book-overview p {
     line-height: 1.7em;
     padding: 0;
     margin: 0;
     margin-bottom: 0.9em;
 }
 
-.mbt-book.mbt-book-single.mbt-display-mode-heropage .mbt-book-overview p:last-child {
+.mbt-book.mbt-book-single.mbt-display-mode-singlecolumn .mbt-book-overview p:last-child {
 	margin-bottom: 0px;
 }
 
-.mbt-book.mbt-book-single.mbt-display-mode-heropage .mbt-book-overview ul li {
+.mbt-book.mbt-book-single.mbt-display-mode-singlecolumn .mbt-book-overview ul li {
 	list-style-type: disc;
 	list-style-position: inside;
 	padding: 0;
 	margin: 0 0 0.7em 0;
 }
 
-.mbt-book.mbt-book-single.mbt-display-mode-heropage .mbt-book-meta .mbt-book-meta-items {
+.mbt-book.mbt-book-single.mbt-display-mode-singlecolumn .mbt-book-meta .mbt-book-meta-items {
 	font-size: 16px;
 	line-height: 1.5;
 }
 
-.mbt-book.mbt-book-single.mbt-display-mode-heropage .mbt-book-overview,
-.mbt-book.mbt-book-single.mbt-display-mode-heropage .mbt-book-endorsements,
-.mbt-book.mbt-book-single.mbt-display-mode-heropage .mbt-book-bookclub-box,
-.mbt-book.mbt-book-single.mbt-display-mode-heropage .mbt-book-purchase,
-.mbt-book.mbt-book-single.mbt-display-mode-heropage .mbt-book-share,
-.mbt-book.mbt-book-single.mbt-display-mode-heropage .mbt-book-about-author,
-.mbt-book.mbt-book-single.mbt-display-mode-heropage .mbt-book-meta {
+.mbt-book.mbt-book-single.mbt-display-mode-singlecolumn .mbt-book-overview,
+.mbt-book.mbt-book-single.mbt-display-mode-singlecolumn .mbt-book-endorsements,
+.mbt-book.mbt-book-single.mbt-display-mode-singlecolumn .mbt-book-bookclub-box,
+.mbt-book.mbt-book-single.mbt-display-mode-singlecolumn .mbt-book-purchase,
+.mbt-book.mbt-book-single.mbt-display-mode-singlecolumn .mbt-book-share,
+.mbt-book.mbt-book-single.mbt-display-mode-singlecolumn .mbt-book-about-author,
+.mbt-book.mbt-book-single.mbt-display-mode-singlecolumn .mbt-book-meta {
 	display: block;
 	clear: both;
 	float: left;
@@ -856,13 +857,13 @@
 	line-height: 1;
 }
 
-.mbt-book.mbt-book-single.mbt-display-mode-heropage .mbt-book-overview-title,
-.mbt-book.mbt-book-single.mbt-display-mode-heropage .mbt-book-endorsements-title,
-.mbt-book.mbt-book-single.mbt-display-mode-heropage .mbt-book-bookclub-box-title,
-.mbt-book.mbt-book-single.mbt-display-mode-heropage .mbt-book-purchase-title,
-.mbt-book.mbt-book-single.mbt-display-mode-heropage .mbt-book-share-title,
-.mbt-book.mbt-book-single.mbt-display-mode-heropage .mbt-book-about-author-title,
-.mbt-book.mbt-book-single.mbt-display-mode-heropage .mbt-book-meta-title {
+.mbt-book.mbt-book-single.mbt-display-mode-singlecolumn .mbt-book-overview-title,
+.mbt-book.mbt-book-single.mbt-display-mode-singlecolumn .mbt-book-endorsements-title,
+.mbt-book.mbt-book-single.mbt-display-mode-singlecolumn .mbt-book-bookclub-box-title,
+.mbt-book.mbt-book-single.mbt-display-mode-singlecolumn .mbt-book-purchase-title,
+.mbt-book.mbt-book-single.mbt-display-mode-singlecolumn .mbt-book-share-title,
+.mbt-book.mbt-book-single.mbt-display-mode-singlecolumn .mbt-book-about-author-title,
+.mbt-book.mbt-book-single.mbt-display-mode-singlecolumn .mbt-book-meta-title {
 	font-size: 30px;
 	font-weight: bold;
 	text-align: center;

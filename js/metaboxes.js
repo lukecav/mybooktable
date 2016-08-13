@@ -9,26 +9,13 @@ jQuery(document).ready(function() {
 		try { book_display_modes = JSON.parse(jQuery('#mbt_display_modes').val()); } catch(err) {}
 
 		function update_display_mode() {
-			var supports_teaser = false;
-			var supports_overview_image = false;
-
 			var display_mode = jQuery('#mbt_display_mode').val();
 			if(book_display_modes[display_mode]) {
 				var display_mode_supports = book_display_modes[display_mode].supports;
-				supports_teaser = display_mode_supports.indexOf('teaser') !== -1;
-				supports_overview_image = display_mode_supports.indexOf('overview_image') !== -1;
-			}
-
-			if(supports_teaser) {
-				jQuery('.mbt_book_teaser_field').show();
-			} else {
-				jQuery('.mbt_book_teaser_field').hide();
-			}
-
-			if(supports_overview_image) {
-				jQuery('.mbt_overview_image_field').show();
-			} else {
-				jQuery('.mbt_overview_image_field').hide();
+				jQuery('[data-mbt-supports]').hide();
+				for(var i = display_mode_supports.length - 1; i >= 0; i--) {
+					jQuery('[data-mbt-supports="'+display_mode_supports[i]+'"]').show();
+				}
 			}
 		}
 
@@ -115,6 +102,12 @@ jQuery(document).ready(function() {
 	if(jQuery('#mbt_show_instant_preview_asin_warning').length > 0) {
 		jQuery('#mbt_unique_id_asin').change(function() { jQuery('#mbt_show_instant_preview_asin_warning').remove(); });
 	}
+
+	// color pickers
+	jQuery('.mbt-colorpicker').spectrum({preferredFormat: 'rgb'});
+	jQuery('.mbt-colorpicker-clear').click(function() {
+		jQuery(this).siblings('.mbt-colorpicker').spectrum('set', '#000000').val('');
+	});
 
 	/*---------------------------------------------------------*/
 	/* Overview Metabox                                        */

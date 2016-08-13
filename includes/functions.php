@@ -283,14 +283,14 @@ function mbt_get_book_display_modes() {
 }
 
 function mbt_add_default_book_display_modes($modes) {
-	$modes['storefront'] = array('name' => 'Storefront', 'supports' => array('compatability'));
-	$modes['heropage'] = array('name' => 'Hero Page', 'supports' => array('teaser', 'compatability'));
+	$modes['storefront'] = array('name' => 'Storefront', 'supports' => array('compatability', 'sale_price'));
+	$modes['singlecolumn'] = array('name' => 'Beautiful Page', 'supports' => array('teaser', 'compatability'));
 	return $modes;
 }
 add_filter('mbt_display_modes', 'mbt_add_default_book_display_modes');
 
 function mbt_get_default_book_display_mode() {
-	return apply_filters('mbt_default_book_display_mode', 'heropage');
+	return apply_filters('mbt_default_book_display_mode', 'singlecolumn');
 }
 
 function mbt_get_book_display_mode($post_id) {

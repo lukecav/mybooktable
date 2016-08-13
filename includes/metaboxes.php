@@ -41,6 +41,8 @@ function mbt_enqueue_metabox_js() {
 
 	wp_enqueue_script('mbt-metaboxes', plugins_url('js/metaboxes.js', dirname(__FILE__)), array('jquery'), MBT_VERSION);
 	wp_enqueue_script('mbt-star-ratings', plugins_url('js/lib/jquery.rating.js', dirname(__FILE__)), array('jquery'), MBT_VERSION);
+	wp_enqueue_script('mbt-colorpicker', plugins_url('js/lib/spectrum.js', dirname(__FILE__)), array('jquery'), MBT_VERSION, true);
+	wp_enqueue_style('mbt-colorpicker', plugins_url('css/lib/spectrum.css', dirname(__FILE__)), array(), MBT_VERSION);
 	add_action('admin_head', 'mbt_override_authors_metabox');
 }
 
@@ -133,7 +135,7 @@ function mbt_save_post_author_field($post_id) {
 
 function mbt_book_blurb_metabox($post) {
 ?>
-	<div class="mbt_book_teaser_field">
+	<div class="mbt_book_teaser_field" data-mbt-supports="teaser">
 		<label for="mbt_book_teaser"><?php _e('Teaser Text:', 'mybooktable'); ?></label>
 		<div class="mbt_book_teaser_input"><input type="text" name="mbt_book_teaser" id="mbt_book_teaser" value="<?php echo(get_post_meta($post->ID, 'mbt_book_teaser', true)); ?>"></div>
 	</div>
@@ -157,7 +159,7 @@ function mbt_save_book_blurb_metabox($post_id) {
 
 function mbt_overview_metabox($post) {
 	?>
-	<div class="mbt_overview_image_field">
+	<div class="mbt_overview_image_field" data-mbt-supports="overview_image">
 		<label for="mbt_overview_image"><?php _e('Image:', 'mybooktable'); ?></label>
 		<div class="mbt_overview_image_preview"><?php echo(mbt_get_overview_image_preview(get_post_meta($post->ID, 'mbt_overview_image', true))); ?></div>
 		<input type="hidden" id="mbt_overview_image" name="mbt_overview_image" value="<?php echo(get_post_meta($post->ID, 'mbt_overview_image', true)); ?>" />
@@ -294,6 +296,13 @@ function mbt_metadata_star_rating($post_id, $field_id, $data) {
 	return $output;
 }
 
+function mbt_metadata_colorpicker($post_id, $field_id, $data) {
+	$output = '';
+	$output .= '<input type="text" class="mbt-colorpicker" name="'.$field_id.'" id="'.$field_id.'" value="'.get_post_meta($post_id, $field_id, true).'" />';
+	$output .= '<input class="button mbt-colorpicker-clear" type="button" value="'.__('Clear', 'mybooktable').'" />';
+	return $output;
+}
+
 function mbt_get_metadata_fields() {
 	return array(
 		'Book Samples' => array(
@@ -329,6 +338,7 @@ function mbt_get_metadata_fields() {
 				'type' => 'mbt_metadata_text',
 				'name' => __('Sale Price', 'mybooktable'),
 				'desc' => __('Setting a sale price will cross out the normal price and show the sale price prominently.', 'mybooktable'),
+				'supports' => 'sale_price',
 			),
 			'mbt_ebook_price' => array(
 				'type' => 'mbt_metadata_text',
@@ -382,6 +392,21 @@ function mbt_get_metadata_fields() {
 				'desc' => __('If applicable, who is the book illustrated by?', 'mybooktable'),
 			),
 		),
+		'Colors' => array(
+			'supports' => 'colors',
+			'mbt_bg_color' => array(
+				'type' => 'mbt_metadata_colorpicker',
+				'name' => __('Background Color', 'mybooktable'),
+			),
+			'mbt_bg_color_alt' => array(
+				'type' => 'mbt_metadata_colorpicker',
+				'name' => __('Alternate Background Color', 'mybooktable'),
+			),
+			'mbt_button_color' => array(
+				'type' => 'mbt_metadata_colorpicker',
+				'name' => __('Button Color', 'mybooktable'),
+			),
+		),
 	);
 }
 
@@ -429,9 +454,10 @@ function mbt_metadata_metabox($post) {
 	</table>
 	<div class="mbt_metadata_fields">
 		<?php foreach($metadata as $section_name => $section) {
-			echo('<div class="mbt-accordion"><h4>'.$section_name.'</h4><div>');
+			echo('<div class="mbt-accordion"'.(empty($section['supports']) ? '' : ' data-mbt-supports="'.$section['supports'].'"').'><h4>'.$section_name.'</h4><div>');
 			foreach($section as $field_id => $field_data) {
-				echo('<div class="mbt_metadata_field">');
+				if($field_id == 'supports') { continue; }
+				echo('<div class="mbt_metadata_field mbt_metadata_field_'.$field_id.'"'.(empty($field_data['supports']) ? '' : ' data-mbt-supports="'.$field_data['supports'].'"').'>');
 				echo('<label for="'.$field_id.'">'.$field_data['name'].':</label>');
 				echo(call_user_func_array($field_data['type'], array($post->ID, $field_id, $field_data)));
 				if(!empty($field_data['desc'])) { echo('<p class="description">'.$field_data['desc'].'</p>'); }
@@ -636,7 +662,7 @@ function mbt_bookclub_metabox($post) {
 			</div>
 			<div class="mbt_bookclub_video_container">
 				<h4 class="mbt_bookclub_video_title">Video Companion</h4>
-				<p>insert help text here!</p>
+				<p>This is where you can include a short YouTube or Vimeo video for Book Groups to show as part of the book discussion.</p>
 				<label>Video URL: <input type="text" name="mbt_bookclub_video" id="mbt_bookclub_video" value="<?php echo($video); ?>" /></label>
 			</div>
 		</div>

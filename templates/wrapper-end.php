@@ -10,7 +10,7 @@ if($template == 'twentythirteen') {
 	echo('</div></div></div>');
 	get_sidebar();
 	get_footer();
-} else if($template == 'twentyfifteen') {
+} else if($template == 'twentyfifteen' or $template == 'twentysixteen') {
 	echo('</div></article></main></div>');
 	get_sidebar();
 	get_footer();

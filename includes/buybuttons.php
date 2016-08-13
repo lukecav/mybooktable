@@ -356,6 +356,8 @@ function mbt_amazon_buybutton_editor($editor, $data, $id, $store) {
 
 function mbt_audible_buybuttons_init() {
 	add_action('mbt_filter_buybutton_data', 'mbt_filter_audible_buybutton_data', 10, 2);
+	add_action('wp_ajax_mbt_audible_buybutton_preview', 'mbt_audible_buybutton_preview');
+	add_action('mbt_buybutton_editor', 'mbt_audible_buybutton_editor', 10, 4);
 }
 add_action('mbt_init', 'mbt_audible_buybuttons_init');
 
@@ -364,6 +366,41 @@ function mbt_filter_audible_buybutton_data($data, $store) {
 		$data['url'] = mbt_get_cj_affiliate_link($data['url'], 7737731);
 	}
 	return $data;
+}
+
+function mbt_audible_buybutton_preview() {
+	if(empty($_REQUEST['data'])) { die(); }
+	$parsed = parse_url($_REQUEST['data']);
+	if(mbt_is_genius_link($_REQUEST['data'])) {
+		echo('<span class="mbt_admin_message_success">'.__('Valid Genius Link', 'mybooktable').'</span>');
+	} else if(isset($parsed['host']) and strpos($parsed['host'], 'amazon') !== false) {
+		$id = mbt_get_amazon_AISN($_REQUEST['data']);
+		if(empty($id)) {
+			echo('<span class="mbt_admin_message_failure">'.__('Invalid Audible product link', 'mybooktable').'</span>');
+		} else {
+			echo('<span class="mbt_admin_message_success">'.__('Valid Audible product link', 'mybooktable').'</span>');
+		}
+	} else if(isset($parsed['host']) and strpos($parsed['host'], 'audible') !== false) {
+		echo('<span class="mbt_admin_message_success">'.__('Valid Audible product link', 'mybooktable').'</span>');
+	} else {
+		echo('<span class="mbt_admin_message_failure">'.__('Invalid Audible product link', 'mybooktable').'</span>');
+	}
+	die();
+}
+
+function mbt_audible_buybutton_editor($editor, $data, $id, $store) {
+	if($data['store'] == 'audible') {
+		$editor .= '
+		<script type="text/javascript">
+			var url = jQuery("#'.$id.'_url");
+			url.before(jQuery("<div class=\"mbt_feedback_above mbt_feedback\"></div>"));
+			url.addClass("mbt_feedback_refresh mbt_feedback_refresh_initial");
+			url.attr("data-refresh-action", "mbt_audible_buybutton_preview");
+			url.attr("data-element", "self");
+			if(typeof url.mbt_feedback !== "undefined") { url.mbt_feedback(); }
+		</script>';
+	}
+	return $editor;
 }
 
 
@@ -494,12 +531,16 @@ function mbt_celery_buybutton_editor($output, $data, $id, $store) {
 /*---------------------------------------------------------*/
 
 function mbt_apple_buybuttons_init() {
-	add_filter('mbt_filter_buybutton_data', 'mbt_filter_apple_buybuttons_data', 10, 2);
+	if(!mbt_get_setting('disable_itunes_affiliates')) {
+		add_filter('mbt_filter_buybutton_data', 'mbt_filter_apple_buybuttons_data', 10, 2);
+		add_action('wp_ajax_mbt_apple_buybutton_preview', 'mbt_apple_buybutton_preview');
+		add_action('mbt_buybutton_editor', 'mbt_apple_buybutton_editor', 10, 4);
+	}
 }
 add_action('mbt_init', 'mbt_apple_buybuttons_init');
 
 function mbt_filter_apple_buybuttons_data($data, $store) {
-	if(($data['store'] == 'ibooks' or $data['store'] == 'itunes') and !empty($data['url']) and !mbt_is_genius_link($data['url']) and !mbt_get_setting('disable_itunes_affiliates')) {
+	if(($data['store'] == 'ibooks' or $data['store'] == 'itunes') and !empty($data['url']) and !mbt_is_genius_link($data['url'])) {
 		$token = mbt_get_setting('itunes_affiliate_token');
 		if(empty($token)) { $token = '1l3vwPw'; }
 		$host = parse_url($data['url'], PHP_URL_HOST);
@@ -511,4 +552,32 @@ function mbt_filter_apple_buybuttons_data($data, $store) {
 		}
 	}
 	return $data;
+}
+
+function mbt_apple_buybutton_preview() {
+	if(empty($_REQUEST['data'])) { die(); }
+	$host = parse_url($_REQUEST['data'], PHP_URL_HOST);
+	if(mbt_is_genius_link($_REQUEST['data'])) {
+		echo('<span class="mbt_admin_message_success">'.__('Valid Genius Link', 'mybooktable').'</span>');
+	} else if(stripos($host, 'itunes.apple.com') === false) {
+		echo('<span class="mbt_admin_message_failure">'.__('Invalid product link', 'mybooktable').'</span>');
+	} else {
+		echo('<span class="mbt_admin_message_success">'.__('Valid product link', 'mybooktable').'</span>');
+	}
+	die();
+}
+
+function mbt_apple_buybutton_editor($editor, $data, $id, $store) {
+	if($data['store'] == 'ibooks' or $data['store'] == 'itunes') {
+		$editor .= '
+		<script type="text/javascript">
+			var url = jQuery("#'.$id.'_url");
+			url.before(jQuery("<div class=\"mbt_feedback_above mbt_feedback\"></div>"));
+			url.addClass("mbt_feedback_refresh mbt_feedback_refresh_initial");
+			url.attr("data-refresh-action", "mbt_apple_buybutton_preview");
+			url.attr("data-element", "self");
+			if(typeof url.mbt_feedback !== "undefined") { url.mbt_feedback(); }
+		</script>';
+	}
+	return $editor;
 }

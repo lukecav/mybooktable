@@ -92,6 +92,10 @@
 	}
 }
 
+.wp-core-ui .button.mbt-colorpicker-clear {
+	margin-left: 10px;
+}
+
 #mbt_metadata .inside {
 	padding: 0;
 	margin: 0;
