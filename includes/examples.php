@@ -24,6 +24,8 @@ update_post_meta($post_id, 'mbt_book_image_id', mbt_copy_and_insert_attachment(p
 update_post_meta($post_id, 'mbt_book_teaser', 'A complete guide to writing and selling your novel!');
 update_post_meta($post_id, 'mbt_endorsements', unserialize('a:1:{i:0;a:4:{s:8:"image_id";s:0:"";s:7:"content";s:65:"...an easy-to-follow guide providing step-by-step instructions...";s:4:"name";s:13:"Writers Forum";s:8:"name_url";s:0:"";}}'));
 update_post_meta($post_id, 'mbt_unique_id_isbn', '9780470530702');
+update_post_meta($post_id, 'mbt_unique_id_asin', '0470530707');
+update_post_meta($post_id, 'mbt_show_unique_id', 'true');
 
 
 
@@ -50,7 +52,9 @@ update_post_meta($post_id, "mbt_buybuttons", unserialize('a:2:{i:0;a:3:{s:7:"dis
 update_post_meta($post_id, "mbt_book_image_id", mbt_copy_and_insert_attachment(plugins_url('images/examples/designinggraphics.jpg', dirname(__FILE__))));
 update_post_meta($post_id, 'mbt_book_teaser', 'Fundamental concepts for web and interactive projects');
 update_post_meta($post_id, 'mbt_endorsements', unserialize('a:3:{i:0;a:4:{s:8:"image_id";s:0:"";s:7:"content";s:91:"If you\'re looking for a comprehensive guide to getting started with web design, this is it.";s:4:"name";s:59:"Marc Grabanski, Founder of Frontend Masters Workshop Series";s:8:"name_url";s:0:"";}i:1;a:4:{s:8:"image_id";s:0:"";s:7:"content";s:323:"In his book, Designing Web & Mobile Graphics, Christopher Schmitt uses easy-to-understand language to guide you through the process of designing web and mobile experiences. This book is a fantastic way to learn the nuts and bolts that you can practically apply to create experiences both for the Web and for mobile devices.";s:4:"name";s:52:"Dr. Leslie Jensen-Inman, Co-Founder of Center Centre";s:8:"name_url";s:0:"";}i:2;a:4:{s:8:"image_id";s:0:"";s:7:"content";s:109:"If you\'re a designer trying to make sense of all the new breed of web technologies, this is the book for you.";s:4:"name";s:62:"Chris Mills, Open Standards Evangelist and Editor of dev.opera";s:8:"name_url";s:0:"";}}'));
-update_post_meta($post_id, "mbt_unique_id_isbn", "9780321858542");
+update_post_meta($post_id, 'mbt_unique_id_isbn', '9780321858542');
+update_post_meta($post_id, 'mbt_unique_id_asin', '0321858549');
+update_post_meta($post_id, 'mbt_show_unique_id', 'true');
 
 
 
@@ -77,7 +81,9 @@ update_post_meta($post_id, "mbt_buybuttons", unserialize('a:2:{i:0;a:3:{s:7:"dis
 update_post_meta($post_id, "mbt_book_image_id", mbt_copy_and_insert_attachment(plugins_url('images/examples/hotapplecider.jpg', dirname(__FILE__))));
 update_post_meta($post_id, 'mbt_book_teaser', 'Words to Stimulate the Mind and Delight the Spirit');
 update_post_meta($post_id, 'mbt_endorsements', unserialize('a:3:{i:0;a:4:{s:8:"image_id";s:0:"";s:7:"content";s:416:"Sometimes all you need is a reminder that there is something good in the world. A Second Cup of Hot Apple Cider is a combination of short stories, poetry, and works of memoir picked for their inspirational nature, dedicated to finding a shining light in our lives that so often turn dark. The stories within are touching and poignant, and will help readers remember that there is something after the worst of it all.";s:4:"name";s:48:"Midwest Book Review, Religion/Spirituality Shelf";s:8:"name_url";s:0:"";}i:1;a:4:{s:8:"image_id";s:0:"";s:7:"content";s:157:"A Second Cup of Hot Apple Cider is exactly the type of warm assurance, in satisfyingly small sips, that we could all use throughout the course of a busy day.";s:4:"name";s:44:"Nicholas Forbes, ManitobaChristianOnline.com";s:8:"name_url";s:0:"";}i:2;a:4:{s:8:"image_id";s:0:"";s:7:"content";s:129:"The very first story in A Second Cup of Hot Apple Cider left me in tears. The next stories kept me turning pages, wanting more...";s:4:"name";s:33:"The Koala Bear Writer, Bonnie Way";s:8:"name_url";s:0:"";}}'));
-update_post_meta($post_id, "mbt_unique_id_isbn", "9780978496319");
+update_post_meta($post_id, 'mbt_unique_id_isbn', '9780978496319');
+update_post_meta($post_id, 'mbt_unique_id_asin', '0978496310');
+update_post_meta($post_id, 'mbt_show_unique_id', 'true');
 
 
 
@@ -104,7 +110,9 @@ update_post_meta($post_id, "mbt_buybuttons", unserialize('a:2:{i:0;a:3:{s:7:"dis
 update_post_meta($post_id, "mbt_book_image_id", mbt_copy_and_insert_attachment(plugins_url('images/examples/deadlystraits.jpg', dirname(__FILE__))));
 update_post_meta($post_id, 'mbt_book_teaser', 'The Ultimate Terrorist Attack');
 update_post_meta($post_id, 'mbt_endorsements', unserialize('a:3:{i:0;a:4:{s:8:"image_id";s:0:"";s:7:"content";s:55:"A fast-moving thriller packed with action and intrigue.";s:4:"name";s:51:"Scott Nicholson, best-selling author of Liquid Fear";s:8:"name_url";s:0:"";}i:1;a:4:{s:8:"image_id";s:0:"";s:7:"content";s:230:"With his debut novel, McDermott sets the bar high--very high. This ambitious novel will keep you turning the pages to get to the thrilling conclusion. This is a truly impressive first book. I look forward to reading more from him.";s:4:"name";s:26:"Neal Hock, Bookhound\'s Den";s:8:"name_url";s:0:"";}i:2;a:4:{s:8:"image_id";s:0:"";s:7:"content";s:265:"International intrigue in the hands of an expert. With his breathless pacing and punchy prose, McDermott knots a complicated plot so real it might as well be breaking news. Deadly Straits ravages like a category-five hurricane: unpredictable, merciless, and fierce.";s:4:"name";s:48:"L.C. Fiore, award-winning author of Green Gospel";s:8:"name_url";s:0:"";}}'));
-update_post_meta($post_id, "mbt_unique_id_isbn", "9780983741701");
+update_post_meta($post_id, 'mbt_unique_id_isbn', '9780983741701');
+update_post_meta($post_id, 'mbt_unique_id_asin', 'B0057AMO2A');
+update_post_meta($post_id, 'mbt_show_unique_id', 'true');
 
 
 
@@ -127,7 +135,9 @@ update_post_meta($post_id, "mbt_buybuttons", unserialize('a:2:{i:0;a:3:{s:7:"dis
 update_post_meta($post_id, "mbt_book_image_id", mbt_copy_and_insert_attachment(plugins_url('images/examples/11secrets.jpg', dirname(__FILE__))));
 update_post_meta($post_id, 'mbt_book_teaser', 'See how easily you can learn the secrets of getting published!');
 update_post_meta($post_id, 'mbt_endorsements', unserialize('a:3:{i:0;a:4:{s:8:"image_id";s:0:"";s:7:"content";s:241:"If you want to know about the field of writing then you want to know Mary DeMuth. She is not only gifted as both a fiction and non-fiction author, but she is also passionate about helping others achieve their goals in the writing profession.";s:4:"name";s:64:"Karol Ladd, Best-selling author of The Power of a Positive Woman";s:8:"name_url";s:0:"";}i:1;a:4:{s:8:"image_id";s:0:"";s:7:"content";s:126:"Mary is a consummate professional and well equipped to help other writers with both the creative and business side of writing.";s:4:"name";s:54:"Terry Glaspey, Senior Editor, Harvest House Publishers";s:8:"name_url";s:0:"";}i:2;a:4:{s:8:"image_id";s:0:"";s:7:"content";s:276:"I seldom read a non-fiction from cover to cover, especially in just a couple of days, but I not only examined every piece of it, I pulled out my manuscript and took her advice to heart in a complete revision. Anyone interested in writing for publication should read this book!";s:4:"name";s:21:"Marji Clubine, writer";s:8:"name_url";s:0:"";}}'));
-update_post_meta($post_id, "mbt_unique_id_isbn", "9780983436720");
+update_post_meta($post_id, 'mbt_unique_id_isbn', '9780983436720');
+update_post_meta($post_id, 'mbt_unique_id_asin', '098343672X');
+update_post_meta($post_id, 'mbt_show_unique_id', 'true');
 
 
 
@@ -154,7 +164,9 @@ update_post_meta($post_id, "mbt_buybuttons", unserialize('a:2:{i:0;a:3:{s:7:"dis
 update_post_meta($post_id, "mbt_book_image_id", mbt_copy_and_insert_attachment(plugins_url('images/examples/thriving.jpg', dirname(__FILE__))));
 update_post_meta($post_id, 'mbt_book_teaser', 'Jesus made believers a bold promise: life and life to the fullest.');
 update_post_meta($post_id, 'mbt_endorsements', unserialize('a:3:{i:0;a:4:{s:8:"image_id";s:0:"";s:7:"content";s:82:"Want to be spiritually encouraged, enlightened, and inspired? Then open this book!";s:4:"name";s:54:"Lee Strobel, bestselling author of The Case for Christ";s:8:"name_url";s:0:"";}i:1;a:4:{s:8:"image_id";s:0:"";s:7:"content";s:257:"It is so refreshing for someone to break through the paralyzing survival mentality and offer a strategy that enables us to thrive. The chapter \'You Are Here... and So Is God\' alone is worth the price of the book. Thriving is a treasure map to abundant life.";s:4:"name";s:54:"Ken Davis, speaker, comedian, and award-winning author";s:8:"name_url";s:0:"";}i:2;a:4:{s:8:"image_id";s:0:"";s:7:"content";s:223:"Nancy shows us practically how to use the pain of our lives to drive us to the Lord and not away from him. \'Real faith,\' she writes, \'goes the distance with God, especially in rough terrain.\' I heartily recommend this book.";s:4:"name";s:73:"Jill Briscoe, author and minister, Elmbrook Church, Brookfield, Wisconsin";s:8:"name_url";s:0:"";}}'));
-update_post_meta($post_id, "mbt_unique_id_isbn", "9780801015434");
+update_post_meta($post_id, 'mbt_unique_id_isbn', '9780801015434');
+update_post_meta($post_id, 'mbt_unique_id_asin', '080101543X');
+update_post_meta($post_id, 'mbt_show_unique_id', 'true');
 
 
 
@@ -177,7 +189,9 @@ update_post_meta($post_id, "mbt_buybuttons", unserialize('a:2:{i:0;a:3:{s:7:"dis
 update_post_meta($post_id, "mbt_book_image_id", mbt_copy_and_insert_attachment(plugins_url('images/examples/confidentfaith.jpg', dirname(__FILE__))));
 update_post_meta($post_id, 'mbt_book_teaser', 'Are you confident in your beliefs?');
 update_post_meta($post_id, 'mbt_endorsements', unserialize('a:3:{i:0;a:4:{s:8:"image_id";s:0:"";s:7:"content";s:60:"This may well be the most important book you read this year!";s:4:"name";s:54:"Lee Strobel, Bestselling author of The Case For Christ";s:8:"name_url";s:0:"";}i:1;a:4:{s:8:"image_id";s:0:"";s:7:"content";s:74:"Marc has emerged as a well-reasoned voice in the conversation about faith.";s:4:"name";s:86:"Max Lucado, Bestselling author of Grace: More Than We Deserve, Greater Than We Imagine";s:8:"name_url";s:0:"";}i:2;a:4:{s:8:"image_id";s:0:"";s:7:"content";s:86:"Mark guides us into understanding the importance of knowing why we believe what we do.";s:4:"name";s:96:"Dan Kimball, Author of Adventures in Churchland: Finding Jesus in the Mess of Organized Religion";s:8:"name_url";s:0:"";}}'));
-update_post_meta($post_id, "mbt_unique_id_isbn", "9781414329963");
+update_post_meta($post_id, 'mbt_unique_id_isbn', '9781414329963');
+update_post_meta($post_id, 'mbt_unique_id_asin', '1414329962');
+update_post_meta($post_id, 'mbt_show_unique_id', 'true');
 
 
 
@@ -201,6 +215,8 @@ if(!is_wp_error($historicalfiction)) { wp_set_post_terms($post_id, $historicalfi
 if(!is_wp_error($jvaughan)) { wp_set_post_terms($post_id, $jvaughan_id, 'mbt_author'); }
 if(!is_wp_error($recommended)) { wp_set_post_terms($post_id, $recommended_id, 'mbt_tag'); }
 update_post_meta($post_id, "mbt_buybuttons", unserialize('a:2:{i:0;a:3:{s:7:"display";s:6:"button";s:5:"store";s:3:"bnn";s:3:"url";s:89:"http://www.barnesandnoble.com/w/flying-solo-jeanette-vaughan/1115228279?ean=9780615618883";}i:1;a:3:{s:7:"display";s:6:"button";s:5:"store";s:6:"amazon";s:3:"url";s:84:"http://www.amazon.com/Flying-Solo-Unconventional-Navigates-Turbulence/dp/061561888X/";}}'));
-update_post_meta($post_id, "mbt_book_image_id", mbt_copy_and_insert_attachment(plugins_url('images/examples/flyingsolo.jpg', dirname(__FILE__))));
+update_post_meta($post_id, 'mbt_book_image_id', mbt_copy_and_insert_attachment(plugins_url('images/examples/flyingsolo.jpg', dirname(__FILE__))));
 update_post_meta($post_id, 'mbt_book_teaser', 'An Unconventional Aviatrix Navigates Turbulence in Life');
-update_post_meta($post_id, "mbt_unique_id_isbn", "9780615618883");
+update_post_meta($post_id, 'mbt_unique_id_isbn', '9780615618883');
+update_post_meta($post_id, 'mbt_unique_id_asin', '061561888X');
+update_post_meta($post_id, 'mbt_show_unique_id', 'true');

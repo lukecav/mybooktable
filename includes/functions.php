@@ -910,6 +910,8 @@ function mbt_get_upgrade() {
 
 function mbt_get_upgrade_version() {
 	$upgrade = mbt_get_upgrade();
+	if($upgrade == 'mybooktable-dev3' and defined('MBTDEV3_VERSION')) { return MBTDEV3_VERSION; }
+	if($upgrade == 'mybooktable-pro3' and defined('MBTPRO3_VERSION')) { return MBTPRO3_VERSION; }
 	if($upgrade == 'mybooktable-dev2' and defined('MBTDEV2_VERSION')) { return MBTDEV2_VERSION; }
 	if($upgrade == 'mybooktable-pro2' and defined('MBTPRO2_VERSION')) { return MBTPRO2_VERSION; }
 	if($upgrade == 'mybooktable-dev' and defined('MBTDEV_VERSION')) { return MBTDEV_VERSION; }
@@ -920,6 +922,8 @@ function mbt_get_upgrade_version() {
 function mbt_get_upgrade_plugin_exists($active=true) {
 	if(!$active) { return defined('MBTDEV2_VERSION') or defined('MBTPRO2_VERSION') or defined('MBTDEV_VERSION') or defined('MBTPRO_VERSION'); }
 	$upgrade = mbt_get_upgrade();
+	if($upgrade == 'mybooktable-dev3') { return defined('MBTDEV3_VERSION'); }
+	if($upgrade == 'mybooktable-pro3') { return defined('MBTPRO3_VERSION'); }
 	if($upgrade == 'mybooktable-dev2') { return defined('MBTDEV2_VERSION'); }
 	if($upgrade == 'mybooktable-pro2') { return defined('MBTPRO2_VERSION'); }
 	if($upgrade == 'mybooktable-dev')  { return defined('MBTDEV_VERSION'); }
