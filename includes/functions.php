@@ -284,7 +284,7 @@ function mbt_get_book_display_modes() {
 
 function mbt_add_default_book_display_modes($modes) {
 	$modes['storefront'] = array('name' => 'Storefront', 'supports' => array('compatability', 'sale_price'));
-	$modes['singlecolumn'] = array('name' => 'Beautiful Page', 'supports' => array('teaser', 'compatability'));
+	$modes['singlecolumn'] = array('name' => 'Beautiful Page', 'supports' => array('compatability', 'teaser', 'sortable_sections'));
 	return $modes;
 }
 add_filter('mbt_display_modes', 'mbt_add_default_book_display_modes');
@@ -359,6 +359,12 @@ function mbt_book_bulk_change_display_mode_admin_notices() {
 		$message = sprintf(_n('Book updated.', '%s books updated.', $_REQUEST['mbt-books-updated']), number_format_i18n($_REQUEST['mbt-books-updated']));
 		echo('<div class="updated"><p>'.$message.'</p></div>');
 	}
+}
+
+function mbt_get_sorted_content_sections($display_mode) {
+	$sections = apply_filters('mbt_get_'.$display_mode.'_content_sections', array());
+	//sort by priority
+	return $sections;
 }
 
 
