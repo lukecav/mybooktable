@@ -14,8 +14,8 @@
 		<?php mbt_the_book_metadata('mbt_illustrator', __('Illustrator', 'mybooktable')); ?>
 		<?php mbt_the_book_unique_id(); ?>
 		<?php mbt_the_book_star_rating(); ?>
-		<?php mbt_the_book_metadata('mbt_price', __('Price', 'mybooktable')); ?>
-		<?php mbt_the_book_metadata('mbt_ebook_price', __('E-book Price', 'mybooktable')); ?>
+		<?php mbt_the_book_metadata('mbt_price', __('List Price', 'mybooktable')); ?>
+		<?php mbt_the_book_metadata('mbt_ebook_price', __('eBook Price', 'mybooktable')); ?>
 		<?php mbt_the_book_metadata('mbt_audiobook_price', __('Audiobook Price', 'mybooktable')); ?>
 	</div>
 </div>

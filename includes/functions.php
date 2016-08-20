@@ -363,8 +363,25 @@ function mbt_book_bulk_change_display_mode_admin_notices() {
 
 function mbt_get_sorted_content_sections($display_mode) {
 	$sections = apply_filters('mbt_get_'.$display_mode.'_content_sections', array());
-	//sort by priority
-	return $sections;
+	$prioritized_sections = array();
+	foreach($sections as $id => $section) { $prioritized_sections[] = array_merge($section, array('id' => $id)); }
+	$prioritize = function($a, $b) { return ($a['priority'] == $b['priority']) ? 0 : (($a['priority'] < $b['priority']) ? -1 : 1); };
+	usort($prioritized_sections, $prioritize);
+	$sections_order = mbt_get_setting('book_section_order_'.$display_mode);
+	if(empty($sections_order)) { $sections_order = array(); }
+	$sorted_sections = array();
+	$order_index = 0;
+	foreach($prioritized_sections as $section) {
+		$index = array_search($section['id'], $sections_order);
+		if($index === false) {
+			$sorted_sections[] = $section;
+		} else {
+			$order_section = $sections[$sections_order[$order_index]];
+			$sorted_sections[] = array_merge($order_section, array('id' => $sections_order[$order_index], 'priority' => $section['priority']));
+			$order_index += 1;
+		}
+	}
+	return $sorted_sections;
 }
 
 

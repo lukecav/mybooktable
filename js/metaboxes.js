@@ -236,7 +236,6 @@ jQuery(document).ready(function() {
 				authors: authors,
 			},
 			function(response) {
-				console.log(response);
 				jQuery('#mbt_main_author_link').attr('href', response);
 			}
 		);
@@ -311,5 +310,55 @@ jQuery(document).ready(function() {
 		jQuery('input[type="submit"]').click(save_bookclub_resources);
 		load_bookclub_resources();
 	}
+
+	/*---------------------------------------------------------*/
+	/* Section Sorting Metabox                                 */
+	/*--------------------------------------------------------*/
+
+	function load_booksections() {
+		var items = JSON.parse(jQuery('.mbt_booksections').val());
+		for(var i = items.length - 1; i >= 0; i--) {
+			jQuery('.mbt_booksections_sorters').prepend(jQuery('<div class="mbt_booksection_sorter" data-booksection-id="'+items[i]['id']+'">'+items[i]['name']+'</div>'));
+		};
+	}
+
+	function save_booksections() {
+		var items = [];
+		jQuery('.mbt_booksections_sorters .mbt_booksection_sorter').each(function(i, e) {
+			items.push(jQuery(e).attr('data-booksection-id'));
+		});
+		jQuery('.mbt_booksections').val(JSON.stringify(items));
+	}
+
+	function change_booksections_displaymode(reset) {
+		var display_mode;
+		if(reset) {
+			display_mode = jQuery('.mbt_booksections_displaymode').val();
+		} else {
+			display_mode = jQuery('#mbt_display_mode').val();
+		}
+		jQuery.post(ajaxurl,
+			{
+				action: 'mbt_change_booksections_displaymode',
+				display_mode: display_mode,
+				reset: !!reset,
+			},
+			function(response) {
+				jQuery('.mbt_booksections_displaymode').val(display_mode);
+				jQuery('.mbt_booksections').val(response);
+				jQuery('.mbt_booksections_sorters').empty();
+				load_booksections();
+			}
+		);
+	}
+
+	if(jQuery('.mbt_booksections').length > 0) {
+		jQuery('.mbt_booksections_sorters').sortable();
+		jQuery('input[type="submit"]').click(save_booksections);
+		load_booksections();
+		jQuery('#mbt_display_mode').change(function() { change_booksections_displaymode(); });
+		jQuery('.mbt_booksections_reset').click(function() { change_booksections_displaymode(true); });
+	}
+
 
 });

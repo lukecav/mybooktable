@@ -7,6 +7,9 @@ function mbt_templates_init() {
 	list($width, $height) = apply_filters('mbt_endorsement_image_size', array(1000, 400));
 	add_image_size('mbt_endorsement_image', $width, $height, false);
 
+	add_action('mbt_get_storefront_content_sections', 'mbt_get_storefront_content_sections');
+	add_action('mbt_get_singlecolumn_content_sections', 'mbt_get_singlecolumn_content_sections');
+
 	if(!is_admin()) {
 		//enqueue frontend styling
 		add_action('wp_enqueue_scripts', 'mbt_enqueue_resources');
@@ -53,7 +56,6 @@ function mbt_templates_init() {
 		add_action('mbt_single_book_storefront_blurb', 'mbt_do_single_book_storefront_blurb');
 		add_action('mbt_single_book_storefront_buybuttons', 'mbt_do_single_book_storefront_buybuttons');
 		add_action('mbt_single_book_storefront_overview', 'mbt_do_single_book_storefront_overview');
-		add_action('mbt_get_storefront_content_sections', 'mbt_get_storefront_content_sections');
 		if(mbt_get_setting('enable_socialmedia_badges_single_book')) { add_action('mbt_single_book_storefront_title', 'mbt_do_single_book_storefront_socialmedia_badges', 5); }
 		if(mbt_get_setting('enable_socialmedia_bar_single_book')) { add_action('mbt_single_book_storefront_overview', 'mbt_do_single_book_storefront_socialmedia_bar', 20); }
 
@@ -69,7 +71,6 @@ function mbt_templates_init() {
 		add_action('mbt_single_book_singlecolumn_overview', 'mbt_do_single_book_singlecolumn_overview');
 		add_action('mbt_single_book_singlecolumn_meta', 'mbt_do_single_book_singlecolumn_meta');
 		add_action('mbt_single_book_singlecolumn_socialmedia', 'mbt_do_single_book_singlecolumn_socialmedia');
-		add_action('mbt_get_singlecolumn_content_sections', 'mbt_get_singlecolumn_content_sections');
 
 		if(!mbt_get_setting('hide_domc_notice')) { add_action('mbt_after_single_book', 'mbt_the_domc_notice', 90); }
 
@@ -341,16 +342,16 @@ function mbt_do_single_book_storefront_summary() {
 	mbt_include_template("single-book-storefront/summary.php");
 }
 function mbt_get_storefront_content_sections($sections) {
-	$sections['summary'] = array('priority' => 10, 'action' => 'mbt_single_book_storefront_summary');
-	$sections['video_sample'] = array('priority' => 20, 'action' => 'mbt_single_book_storefront_video_sample');
-	$sections['overview'] = array('priority' => 30, 'action' => 'mbt_single_book_storefront_overview');
-	$sections['endorsements'] = array('priority' => 40, 'action' => 'mbt_single_book_storefront_endorsements');
-	$sections['bookclub_box'] = array('priority' => 50, 'action' => 'mbt_single_book_storefront_bookclub_box');
-	if(mbt_get_setting('show_about_author')) { $sections['about_author'] = array('priority' => 100, 'function' => 'mbt_the_book_about_author'); }
-	if(mbt_get_setting('show_series')) { $sections['series_box'] = array('priority' => 110, 'function' => 'mbt_the_book_series_box'); }
-	$sections['kindle_instant_preview'] = array('priority' => 120, 'function' => 'mbt_the_kindle_instant_preview_box');
-	if(mbt_get_setting('show_find_bookstore')) { $sections['find_bookstore_box'] = array('priority' => 130, 'function' => 'mbt_the_find_bookstore_box'); }
-	$sections['reviews_box'] = array('priority' => 140, 'function' => 'mbt_the_reviews_box');
+	$sections['summary'] = array('name'=> 'Summary', 'priority' => 10, 'action' => 'mbt_single_book_storefront_summary');
+	$sections['video_sample'] = array('name'=> 'Video Sample', 'priority' => 20, 'action' => 'mbt_single_book_storefront_video_sample');
+	$sections['overview'] = array('name'=> 'Overview', 'priority' => 30, 'action' => 'mbt_single_book_storefront_overview');
+	$sections['endorsements'] = array('name'=> 'Endorsements', 'priority' => 40, 'action' => 'mbt_single_book_storefront_endorsements');
+	$sections['bookclub_box'] = array('name'=> 'Book Club Resources', 'priority' => 50, 'action' => 'mbt_single_book_storefront_bookclub_box');
+	if(mbt_get_setting('show_about_author')) { $sections['about_author'] = array('name'=> 'About Author', 'priority' => 100, 'function' => 'mbt_the_book_about_author'); }
+	if(mbt_get_setting('show_series')) { $sections['series_box'] = array('name'=> 'Books in Series', 'priority' => 110, 'function' => 'mbt_the_book_series_box'); }
+	$sections['kindle_instant_preview'] = array('name'=> 'Kindle Instant Preview', 'priority' => 120, 'function' => 'mbt_the_kindle_instant_preview_box');
+	if(mbt_get_setting('show_find_bookstore')) { $sections['find_bookstore_box'] = array('name'=> 'Find Bookstores', 'priority' => 130, 'function' => 'mbt_the_find_bookstore_box'); }
+	$sections['reviews_box'] = array('name'=> 'Reviews', 'priority' => 140, 'function' => 'mbt_the_reviews_box');
 	return $sections;
 }
 
@@ -394,18 +395,18 @@ function mbt_do_single_book_singlecolumn_summary() {
 }
 function mbt_get_singlecolumn_content_sections($sections) {
 	$sections['summary'] = array('name'=> 'Summary', 'priority' => 10, 'action' => 'mbt_single_book_singlecolumn_summary');
-	$sections['video_sample'] = array('priority' => 20, 'function' => 'mbt_the_book_video_sample');
-	$sections['overview'] = array('priority' => 30, 'action' => 'mbt_single_book_singlecolumn_overview');
-	$sections['meta'] = array('priority' => 40, 'action' => 'mbt_single_book_singlecolumn_meta');
-	$sections['endorsements'] = array('priority' => 50, 'function' => 'mbt_the_book_endorsements');
-	$sections['bookclub_box'] = array('priority' => 60, 'function' => 'mbt_the_book_bookclub_box');
-	$sections['purchase'] = array('priority' => 70, 'action' => 'mbt_single_book_singlecolumn_purchase');
-	$sections['socialmedia'] = array('priority' => 80, 'action' => 'mbt_single_book_singlecolumn_socialmedia');
-	if(mbt_get_setting('show_about_author')) { $sections['about_author'] = array('priority' => 100, 'function' => 'mbt_the_book_about_author'); }
-	if(mbt_get_setting('show_series')) { $sections['series_box'] = array('priority' => 110, 'function' => 'mbt_the_book_series_box'); }
-	$sections['kindle_instant_preview'] = array('priority' => 120, 'function' => 'mbt_the_kindle_instant_preview_box');
-	if(mbt_get_setting('show_find_bookstore')) { $sections['find_bookstore_box'] = array('priority' => 130, 'function' => 'mbt_the_find_bookstore_box'); }
-	$sections['reviews_box'] = array('priority' => 140, 'function' => 'mbt_the_reviews_box');
+	$sections['video_sample'] = array('name'=> 'Video Sample', 'priority' => 20, 'function' => 'mbt_the_book_video_sample');
+	$sections['overview'] = array('name'=> 'Overview', 'priority' => 30, 'action' => 'mbt_single_book_singlecolumn_overview');
+	$sections['meta'] = array('name'=> 'Details', 'priority' => 40, 'action' => 'mbt_single_book_singlecolumn_meta');
+	$sections['endorsements'] = array('name'=> 'Endorsements', 'priority' => 50, 'function' => 'mbt_the_book_endorsements');
+	$sections['bookclub_box'] = array('name'=> 'Book Club Resources', 'priority' => 60, 'function' => 'mbt_the_book_bookclub_box');
+	$sections['purchase'] = array('name'=> 'Buy Buttons', 'priority' => 70, 'action' => 'mbt_single_book_singlecolumn_purchase');
+	$sections['socialmedia'] = array('name'=> 'Social Media', 'priority' => 80, 'action' => 'mbt_single_book_singlecolumn_socialmedia');
+	if(mbt_get_setting('show_about_author')) { $sections['about_author'] = array('name'=> 'About Author', 'priority' => 100, 'function' => 'mbt_the_book_about_author'); }
+	if(mbt_get_setting('show_series')) { $sections['series_box'] = array('name'=> 'Books in Series', 'priority' => 110, 'function' => 'mbt_the_book_series_box'); }
+	$sections['kindle_instant_preview'] = array('name'=> 'Kindle Instant Preview', 'priority' => 120, 'function' => 'mbt_the_kindle_instant_preview_box');
+	if(mbt_get_setting('show_find_bookstore')) { $sections['find_bookstore_box'] = array('name'=> 'Find Bookstores', 'priority' => 130, 'function' => 'mbt_the_find_bookstore_box'); }
+	$sections['reviews_box'] = array('name'=> 'Reviews', 'priority' => 140, 'function' => 'mbt_the_reviews_box');
 	return $sections;
 }
 
@@ -565,9 +566,9 @@ function mbt_the_book_archive_pagination() {
 function mbt_do_book_content_sections($display_mode) {
 	$sections = mbt_get_sorted_content_sections($display_mode);
 	foreach($sections as $section) {
-		if($section['action']) {
+		if(!empty($section['action'])) {
 			do_action($section['action']);
-		} else if($section['function']) {
+		} else if(!empty($section['function'])) {
 			call_user_func($section['function']);
 		}
 	}
@@ -666,7 +667,7 @@ function mbt_get_book_price($post_id) {
 	}
 
 	if(!empty($ebook_price)) {
-		$output .= '<span class="mbt-alt-price"><span class="mbt-price-title">'.__('E-book', 'mybooktable').':</span> <span itemprop="offers" itemscope itemtype="http://schema.org/Offer"><span itemprop="price">'.$ebook_price.'</span><link itemprop="availability" href="http://schema.org/InStock"/></span></span>';
+		$output .= '<span class="mbt-alt-price"><span class="mbt-price-title">'.__('eBook', 'mybooktable').':</span> <span itemprop="offers" itemscope itemtype="http://schema.org/Offer"><span itemprop="price">'.$ebook_price.'</span><link itemprop="availability" href="http://schema.org/InStock"/></span></span>';
 	}
 	if(!empty($audiobook_price)) {
 		$output .= '<span class="mbt-alt-price"><span class="mbt-price-title">'.__('Audiobook', 'mybooktable').':</span> <span itemprop="offers" itemscope itemtype="http://schema.org/Offer"><span itemprop="price">'.$audiobook_price.'</span><link itemprop="availability" href="http://schema.org/InStock"/></span></span>';

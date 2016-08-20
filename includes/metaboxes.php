@@ -8,6 +8,7 @@ function mbt_metaboxes_init() {
 	add_action('wp_ajax_mbt_asin_preview', 'mbt_asin_preview_ajax');
 	add_action('wp_ajax_mbt_overview_image_preview', 'mbt_overview_image_preview_ajax');
 	add_action('wp_ajax_mbt_main_author_url', 'mbt_main_author_url_ajax');
+	add_action('wp_ajax_mbt_change_booksections_displaymode', 'mbt_change_booksections_displaymode_ajax');
 	add_action('admin_enqueue_scripts', 'mbt_enqueue_metabox_js');
 
 	add_action('save_post', 'mbt_save_book_blurb_metabox');
@@ -19,6 +20,7 @@ function mbt_metaboxes_init() {
 	add_action('save_post', 'mbt_save_overview_metabox');
 	add_action('save_post', 'mbt_save_display_mode_field');
 	add_action('save_post', 'mbt_save_post_author_field');
+	add_action('save_post', 'mbt_save_sectionsorting_metabox');
 
 	add_action('add_meta_boxes', 'mbt_add_metaboxes', 9);
 	add_action('post_submitbox_misc_actions', 'mbt_add_post_author_field');
@@ -34,6 +36,7 @@ function mbt_add_metaboxes() {
 	add_meta_box('mbt_endorsements', __('Endorsements', 'mybooktable'), 'mbt_endorsements_metabox', 'mbt_book', 'normal', 'high');
 	add_meta_box('mbt_bookclub', __('Book Club Resources', 'mybooktable'), 'mbt_bookclub_metabox', 'mbt_book', 'normal', 'low');
 	add_meta_box('mbt_series_order', __('Series Order', 'mybooktable'), 'mbt_series_order_metabox', 'mbt_book', 'side', 'default');
+	add_meta_box('mbt_sectionsorting', __('Section Order', 'mybooktable'), 'mbt_sectionsorting_metabox', 'mbt_book', 'side', 'default');
 }
 
 function mbt_enqueue_metabox_js() {
@@ -342,8 +345,8 @@ function mbt_get_metadata_fields() {
 			),
 			'mbt_ebook_price' => array(
 				'type' => 'mbt_metadata_text',
-				'name' => __('E-book Price', 'mybooktable'),
-				'desc' => __('If your book is available in multiple formats, you can use this to display the e-book price.', 'mybooktable'),
+				'name' => __('eBook Price', 'mybooktable'),
+				'desc' => __('If your book is available in multiple formats, you can use this to display the eBook price.', 'mybooktable'),
 			),
 			'mbt_audiobook_price' => array(
 				'type' => 'mbt_metadata_text',
@@ -392,8 +395,8 @@ function mbt_get_metadata_fields() {
 				'desc' => __('If applicable, who is the book illustrated by?', 'mybooktable'),
 			),
 		),
-		'Colors' => array(
-			'supports' => 'colors',
+		'Section Colors' => array(
+			'supports' => 'section_colors',
 			'mbt_bg_color' => array(
 				'type' => 'mbt_metadata_colorpicker',
 				'name' => __('Background Color', 'mybooktable'),
@@ -674,4 +677,45 @@ function mbt_save_bookclub_metabox($post_id) {
 
 	if(isset($_REQUEST['mbt_bookclub_resources'])) { update_post_meta($post_id, 'mbt_bookclub_resources', json_decode(str_replace('\\\\', '\\', str_replace('\"', '"', str_replace('\\\'', '\'', $_REQUEST['mbt_bookclub_resources']))), true)); }
 	if(isset($_REQUEST['mbt_bookclub_video'])) { update_post_meta($post_id, 'mbt_bookclub_video', $_REQUEST['mbt_bookclub_video']); }
+}
+
+
+
+/*---------------------------------------------------------*/
+/* Section Sorting Metabox                                 */
+/*---------------------------------------------------------*/
+
+function mbt_change_booksections_displaymode_ajax() {
+	if(isset($_REQUEST['display_mode'])) {
+		if(isset($_REQUEST['reset']) and $_REQUEST['reset'] === "true") {
+			mbt_update_setting('book_section_order_'.$_REQUEST['display_mode'], array());
+		}
+		$sections = mbt_get_sorted_content_sections($_REQUEST['display_mode']);
+		echo(str_replace('\'', '&#39;', json_encode($sections)));
+	}
+	die();
+}
+
+function mbt_sectionsorting_metabox($post) {
+	$display_mode = mbt_get_book_display_mode($post->ID);
+	$sections = mbt_get_sorted_content_sections($display_mode);
+	if(empty($sections)) { $sections = array(); }
+	?>
+		<div class="mbt_sectionsorting_metabox">
+			<input type="hidden" class="mbt_booksections_displaymode" name="mbt_booksections_displaymode" value="<?php echo($display_mode); ?>">
+			<input type="hidden" class="mbt_booksections" name="mbt_booksections" value='<?php echo(str_replace('\'', '&#39;', json_encode($sections))); ?>'>
+			<div class="mbt_booksections_sorters"></div>
+			<p class="description" style="margin-bottom: 6px;">Use this to rearrange the display order of the sections on the book page.</p>
+			<div class="button mbt_booksections_reset">Restore Default Section Order</div>
+		</div>
+		<script type="text/javascript">jQuery('.mbt_sectionsorting_metabox').parents('#mbt_sectionsorting').attr('data-mbt-supports', 'sortable_sections');</script>
+	<?php
+}
+
+function mbt_save_sectionsorting_metabox($post_id) {
+	if((defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) || get_post_status($post_id) == 'auto-draft' || get_post_type($post_id) !== 'mbt_book') { return; }
+
+	if(isset($_REQUEST['mbt_booksections']) and isset($_REQUEST['mbt_booksections_displaymode'])) {
+		mbt_update_setting('book_section_order_'.$_REQUEST['mbt_booksections_displaymode'], json_decode(str_replace('\\\\', '\\', str_replace('\"', '"', str_replace('\\\'', '\'', $_REQUEST['mbt_booksections']))), true));
+	}
 }

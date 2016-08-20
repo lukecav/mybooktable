@@ -404,6 +404,22 @@ div.star-rating{background:transparent!important;overflow:hidden!important}
 	font-size: 1.2em;
 }
 
+.mbt_booksection_sorter {
+	background: #ececec;
+	border: 1px solid #DFDFDF;
+	border-radius: 5px;
+	margin: 5px 0;
+	padding: 5px;
+	cursor: move;
+
+	-webkit-touch-callout: none;
+	-webkit-user-select: none;
+	-khtml-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+}
+
 
 
 /*---------------------------------------------------------*/
