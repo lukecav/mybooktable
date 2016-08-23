@@ -104,7 +104,10 @@ jQuery(document).ready(function() {
 	}
 
 	// color pickers
-	jQuery('.mbt-colorpicker').spectrum({preferredFormat: 'rgb'});
+	jQuery('.mbt-colorpicker').each(function() {
+		var ele = jQuery(this);
+		ele.spectrum({preferredFormat: 'rgb', color: ele.val() ? ele.val() : ele.attr('data-default-color')});
+	});
 	jQuery('.mbt-colorpicker-clear').click(function() {
 		jQuery(this).siblings('.mbt-colorpicker').spectrum('set', '#000000').val('');
 	});
@@ -359,6 +362,5 @@ jQuery(document).ready(function() {
 		jQuery('#mbt_display_mode').change(function() { change_booksections_displaymode(); });
 		jQuery('.mbt_booksections_reset').click(function() { change_booksections_displaymode(true); });
 	}
-
 
 });

@@ -301,7 +301,7 @@ function mbt_metadata_star_rating($post_id, $field_id, $data) {
 
 function mbt_metadata_colorpicker($post_id, $field_id, $data) {
 	$output = '';
-	$output .= '<input type="text" class="mbt-colorpicker" name="'.$field_id.'" id="'.$field_id.'" value="'.get_post_meta($post_id, $field_id, true).'" />';
+	$output .= '<input type="text" class="mbt-colorpicker" name="'.$field_id.'" id="'.$field_id.'" value="'.get_post_meta($post_id, $field_id, true).'"'.(empty($data['default']) ? '' : ' data-default-color="'.$data['default'].'"').'/>';
 	$output .= '<input class="button mbt-colorpicker-clear" type="button" value="'.__('Clear', 'mybooktable').'" />';
 	return $output;
 }
@@ -400,14 +400,17 @@ function mbt_get_metadata_fields() {
 			'mbt_bg_color' => array(
 				'type' => 'mbt_metadata_colorpicker',
 				'name' => __('Background Color', 'mybooktable'),
+				'default' => '#fff',
 			),
 			'mbt_bg_color_alt' => array(
 				'type' => 'mbt_metadata_colorpicker',
 				'name' => __('Alternate Background Color', 'mybooktable'),
+				'default' => '#ddd',
 			),
 			'mbt_button_color' => array(
 				'type' => 'mbt_metadata_colorpicker',
 				'name' => __('Button Color', 'mybooktable'),
+				'default' => '#64ACF3',
 			),
 		),
 	);
