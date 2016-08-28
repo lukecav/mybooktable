@@ -648,6 +648,11 @@ function mbt_send_tracking_data() {
 		),
 		'events' => mbt_get_tracking_data('events'),
 		'ab_status' => mbt_get_tracking_data('ab_status'),
+		'plugins' => array(
+			'has_mybookprogress' => defined('MBP_VERSION'),
+			'has_myspeakingpage' => defined('MSP_VERSION'),
+			'has_myspeakingevents' => defined('MSE_VERSION'),
+		),
 	);
 
 	global $wp_version;

@@ -18,7 +18,7 @@ function mbr_enqueue_widget_admin_js() {
 /*---------------------------------------------------------*/
 
 class MBT_Featured_Book extends WP_Widget {
-	function MBT_Featured_Book() {
+	function __construct() {
 		$widget_ops = array('classname' => 'mbt_featured_book', 'description' => __("Displays featured or random books.", 'mybooktable'));
 		parent::__construct('mbt_featured_book', __('MyBookTable Featured Books', 'mybooktable'), $widget_ops);
 		$this->defaultargs = array('title' => __('Featured Books', 'mybooktable'), 'selectmode' => 'by_date', 'featured_books' => array(), 'image_size' => 'medium', 'num_books' => 1, 'show_blurb' => true, 'use_shadowbox' => true);
@@ -170,7 +170,7 @@ class MBT_Featured_Book extends WP_Widget {
 /*---------------------------------------------------------*/
 
 class MBT_Taxonomies extends WP_Widget {
-	function MBT_Taxonomies() {
+	function __construct() {
 		$widget_ops = array('classname' => 'mbt_taxonomies', 'description' => __("A list of Authors, Genres, Series, or Tags.", 'mybooktable'));
 		parent::__construct('mbt_taxonomies', __('MyBookTable Taxonomy Widget', 'mybooktable'), $widget_ops);
 	}
