@@ -177,13 +177,14 @@ jQuery(document).ready(function() {
 					image_id: jQuery('#mbt_endorsement_image_'+id).val(),
 				},
 				function(response) {
+
 					jQuery('.mbt_endorsement_image_preview_'+id).empty();
 					if(response) {
 						jQuery('.mbt_endorsement_image_preview_'+id).html('<img src="'+response+'">');
 					}
 				}
 			);
-		}).trigger('change');
+		});
 
 		return new_item;
 	}
@@ -250,68 +251,68 @@ jQuery(document).ready(function() {
 	/* Book Club Metabox                                       */
 	/*---------------------------------------------------------*/
 
-	var bookclub_resource_editors = jQuery('.mbt_bookclub_resource_editors');
-	var bookclub_resource_id = 0;
+	var bookclub_link_editors = jQuery('.mbt_bookclub_link_editors');
+	var bookclub_link_id = 0;
 
-	function new_bookclub_resource() {
-		var id = bookclub_resource_id++;
+	function new_bookclub_link() {
+		var id = bookclub_link_id++;
 
 		src = '';
-		src += '<div class="mbt_bookclub_resource_editor">';
-		src += '	<div class="mbt_bookclub_resource_header">';
-		src += '		<button class="mbt_bookclub_resource_remover button">Remove</button>';
+		src += '<div class="mbt_bookclub_link_editor">';
+		src += '	<div class="mbt_bookclub_link_header">';
+		src += '		<button class="mbt_bookclub_link_remover button">Remove</button>';
 		src += '		<div style="clear:both"></div>';
 		src += '	</div>';
-		src += '	<div class="mbt_bookclub_resource_content">';
-		src += '		<div class="mbt_bookclub_resource_url_field">';
-		src += '			<label>Resource URL: <input type="text" class="mbt_bookclub_resource_url" id="mbt_bookclub_resource_url_'+id+'" value="" autocomplete="off"></label>';
-		src += '			<input class="mbt_bookclub_resource_upload button" data-upload-target="mbt_bookclub_resource_url_'+id+'" type="button" value="Choose File" />';
+		src += '	<div class="mbt_bookclub_link_content">';
+		src += '		<div class="mbt_bookclub_link_url_field">';
+		src += '			<label>Resource URL: <input type="text" class="mbt_bookclub_link_url" id="mbt_bookclub_link_url_'+id+'" value="" autocomplete="off"></label>';
+		src += '			<input class="mbt_bookclub_link_upload button" data-upload-target="mbt_bookclub_link_url_'+id+'" type="button" value="Choose File" />';
 		src += '		</div>';
-		src += '		<div class="mbt_bookclub_resource_text_field">';
-		src += '			<label>Link Text: <input type="text" class="mbt_bookclub_resource_text" value="" autocomplete="off"></label>';
+		src += '		<div class="mbt_bookclub_link_text_field">';
+		src += '			<label>Link Text: <input type="text" class="mbt_bookclub_link_text" value="" autocomplete="off"></label>';
 		src += '		</div>';
 		src += '		<div style="clear:both"></div>';
 		src += '	</div>';
 		src += '</div>';
 
 		new_item = jQuery(src);
-		bookclub_resource_editors.prepend(new_item);
+		bookclub_link_editors.prepend(new_item);
 
-		new_item.find('.mbt_bookclub_resource_upload').mbt_upload_button();
+		new_item.find('.mbt_bookclub_link_upload').mbt_upload_button();
 
 		return new_item;
 	}
 
-	function load_bookclub_resources() {
-		var items = JSON.parse(jQuery('.mbt_bookclub_resources').val());
+	function load_bookclub_links() {
+		var items = JSON.parse(jQuery('.mbt_bookclub_links').val());
 		for(var i = items.length - 1; i >= 0; i--) {
-			var element = new_bookclub_resource();
+			var element = new_bookclub_link();
 
-			element.find('.mbt_bookclub_resource_url').val(items[i]['url']);
-			element.find('.mbt_bookclub_resource_text').val(items[i]['text']);
+			element.find('.mbt_bookclub_link_url').val(items[i]['url']);
+			element.find('.mbt_bookclub_link_text').val(items[i]['text']);
 		};
 	}
 
-	function save_bookclub_resources() {
+	function save_bookclub_links() {
 		var items = [];
-		bookclub_resource_editors.find('.mbt_bookclub_resource_editor').each(function(i, e) {
+		bookclub_link_editors.find('.mbt_bookclub_link_editor').each(function(i, e) {
 			var element = jQuery(e);
 			var new_item = {}
 
-			new_item['url'] = element.find('.mbt_bookclub_resource_url').val();
-			new_item['text'] = element.find('.mbt_bookclub_resource_text').val();
+			new_item['url'] = element.find('.mbt_bookclub_link_url').val();
+			new_item['text'] = element.find('.mbt_bookclub_link_text').val();
 
 			items.push(new_item);
 		});
-		jQuery('.mbt_bookclub_resources').val(JSON.stringify(items));
+		jQuery('.mbt_bookclub_links').val(JSON.stringify(items));
 	}
 
-	if(jQuery('.mbt_bookclub_resources').length > 0) {
-		jQuery('.mbt_bookclub_resource_adder').click(new_bookclub_resource);
-		bookclub_resource_editors.sortable({cancel: '.mbt_bookclub_resource_content,.mbt_bookclub_resource_title,.mbt_bookclub_resource_remover'});
-		bookclub_resource_editors.on('click', '.mbt_bookclub_resource_remover', function() { jQuery(this).parents('.mbt_bookclub_resource_editor').remove(); });
-		jQuery('input[type="submit"]').click(save_bookclub_resources);
-		load_bookclub_resources();
+	if(jQuery('.mbt_bookclub_links').length > 0) {
+		jQuery('.mbt_bookclub_link_adder').click(new_bookclub_link);
+		bookclub_link_editors.sortable({cancel: '.mbt_bookclub_link_content,.mbt_bookclub_link_title,.mbt_bookclub_link_remover'});
+		bookclub_link_editors.on('click', '.mbt_bookclub_link_remover', function() { jQuery(this).parents('.mbt_bookclub_link_editor').remove(); });
+		jQuery('input[type="submit"]').click(save_bookclub_links);
+		load_bookclub_links();
 	}
 
 	/*---------------------------------------------------------*/

@@ -4,11 +4,11 @@ function mbt_goodreads_init() {
 	add_action('mbt_integrate_settings_render', 'mbt_goodreads_settings_render', 9);
 	add_action('mbt_settings_save', 'mbt_goodreads_settings_save');
 	add_action('wp_ajax_mbt_goodreads_developer_key_refresh', 'mbt_goodreads_developer_key_refresh_ajax');
-	add_filter('mbt_reviews_boxes', 'mbt_add_goodreads_reviews_box');
+	add_filter('mbt_reviews_types', 'mbt_add_goodreads_reviews_type');
 }
 add_action('mbt_init', 'mbt_goodreads_init');
 
-function mbt_add_goodreads_reviews_box($reviews) {
+function mbt_add_goodreads_reviews_type($reviews) {
 	$dev_key = mbt_get_setting('goodreads_developer_key');
 	$disabled = empty($dev_key) ? '<a href="'.admin_url('admin.php?page=mbt_settings&mbt_current_tab=5').'">'.__('You must input your GoodReads Developer Key', 'mybooktable').'</a>' : '';
 	$reviews['goodreads'] = array(

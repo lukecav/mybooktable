@@ -112,15 +112,14 @@ function mbt_save_settings_page() {
 		mbt_update_setting('booktable_page', $_REQUEST['mbt_booktable_page']);
 		mbt_update_setting('compatibility_mode', isset($_REQUEST['mbt_compatibility_mode']));
 
-		mbt_update_setting('enable_socialmedia_badges_single_book', isset($_REQUEST['mbt_enable_socialmedia_badges_single_book']));
-		mbt_update_setting('enable_socialmedia_badges_book_excerpt', isset($_REQUEST['mbt_enable_socialmedia_badges_book_excerpt']));
-		mbt_update_setting('enable_socialmedia_bar_single_book', isset($_REQUEST['mbt_enable_socialmedia_bar_single_book']));
+		mbt_update_setting('enable_socialmedia_single_book', isset($_REQUEST['mbt_enable_socialmedia_single_book']));
+		mbt_update_setting('enable_socialmedia_book_excerpt', isset($_REQUEST['mbt_enable_socialmedia_book_excerpt']));
 
 		mbt_update_setting('enable_seo', isset($_REQUEST['mbt_enable_seo']));
 
 		mbt_update_setting('style_pack', $_REQUEST['mbt_style_pack']);
 		mbt_update_setting('image_size', $_REQUEST['mbt_image_size']);
-		mbt_update_setting('reviews_box', isset($_REQUEST['mbt_reviews_box']) ? $_REQUEST['mbt_reviews_box'] : 'none');
+		mbt_update_setting('reviews_type', isset($_REQUEST['mbt_reviews_type']) ? $_REQUEST['mbt_reviews_type'] : 'none');
 		mbt_update_setting('buybutton_shadowbox', $_REQUEST['mbt_buybutton_shadowbox']);
 		mbt_update_setting('enable_breadcrumbs', isset($_REQUEST['mbt_enable_breadcrumbs']));
 		mbt_update_setting('show_series', isset($_REQUEST['mbt_show_series']));
@@ -192,13 +191,13 @@ function mbt_button_size_feedback($size) {
 
 function mbt_check_reviews_ajax() {
 	$output = '';
-	$reviews_boxes = mbt_get_reviews_boxes();
+	$reviews_types = mbt_get_reviews_types();
 	$reviews_type = $_REQUEST['reviews_type'];
-	if(!empty($reviews_boxes[$reviews_type]['book-check'])) {
+	if(!empty($reviews_types[$reviews_type]['book-check'])) {
 		$books_query = new WP_Query(array('post_type' => 'mbt_book', 'posts_per_page' => -1));
 		$books_results = array();
 		foreach ($books_query->posts as $book) {
-			$result = call_user_func_array($reviews_boxes[$reviews_type]['book-check'], array($book->ID));
+			$result = call_user_func_array($reviews_types[$reviews_type]['book-check'], array($book->ID));
 			$books_results[] = array('id' => $book->ID, 'title' => (strlen($book->post_title) > 30 ? substr($book->post_title, 0, 30) : $book->post_title), 'result' => $result);
 		}
 
@@ -455,24 +454,24 @@ function mbt_render_settings_page() {
 								</td>
 							</tr>
 							<tr>
-								<th><?php _e('Book Reviews Box', 'mybooktable'); ?></th>
+								<th><?php _e('Book Reviews', 'mybooktable'); ?></th>
 								<td>
 									<?php
-										$reviews_boxes = mbt_get_reviews_boxes();
-										$current_reviews = mbt_get_setting('reviews_box');
-										if(empty($current_reviews) or empty($reviews_boxes[$current_reviews])) { $current_reviews = 'none'; }
-										echo('<input type="radio" name="mbt_reviews_box" id="mbt_reviews_box_none" value="none" '.checked($current_reviews, 'none', false).'><label for="mbt_reviews_box_none">None</label><br>');
-										foreach($reviews_boxes as $slug => $reviews_data) {
+										$reviews_types = mbt_get_reviews_types();
+										$current_reviews = mbt_get_setting('reviews_type');
+										if(empty($current_reviews) or empty($reviews_types[$current_reviews])) { $current_reviews = 'none'; }
+										echo('<input type="radio" name="mbt_reviews_type" id="mbt_reviews_type_none" value="none" '.checked($current_reviews, 'none', false).'><label for="mbt_reviews_type_none">None</label><br>');
+										foreach($reviews_types as $slug => $reviews_data) {
 											if(!empty($reviews_data['disabled'])) {
-												echo('<input type="radio" name="mbt_reviews_box" id="mbt_reviews_box_'.$slug.'" value="'.$slug.'" '.checked($current_reviews, $slug, false).' disabled="disabled">');
-												echo('<label for="mbt_reviews_box_'.$slug.'" class="mbt_reviews_box_disabled">'.$reviews_data['name'].' ('.$reviews_data['disabled'].')</label><br>');
+												echo('<input type="radio" name="mbt_reviews_type" id="mbt_reviews_type_'.$slug.'" value="'.$slug.'" '.checked($current_reviews, $slug, false).' disabled="disabled">');
+												echo('<label for="mbt_reviews_type_'.$slug.'" class="mbt_reviews_type_disabled">'.$reviews_data['name'].' ('.$reviews_data['disabled'].')</label><br>');
 											} else {
-												echo('<input type="radio" name="mbt_reviews_box" id="mbt_reviews_box_'.$slug.'" value="'.$slug.'" '.checked($current_reviews, $slug, false).'>');
-												echo('<label for="mbt_reviews_box_'.$slug.'">'.$reviews_data['name'].'</label><br>');
+												echo('<input type="radio" name="mbt_reviews_type" id="mbt_reviews_type_'.$slug.'" value="'.$slug.'" '.checked($current_reviews, $slug, false).'>');
+												echo('<label for="mbt_reviews_type_'.$slug.'">'.$reviews_data['name'].'</label><br>');
 											}
 										}
 									?>
-									<p class="description"><?php _e('Select the reviews box that will be displayed under each book with a valid ISBN.', 'mybooktable'); ?></p>
+									<p class="description"><?php _e('Select the reviews provider that will be displayed under each book with a valid ISBN.', 'mybooktable'); ?></p>
 									<div class="mbt-check-reviews">
 										<div class="mbt-check-reviews-checking">Checking&hellip;<div class="mbt-check-reviews-spinner"></div></div>
 										<div class="mbt-check-reviews-results"></div>
@@ -484,31 +483,23 @@ function mbt_render_settings_page() {
 								</td>
 							</tr>
 							<tr>
-								<th><?php _e('Social Media Badges', 'mybooktable'); ?></th>
+								<th><?php _e('Social Media', 'mybooktable'); ?></th>
 								<td>
-									<input type="checkbox" name="mbt_enable_socialmedia_badges_single_book" id="mbt_enable_socialmedia_badges_single_book" <?php checked(mbt_get_setting('enable_socialmedia_badges_single_book'), true); ?> >
-									<label for="mbt_enable_socialmedia_badges_single_book"><?php _e('Show on Book Pages', 'mybooktable'); ?></label><br>
-									<input type="checkbox" name="mbt_enable_socialmedia_badges_book_excerpt" id="mbt_enable_socialmedia_badges_book_excerpt" <?php checked(mbt_get_setting('enable_socialmedia_badges_book_excerpt'), true); ?> >
-									<label for="mbt_enable_socialmedia_badges_book_excerpt"><?php _e('Show on Book Listings', 'mybooktable'); ?></label>
-									<p class="description"><?php _e('Check to enable MyBookTable\'s social media badges.', 'mybooktable'); ?></p>
+									<input type="checkbox" name="mbt_enable_socialmedia_single_book" id="mbt_enable_socialmedia_single_book" <?php checked(mbt_get_setting('enable_socialmedia_single_book'), true); ?> >
+									<label for="mbt_enable_socialmedia_single_book"><?php _e('Show on Book Pages', 'mybooktable'); ?></label><br>
+									<input type="checkbox" name="mbt_enable_socialmedia_book_excerpt" id="mbt_enable_socialmedia_book_excerpt" <?php checked(mbt_get_setting('enable_socialmedia_book_excerpt'), true); ?> >
+									<label for="mbt_enable_socialmedia_book_excerpt"><?php _e('Show on Book Listings', 'mybooktable'); ?></label>
+									<p class="description"><?php _e('Check to enable MyBookTable\'s social media buttons.', 'mybooktable'); ?></p>
 								</td>
 							</tr>
 							<tr>
-								<th><?php _e('Social Media Bar', 'mybooktable'); ?></th>
-								<td>
-									<input type="checkbox" name="mbt_enable_socialmedia_bar_single_book" id="mbt_enable_socialmedia_bar_single_book" <?php checked(mbt_get_setting('enable_socialmedia_bar_single_book'), true); ?> >
-									<label for="mbt_enable_socialmedia_bar_single_book"><?php _e('Show on Book Pages', 'mybooktable'); ?></label>
-									<p class="description"><?php _e('Check to enable the social media bar on book pages.', 'mybooktable'); ?></p>
-								</td>
-							</tr>
-							<tr>
-								<th><?php _e('"Find a Local Bookstore" Box', 'mybooktable'); ?></th>
+								<th><?php _e('"Find a Local Bookstore" Form', 'mybooktable'); ?></th>
 								<td>
 									<input type="checkbox" name="mbt_show_find_bookstore" id="mbt_show_find_bookstore" <?php checked(mbt_get_setting('show_find_bookstore'), true); ?> >
 									<label for="mbt_show_find_bookstore"><?php _e('Show on Book Pages', 'mybooktable'); ?></label><br>
 									<input type="checkbox" name="mbt_show_find_bookstore_buybuttons_shadowbox" id="mbt_show_find_bookstore_buybuttons_shadowbox" <?php checked(mbt_get_setting('show_find_bookstore_buybuttons_shadowbox'), true); ?> >
 									<label for="mbt_show_find_bookstore_buybuttons_shadowbox"><?php _e('Show in Buy Buttons Shadow Box', 'mybooktable'); ?></label>
-									<p class="description"><?php _e('If checked, show a box that helps your readers find places to buy your book will display under each book.', 'mybooktable'); ?></p>
+									<p class="description"><?php _e('If checked, show a form that helps your readers find places to buy your book will display under each book.', 'mybooktable'); ?></p>
 								</td>
 							</tr>
 							<tr>
@@ -520,11 +511,11 @@ function mbt_render_settings_page() {
 								</td>
 							</tr>
 							<tr>
-								<th><?php _e('"About the Author" Box', 'mybooktable'); ?></th>
+								<th><?php _e('"About the Author" Section', 'mybooktable'); ?></th>
 								<td>
 									<input type="checkbox" name="mbt_show_about_author" id="mbt_show_about_author" <?php checked(mbt_get_setting('show_about_author'), true); ?> >
 									<label for="mbt_show_about_author"><?php _e('Show on Book Pages', 'mybooktable'); ?></label><br>
-									<p class="description"><?php _e('If checked, show a box on the book page that displays information about the book author.', 'mybooktable'); ?></p>
+									<p class="description"><?php _e('If checked, show a section on the book page that displays information about the book author.', 'mybooktable'); ?></p>
 								</td>
 							</tr>
 						</tbody>

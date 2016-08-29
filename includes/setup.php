@@ -131,6 +131,9 @@ function mbt_update_2_3_0() {
 
 function mbt_update_3_0_0() {
 	mbt_update_setting('show_about_author', true);
+	mbt_update_setting('reviews_type', mbt_get_setting('reviews_box'));
+	mbt_update_setting('enable_socialmedia_single_book', mbt_get_setting('enable_socialmedia_badges_single_book') or mbt_get_setting('enable_socialmedia_bar_single_book'));
+	mbt_update_setting('enable_socialmedia_book_excerpt', mbt_get_setting('enable_socialmedia_badges_book_excerpt'));
 
 	$books_query = new WP_Query(array('post_type' => 'mbt_book', 'posts_per_page' => -1));
 	foreach ($books_query->posts as $book) {
@@ -138,11 +141,13 @@ function mbt_update_3_0_0() {
 
 		if(get_post_meta($book->ID, 'mbt_unique_id_asin', true) == '') {
 			$buybuttons = get_post_meta($book->ID, 'mbt_buybuttons', true);
-			foreach($buybuttons as $buybutton) {
-				if($buybutton['store'] == 'amazon' or $buybutton['store'] == 'kindle') {
-					$asin = mbt_get_amazon_AISN($buybutton['url']);
-					if(!empty($asin)) { update_post_meta($book->ID, 'mbt_unique_id_asin', $asin); }
-					break;
+			if(is_array($buybuttons) and !empty($buybuttons)) {
+				foreach($buybuttons as $buybutton) {
+					if($buybutton['store'] == 'amazon' or $buybutton['store'] == 'kindle') {
+						$asin = mbt_get_amazon_AISN($buybutton['url']);
+						if(!empty($asin)) { update_post_meta($book->ID, 'mbt_unique_id_asin', $asin); }
+						break;
+					}
 				}
 			}
 		}

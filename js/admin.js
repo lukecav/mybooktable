@@ -106,20 +106,20 @@ jQuery(document).ready(function() {
 	/* Review Checker                                          */
 	/*---------------------------------------------------------*/
 
-	function mbt_reviews_box_display() {
+	function mbt_reviews_type_display() {
 		jQuery('.mbt-check-reviews-begin').show();
 		jQuery('.mbt-check-reviews-checking').hide();
 		jQuery('.mbt-check-reviews-results').hide();
 
-		if(jQuery('input[name=mbt_reviews_box]:checked').val() == 'none') {
+		if(jQuery('input[name=mbt_reviews_type]:checked').val() == 'none') {
 			jQuery('.mbt-check-reviews').hide();
 		} else {
 			jQuery('.mbt-check-reviews').show();
 		}
 	}
 
-	jQuery('input[name=mbt_reviews_box]:radio').change(mbt_reviews_box_display);
-	mbt_reviews_box_display();
+	jQuery('input[name=mbt_reviews_type]:radio').change(mbt_reviews_type_display);
+	mbt_reviews_type_display();
 
 	jQuery('.mbt-check-reviews-button').click(function() {
 		jQuery('.mbt-check-reviews-begin').hide();
@@ -128,7 +128,7 @@ jQuery(document).ready(function() {
 		jQuery.post(ajaxurl,
 			{
 				action: 'mbt_check_reviews',
-				reviews_type: jQuery('input[name=mbt_reviews_box]:checked').val(),
+				reviews_type: jQuery('input[name=mbt_reviews_type]:checked').val(),
 			},
 			function(response) {
 				jQuery('.mbt-check-reviews-checking').hide();

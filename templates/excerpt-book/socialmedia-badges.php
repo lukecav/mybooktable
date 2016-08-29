@@ -1,1 +1,0 @@
-<div class="mbt-book-socialmedia-badges"><?php mbt_the_book_socialmedia_badges(); ?></div>

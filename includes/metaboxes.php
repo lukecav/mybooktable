@@ -217,7 +217,7 @@ function mbt_isbn_preview_feedback($data) {
 	$post_id = $data['mbt_post_id'];
 
 	if(empty($isbn)) {
-		if(get_post_status($post_id) === 'publish' and (mbt_get_setting('reviews_box') === 'goodreads' or (mbt_get_setting('reviews_box') === 'amazon' and get_post_meta($post_id, 'mbt_unique_id_asin', true) === ''))) {
+		if(get_post_status($post_id) === 'publish' and (mbt_get_setting('reviews_type') === 'goodreads' or (mbt_get_setting('reviews_type') === 'amazon' and get_post_meta($post_id, 'mbt_unique_id_asin', true) === ''))) {
 			$output = '<span class="mbt_admin_message_warning">'.__('Cannot show reviews without a valid ISBN.', 'mybooktable').'</span>';
 		}
 	} else {
@@ -648,12 +648,12 @@ function mbt_save_endorsements_metabox($post_id) {
 
 function mbt_bookclub_metabox($post) {
 	$video = get_post_meta($post->ID, 'mbt_bookclub_video', true);
-	$resources = get_post_meta($post->ID, 'mbt_bookclub_resources', true);
-	if(empty($resources)) { $resources = array(); }
+	$links = get_post_meta($post->ID, 'mbt_bookclub_links', true);
+	if(empty($links)) { $links = array(); }
 	?>
 		<div class="mbt_bookclub_metabox">
-			<div class="mbt_bookclub_resources_container">
-				<div class="mbt_bookclub_resources_description">
+			<div class="mbt_bookclub_links_container">
+				<div class="mbt_bookclub_links_description">
 					<p>The more resources you provide book clubs, the more they will want to read your book. Suggested materials include:</p>
 					<ul>
 						<li>PDF Download (Discussion Questions)</li>
@@ -662,9 +662,9 @@ function mbt_bookclub_metabox($post) {
 						<li>Chapter Excerpts PDF</li>
 					</ul>
 				</div>
-				<div class="button button-primary mbt_bookclub_resource_adder">Add Resource</div>
-				<input type="hidden" class="mbt_bookclub_resources" name="mbt_bookclub_resources" value='<?php echo(str_replace('\'', '&#39;', json_encode($resources))); ?>'>
-				<div class="mbt_bookclub_resource_editors"></div>
+				<div class="button button-primary mbt_bookclub_link_adder">Add Resource</div>
+				<input type="hidden" class="mbt_bookclub_links" name="mbt_bookclub_links" value='<?php echo(str_replace('\'', '&#39;', json_encode($links))); ?>'>
+				<div class="mbt_bookclub_link_editors"></div>
 			</div>
 			<div class="mbt_bookclub_video_container">
 				<h4 class="mbt_bookclub_video_title">Video Companion</h4>
@@ -678,7 +678,7 @@ function mbt_bookclub_metabox($post) {
 function mbt_save_bookclub_metabox($post_id) {
 	if((defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) || get_post_status($post_id) == 'auto-draft' || get_post_type($post_id) !== 'mbt_book') { return; }
 
-	if(isset($_REQUEST['mbt_bookclub_resources'])) { update_post_meta($post_id, 'mbt_bookclub_resources', json_decode(str_replace('\\\\', '\\', str_replace('\"', '"', str_replace('\\\'', '\'', $_REQUEST['mbt_bookclub_resources']))), true)); }
+	if(isset($_REQUEST['mbt_bookclub_links'])) { update_post_meta($post_id, 'mbt_bookclub_links', json_decode(str_replace('\\\\', '\\', str_replace('\"', '"', str_replace('\\\'', '\'', $_REQUEST['mbt_bookclub_links']))), true)); }
 	if(isset($_REQUEST['mbt_bookclub_video'])) { update_post_meta($post_id, 'mbt_bookclub_video', $_REQUEST['mbt_bookclub_video']); }
 }
 
