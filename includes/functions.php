@@ -39,6 +39,7 @@ function mbt_reset_settings() {
 		'widget_button_size' => 'medium',
 		'posts_per_page' => 12,
 		'enable_default_affiliates' => false,
+		'google_api_key' => '',
 		'product_name' => __('Books', 'mybooktable'),
 		'product_slug' => _x('books', 'URL slug', 'mybooktable'),
 		'hide_domc_notice' => false,
@@ -773,6 +774,7 @@ function mbt_send_tracking_data() {
 	$mailchimp_integration = mbt_get_setting('mailchimp_api_key');
 	$email_updates_list = mbt_get_setting('email_updates_list');
 	$genius_link_integration = mbt_get_setting('genius_link_tsid');
+	$google_integration = mbt_get_setting('google_api_key');
 
 	$data = array(
 		'id' => mbt_get_tracking_data('id'),
@@ -798,6 +800,7 @@ function mbt_send_tracking_data() {
 			'product_name' => mbt_get_setting('product_name'),
 			'hide_domc_notice' => mbt_get_setting('hide_domc_notice'),
 			'using_goodreads_integration' => !empty($goodreads_integration),
+			'using_google_integration' => !empty($google_integration),
 			'display_mode_usage' => $display_modes,
 		),
 		'upgrade' => array(

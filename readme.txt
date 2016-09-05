@@ -217,6 +217,7 @@ This version adds **many** new buy button options, including Apple iBooks & Sony
 
 = 3.0.0 =
 * Added support for using Genius Links with Amazon, Barnes & Noble, and Apple Buy Buttons.
+* Fixed a bug preventing the "Find a Local Bookstore" system from working properly.
 
 = 2.3.0 =
 * New Kindle Instant Preview feature

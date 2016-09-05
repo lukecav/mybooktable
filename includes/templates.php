@@ -63,13 +63,9 @@ function mbt_templates_init() {
 		add_action('mbt_after_single_book_singlecolumn', 'mbt_do_after_single_book_singlecolumn', 100);
 		add_action('mbt_single_book_singlecolumn_summary', 'mbt_do_single_book_singlecolumn_summary');
 		add_action('mbt_single_book_singlecolumn_title', 'mbt_do_single_book_singlecolumn_title');
-		add_action('mbt_single_book_singlecolumn_images', 'mbt_do_single_book_singlecolumn_images');
-		add_action('mbt_single_book_singlecolumn_teaser', 'mbt_do_single_book_singlecolumn_teaser');
 		add_action('mbt_single_book_singlecolumn_blurb', 'mbt_do_single_book_singlecolumn_blurb');
-		add_action('mbt_single_book_singlecolumn_purchase', 'mbt_do_single_book_singlecolumn_purchase');
 		add_action('mbt_single_book_singlecolumn_overview', 'mbt_do_single_book_singlecolumn_overview');
 		add_action('mbt_single_book_singlecolumn_meta', 'mbt_do_single_book_singlecolumn_meta');
-		add_action('mbt_single_book_singlecolumn_socialmedia', 'mbt_do_single_book_singlecolumn_socialmedia');
 
 		if(!mbt_get_setting('hide_domc_notice')) { add_action('mbt_after_single_book', 'mbt_the_domc_notice', 90); }
 
@@ -151,7 +147,6 @@ function mbt_enqueue_frontend_scripts() {
 function mbt_enqueue_scripts() {
 	wp_enqueue_script('jquery-ui-accordion');
 	wp_enqueue_script('mbt-frontend-js', plugins_url('js/frontend.js', dirname(__FILE__)), array('jquery', 'jquery-ui-accordion'), MBT_VERSION, true);
-	wp_enqueue_script('mbt-google-maps', 'https://maps.googleapis.com/maps/api/js?v=3.exp', array(), MBT_VERSION, true);
 	wp_enqueue_script('mbt-shadowbox', plugins_url('js/lib/jquery.colorbox.min.js', dirname(__FILE__)), array('jquery'), MBT_VERSION, true);
 }
 
@@ -192,10 +187,6 @@ function mbt_add_custom_css() {
 	$listing_button_size = mbt_get_setting('listing_button_size');
 	$widget_button_size = mbt_get_setting('widget_button_size');
 	echo('<style type="text/css">');
-	//Image Size
-	if($image_size == 'small') { echo('.mbt-book .mbt-book-images { width: 15%; } .mbt-book .mbt-book-right { width: 85%; } '); }
-	else if($image_size == 'large') { echo('.mbt-book .mbt-book-images { width: 35%; } .mbt-book .mbt-book-right { width: 65%; } '); }
-	else { echo('.mbt-book .mbt-book-images { width: 25%; } .mbt-book .mbt-book-right { width: 75%; } '); }
 	//Book Button Size
 	if($book_button_size == 'small') { echo('.mbt-book .mbt-book-buybuttons .mbt-book-buybutton img { width: 144px; height: 25px; } .mbt-book .mbt-book-buybuttons .mbt-book-buybutton { padding: 3px 6px 0px 0px; }'); }
 	else if($book_button_size == 'medium') { echo('.mbt-book .mbt-book-buybuttons .mbt-book-buybutton img { width: 172px; height: 30px; } .mbt-book .mbt-book-buybuttons .mbt-book-buybutton { padding: 4px 8px 0px 0px; }'); }
@@ -342,7 +333,7 @@ function mbt_get_storefront_content_sections($sections) {
 	$sections['video_sample'] = array('name'=> 'Video Sample', 'priority' => 20, 'function' => 'mbt_do_standard_book_video_sample_section');
 	$sections['overview'] = array('name'=> 'Overview', 'priority' => 30, 'action' => 'mbt_single_book_storefront_overview');
 	$sections['endorsements'] = array('name'=> 'Endorsements', 'priority' => 40, 'function' => 'mbt_do_standard_book_endorsements_section');
-	$sections['bookclub'] = array('name'=> 'Book Club Resources', 'priority' => 50, 'action' => 'mbt_do_standard_book_bookclub_section');
+	$sections['bookclub'] = array('name'=> 'Book Club Resources', 'priority' => 50, 'function' => 'mbt_do_standard_book_bookclub_section');
 	if(mbt_get_setting('show_about_author')) { $sections['about_author'] = array('name'=> 'About Author', 'priority' => 100, 'function' => 'mbt_do_standard_book_about_author_section'); }
 	if(mbt_get_setting('show_series')) { $sections['series'] = array('name'=> 'Books in Series', 'priority' => 110, 'function' => 'mbt_do_standard_book_series_section'); }
 	$sections['kindle_instant_preview'] = array('name'=> 'Kindle Instant Preview', 'priority' => 120, 'function' => 'mbt_do_standard_kindle_instant_preview_section');
@@ -365,12 +356,6 @@ function mbt_do_after_single_book_singlecolumn() {
 function mbt_do_single_book_singlecolumn_title() {
 	mbt_include_template("single-book-singlecolumn/title.php");
 }
-function mbt_do_single_book_singlecolumn_images() {
-	mbt_include_template("single-book-singlecolumn/images.php");
-}
-function mbt_do_single_book_singlecolumn_teaser() {
-	mbt_include_template("single-book-singlecolumn/teaser.php");
-}
 function mbt_do_single_book_singlecolumn_blurb() {
 	mbt_include_template("single-book-singlecolumn/blurb.php");
 }
@@ -379,12 +364,6 @@ function mbt_do_single_book_singlecolumn_meta() {
 }
 function mbt_do_single_book_singlecolumn_overview() {
 	mbt_include_template("single-book-singlecolumn/overview.php");
-}
-function mbt_do_single_book_singlecolumn_purchase() {
-	mbt_include_template("single-book-singlecolumn/purchase.php");
-}
-function mbt_do_single_book_singlecolumn_socialmedia() {
-	mbt_include_template("single-book-singlecolumn/socialmedia.php");
 }
 function mbt_do_single_book_singlecolumn_summary() {
 	mbt_include_template("single-book-singlecolumn/summary.php");
@@ -396,8 +375,8 @@ function mbt_get_singlecolumn_content_sections($sections) {
 	$sections['meta'] = array('name'=> 'Details', 'priority' => 40, 'action' => 'mbt_single_book_singlecolumn_meta');
 	$sections['endorsements'] = array('name'=> 'Endorsements', 'priority' => 50, 'function' => 'mbt_do_standard_book_endorsements_section');
 	$sections['bookclub'] = array('name'=> 'Book Club Resources', 'priority' => 60, 'function' => 'mbt_do_standard_book_bookclub_section');
-	$sections['purchase'] = array('name'=> 'Buy Buttons', 'priority' => 70, 'action' => 'mbt_single_book_singlecolumn_purchase');
-	if(mbt_get_setting('enable_socialmedia_single_book')) { $sections['socialmedia'] = array('name'=> 'Social Media', 'priority' => 80, 'action' => 'mbt_single_book_singlecolumn_socialmedia'); }
+	$sections['purchase'] = array('name'=> 'Buy Buttons', 'priority' => 70, 'function' => 'mbt_do_standard_book_purchase_section');
+	if(mbt_get_setting('enable_socialmedia_single_book')) { $sections['socialmedia'] = array('name'=> 'Social Media', 'priority' => 80, 'function' => 'mbt_do_standard_book_socialmedia_section'); }
 	if(mbt_get_setting('show_about_author')) { $sections['about_author'] = array('name'=> 'About Author', 'priority' => 100, 'function' => 'mbt_do_standard_book_about_author_section'); }
 	if(mbt_get_setting('show_series')) { $sections['series'] = array('name'=> 'Books in Series', 'priority' => 110, 'function' => 'mbt_do_standard_book_series_section'); }
 	$sections['kindle_instant_preview'] = array('name'=> 'Kindle Instant Preview', 'priority' => 120, 'function' => 'mbt_do_standard_kindle_instant_preview_section');
@@ -646,6 +625,23 @@ function mbt_get_book_image($post_id, $attrs = '') {
 function mbt_the_book_image($attrs = '') {
 	global $post;
 	echo(mbt_get_book_image($post->ID, $attrs));
+}
+function mbt_get_book_images($post_id, $include_link = false) {
+	$image_size_class = '';
+	$image_size = mbt_get_setting('image_size');
+	if($image_size == 'small') { $image_size_class = 'mbt-book-images-small'; }
+	else if($image_size == 'large') { $image_size_class = 'mbt-book-images-large'; }
+
+	$output = '';
+	$output .= '<div class="mbt-book-images '.$image_size_class.'">';
+	$output .= $include_link ? '<a href="'.get_permalink($post_id).'">'.mbt_get_book_image($post_id).'</a>' : mbt_get_book_image($post_id);
+	$output .= '</div>';
+
+	return apply_filters('mbt_get_book_images', $output, $post_id, $include_link);
+}
+function mbt_the_book_images($include_link = false) {
+	global $post;
+	echo(mbt_get_book_images($post->ID, $include_link));
 }
 
 
@@ -995,10 +991,13 @@ function mbt_the_book_star_rating() {
 
 
 function mbt_get_find_bookstore_form($post_id) {
+	$key = mbt_get_setting('google_api_key');
+	if(empty($key)) { return ''; }
+	wp_enqueue_script('mbt-google-maps', 'https://maps.googleapis.com/maps/api/js?key='.$key.'&v=3.exp', array(), MBT_VERSION, true);
 	$output = '';
 	$output .= '<div class="mbt-find-bookstore">';
 	$output .= '<form class="mbt-find-bookstore-form" action="//maps.google.com/maps">';
-	$output .= '	<input type="text" class="mbt-city" placeholder="'.__('City', 'mybooktable').'" name="city" size="20">,';
+	$output .= '	<input type="text" class="mbt-city" placeholder="'.__('City', 'mybooktable').'" name="city" size="20">';
 	$output .= '	<input type="text" class="mbt-zip" placeholder="'.__('Zip', 'mybooktable').'" name="zip" size="5" maxlength="5">';
 	$output .= '	<input type="submit" name="submit" value="'.__('Find Store', 'mybooktable').'">';
 	$output .= '</form>';

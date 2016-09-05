@@ -92,6 +92,7 @@ function mbt_settings_page_init() {
 	add_action('wp_ajax_mbt_style_pack_preview', 'mbt_style_pack_preview_ajax');
 	add_action('wp_ajax_mbt_button_size_preview', 'mbt_button_size_preview_ajax');
 	add_action('wp_ajax_mbt_check_reviews', 'mbt_check_reviews_ajax');
+	add_action('wp_ajax_mbt_google_api_key_refresh', 'mbt_google_api_key_refresh_ajax');
 
 	//needs to happen before setup.php admin_init in order to properly update admin notices
 	add_action('admin_init', 'mbt_save_settings_page');
@@ -133,6 +134,8 @@ function mbt_save_settings_page() {
 		mbt_update_setting('listing_button_size', $_REQUEST['mbt_listing_button_size']);
 		mbt_update_setting('widget_button_size', $_REQUEST['mbt_widget_button_size']);
 
+		mbt_update_setting('google_api_key', $_REQUEST['mbt_google_api_key']);
+
 		$settings_updated = true;
 	} else if(isset($_REQUEST['page']) and $_REQUEST['page'] == 'mbt_settings' and isset($_REQUEST['save_default_affiliate_settings'])) {
 		if(isset($_REQUEST['mbt_enable_default_affiliates']) and !empty($_REQUEST['mbt_enable_default_affiliates'])) {
@@ -167,6 +170,13 @@ function mbt_api_key_feedback() {
 		}
 	}
 	return $output;
+}
+
+function mbt_google_api_key_refresh_ajax() {
+	if(!empty($_REQUEST['data'])) {
+		echo('<span class="mbt_admin_message_success">'.__('Valid API Key', 'mybooktable').'</span>');
+	}
+	die();
 }
 
 function mbt_style_pack_preview_ajax() {
@@ -499,7 +509,10 @@ function mbt_render_settings_page() {
 									<label for="mbt_show_find_bookstore"><?php _e('Show on Book Pages', 'mybooktable'); ?></label><br>
 									<input type="checkbox" name="mbt_show_find_bookstore_buybuttons_shadowbox" id="mbt_show_find_bookstore_buybuttons_shadowbox" <?php checked(mbt_get_setting('show_find_bookstore_buybuttons_shadowbox'), true); ?> >
 									<label for="mbt_show_find_bookstore_buybuttons_shadowbox"><?php _e('Show in Buy Buttons Shadow Box', 'mybooktable'); ?></label>
-									<p class="description"><?php _e('If checked, show a form that helps your readers find places to buy your book will display under each book.', 'mybooktable'); ?></p>
+									<p class="description">
+										<?php _e('If checked, show a form that helps your readers find places to buy your book will display under each book.', 'mybooktable'); ?>
+										<?php printf(__('<a href="%s">(You must enter your Google Maps API Key for this feature to work)</a>', 'mybooktable'), admin_url('admin.php?page=mbt_settings&mbt_current_tab=5')); ?>
+									</p>
 								</td>
 							</tr>
 							<tr>
@@ -555,6 +568,20 @@ function mbt_render_settings_page() {
 				</div>
 				<div class="mbt-tab" id="mbt-tab-5">
 					<?php do_action("mbt_integrate_settings_render"); ?>
+					<table class="form-table">
+						<tbody>
+							<tr>
+								<th><label for="mbt_google_api_key"><?php _e('Google Maps API', 'mybooktable'); ?></label></th>
+								<td>
+									<div class="mbt_feedback_above mbt_feedback"></div>
+									<label for="mbt_google_api_key" class="mbt-integrate-label">API Key:</label>
+									<input type="text" id="mbt_google_api_key" name="mbt_google_api_key" value="<?php echo(mbt_get_setting('google_api_key')); ?>" class="regular-text">
+									<div class="mbt_feedback_refresh mbt_feedback_refresh_initial" data-refresh-action="mbt_google_api_key_refresh" data-element="mbt_google_api_key"></div>
+									<p class="description"><?php printf(__('Insert your Google Maps API Key to <a href="%s">enable the Find Local Bookstore Form</a> on your book pages.', 'mybooktable'), admin_url('admin.php?page=mbt_settings&mbt_current_tab=3')); ?> <a href="https://developers.google.com/maps/documentation/javascript/get-api-key#key" target="_blank"> <?php _e('Learn how to get a Google Maps API Key', 'mybooktable'); ?></a></p>
+								</td>
+							</tr>
+						</tbody>
+					</table>
 					<input type="submit" name="save_settings" class="button button-primary" value="<?php _e('Save Changes', 'mybooktable'); ?>">
 				</div>
 			</div>
