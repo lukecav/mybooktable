@@ -218,6 +218,12 @@ This version adds **many** new buy button options, including Apple iBooks & Sony
 = 3.0.0 =
 * Added support for using Genius Links with Amazon, Barnes & Noble, and Apple Buy Buttons.
 * Fixed a bug preventing the "Find a Local Bookstore" system from working properly.
+* Added new Review Checking system to verify that your books are showing their reviews properly.
+* New custom MyBookTable data Import/Export system
+* New and improved book details editor
+* New Beautiful Page Mode gives your books a new modern look!
+* Added an "About the Author" section to book pages
+* Added new "Book Club Resources" section to provide your readers information they can use with their book clubs.
 
 = 2.3.0 =
 * New Kindle Instant Preview feature
