@@ -20,6 +20,11 @@
 	clear: both;
 }
 
+.mbt-book a.mbt-book-anchor {
+	display: block;
+	position: absolute; /* This is nessesary or else the element shows up as 1px high, for some reason */
+}
+
 
 
 /*---------------------------------------------------------*/
@@ -199,6 +204,48 @@
 }
 .mbt-book .mbt-book-meta .mbt-star-rating .mbt-star.mbt-star-filled {
 	background-position: 0 -32px;
+}
+
+
+
+/*---------------------------------------------------------*/
+/* Book Samples                                            */
+/*---------------------------------------------------------*/
+
+.mbt-book a.mbt-book-sample {
+	font-family: Helvetica, sans-serif;
+	font-weight: bold;
+	font-size: 14px;
+	line-height: 14px;
+	vertical-align: middle;
+	color: white;
+	text-align: center;
+	text-decoration: none;
+	text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.3);
+
+	border: 1px solid #345873;
+	border-radius: 5px;
+
+	background-color: #36738d;
+	background-image: -moz-linear-gradient(top,  #36738d 0%, #2f5a79 100%);
+	background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#36738d), color-stop(100%,#2f5a79));
+	background-image: -webkit-linear-gradient(top,  #36738d 0%,#2f5a79 100%);
+	background-image: -o-linear-gradient(top,  #36738d 0%,#2f5a79 100%);
+	background-image: -ms-linear-gradient(top,  #36738d 0%,#2f5a79 100%);
+	background-image: linear-gradient(to bottom,  #36738d 0%,#2f5a79 100%);
+
+	-webkit-box-shadow: inset 1px 1px 0 rgba(141,184,211,0.7);
+	box-shadow: inset 1px 1px 0 rgba(141,184,211,0.7);
+
+	display: inline-block;
+	margin: 0;
+	margin-top: 10px;
+	padding: 6px 15px;
+	min-width: 70px;
+}
+
+.mbt-book audio.mbt-book-sample {
+	margin-top: 10px;
 }
 
 
@@ -746,52 +793,6 @@
 	margin: 10px 0px 0px 10px;
 	padding: 15px 23px;
 	min-height: 50px;
-}
-
-.mbt-book.mbt-book-single.mbt-display-mode-storefront .mbt-book-blurb a {
-	color: #484949;
-	font-weight: 600;
-	text-decoration: none;
-}
-
-.mbt-book.mbt-book-single.mbt-display-mode-storefront .mbt-book-blurb a:hover {
-	text-decoration: underline;
-}
-
-.mbt-book.mbt-book-single.mbt-display-mode-storefront .mbt-book-blurb a.mbt-book-sample {
-	font-family: Helvetica, sans-serif;
-	font-weight: bold;
-	font-size: 14px;
-	line-height: 14px;
-	vertical-align: middle;
-	color: white;
-	text-align: center;
-	text-decoration: none;
-	text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.3);
-
-	border: 1px solid #345873;
-	border-radius: 5px;
-
-	background-color: #36738d;
-	background-image: -moz-linear-gradient(top,  #36738d 0%, #2f5a79 100%);
-	background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#36738d), color-stop(100%,#2f5a79));
-	background-image: -webkit-linear-gradient(top,  #36738d 0%,#2f5a79 100%);
-	background-image: -o-linear-gradient(top,  #36738d 0%,#2f5a79 100%);
-	background-image: -ms-linear-gradient(top,  #36738d 0%,#2f5a79 100%);
-	background-image: linear-gradient(to bottom,  #36738d 0%,#2f5a79 100%);
-
-	-webkit-box-shadow: inset 1px 1px 0 rgba(141,184,211,0.7);
-	box-shadow: inset 1px 1px 0 rgba(141,184,211,0.7);
-
-	display: inline-block;
-	margin: 0;
-	margin-top: 10px;
-	padding: 6px 15px;
-	min-width: 70px;
-}
-
-.mbt-book.mbt-book-single.mbt-display-mode-storefront .mbt-book-blurb audio.mbt-book-sample {
-	margin-top: 10px;
 }
 
 /*

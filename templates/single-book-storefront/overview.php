@@ -1,4 +1,5 @@
-<div class="mbt-book-section mbt-book-overview-section" name="mbt-book-overview-anchor">
+<a class="mbt-book-anchor" name="mbt-book-overview-anchor"></a>
+<div class="mbt-book-section mbt-book-overview-section">
 	<div class="mbt-book-section-title"><?php _e('About the Book', 'mybooktable'); ?></div>
 	<div class="mbt-book-section-content">
 		<div class="mbt-book-overview">

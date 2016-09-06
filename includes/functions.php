@@ -390,7 +390,8 @@ function mbt_render_book_section($post_id, $section_id, $content, $title='') {
 	$title = apply_filters('mbt_book_section_title', $title, $post_id, $section_id);
 	$content = apply_filters('mbt_book_section_content', $content, $post_id, $section_id);
 	if(!empty($content)) {
-		$output .= '<div class="mbt-book-section mbt-book-'.$section_id.'-section" name="mbt-book-'.$section_id.'-anchor">';
+		$output .= '<a class="mbt-book-anchor" name="mbt-book-'.$section_id.'-anchor"></a>';
+		$output .= '<div class="mbt-book-section mbt-book-'.$section_id.'-section">';
 		if($title) { $output .= '<div class="mbt-book-section-title">'.$title.'</div>'; }
 		$output .= '<div class="mbt-book-section-content">'.$content.'</div>';
 		$output .= '</div>';

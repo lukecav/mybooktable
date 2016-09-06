@@ -1,4 +1,5 @@
-<div class="mbt-book-section mbt-book-summary-section" name="mbt-book-summary-anchor">
+<a class="mbt-book-anchor" name="mbt-book-summary-anchor"></a>
+<div class="mbt-book-section mbt-book-summary-section">
 	<div class="mbt-book-section-content">
 		<?php do_action('mbt_single_book_storefront_images'); ?>
 		<div class="mbt-book-right">

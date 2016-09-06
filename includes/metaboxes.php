@@ -37,6 +37,7 @@ function mbt_add_metaboxes() {
 	add_meta_box('mbt_bookclub', __('Book Club Resources', 'mybooktable'), 'mbt_bookclub_metabox', 'mbt_book', 'normal', 'low');
 	add_meta_box('mbt_series_order', __('Series Order', 'mybooktable'), 'mbt_series_order_metabox', 'mbt_book', 'side', 'default');
 	add_meta_box('mbt_sectionsorting', __('Section Order', 'mybooktable'), 'mbt_sectionsorting_metabox', 'mbt_book', 'side', 'default');
+	add_filter('postbox_classes_mbt_book_mbt_sectionsorting', 'mbt_minify_sectionsorting_metabox');
 }
 
 function mbt_enqueue_metabox_js() {
@@ -48,6 +49,17 @@ function mbt_enqueue_metabox_js() {
 	wp_enqueue_style('mbt-colorpicker', plugins_url('css/lib/spectrum.css', dirname(__FILE__)), array(), MBT_VERSION);
 	add_action('admin_head', 'mbt_override_authors_metabox');
 }
+
+function mbt_minify_sectionsorting_metabox($classes) {
+	array_push($classes, 'closed');
+	return $classes;
+}
+
+
+
+/*---------------------------------------------------------*/
+/* Override Authors Metabox                                */
+/*---------------------------------------------------------*/
 
 function mbt_override_authors_metabox() {
 	?>
@@ -79,9 +91,6 @@ function mbt_main_author_url_ajax() {
 	}
 	die();
 }
-
-
-
 
 
 
