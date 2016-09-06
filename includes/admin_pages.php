@@ -998,7 +998,13 @@ function mbt_render_dashboard() {
 							<h3 class="hndle"><?php _e('Current Version', 'mybooktable'); ?></h3>
 							<div class="inside">
 								<h1 class="mybooktable-version"><?php printf(__('You are currently using <span class="current-version">MyBookTable %s</span>', 'mybooktable'), MBT_VERSION); ?></h1>
-								<?php if(mbt_get_upgrade() == 'mybooktable-dev2' and mbt_get_upgrade_plugin_exists()) { ?>
+								<?php if(mbt_get_upgrade() == 'mybooktable-dev3' and mbt_get_upgrade_plugin_exists()) { ?>
+									<h1 class="upgrade-version"><?php printf(__('with the <span class="current-version">Developer Upgrade %s</span>', 'mybooktable'), MBTDEV3_VERSION); ?></h1>
+									<h2 class="thank-you"><?php _e('Thank you for your support!', 'mybooktable'); ?></h2>
+								<?php } else if(mbt_get_upgrade() == 'mybooktable-pro3' and mbt_get_upgrade_plugin_exists()) { ?>
+									<h1 class="upgrade-version"><?php printf(__('with the <span class="current-version">Professional Upgrade %s</span>', 'mybooktable'), MBTPRO3_VERSION); ?></h1>
+									<h2 class="thank-you"><?php _e('Thank you for your support!', 'mybooktable'); ?></h2>
+								<?php } else if(mbt_get_upgrade() == 'mybooktable-dev2' and mbt_get_upgrade_plugin_exists()) { ?>
 									<h1 class="upgrade-version"><?php printf(__('with the <span class="current-version">Developer Upgrade %s</span>', 'mybooktable'), MBTDEV2_VERSION); ?></h1>
 									<h2 class="thank-you"><?php _e('Thank you for your support!', 'mybooktable'); ?></h2>
 								<?php } else if(mbt_get_upgrade() == 'mybooktable-pro2' and mbt_get_upgrade_plugin_exists()) { ?>
@@ -1143,6 +1149,8 @@ function mbt_render_get_upgrade_page() {
 			} else {
 				if(!mbt_get_upgrade_check_is_plugin_inactivate($slug)) {
 					$url = mbt_get_upgrade_get_plugin_url($slug);
+					if($slug == 'mybooktable-dev3') { $name = 'MyBookTable Developer Upgrade 3.0'; }
+					if($slug == 'mybooktable-pro3') { $name = 'MyBookTable Professional Upgrade 3.0'; }
 					if($slug == 'mybooktable-dev2') { $name = 'MyBookTable Developer Upgrade 2.0'; }
 					if($slug == 'mybooktable-pro2') { $name = 'MyBookTable Professional Upgrade 2.0'; }
 					if($slug == 'mybooktable-dev')  { $name = 'MyBookTable Developer Upgrade'; }

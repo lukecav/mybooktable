@@ -901,7 +901,15 @@ function mbt_verify_api_key() {
 			$permissions = $response['permissions'];
 		}
 
-		if(in_array('mybooktable-dev2', $permissions)) {
+		if(in_array('mybooktable-dev3', $permissions)) {
+			mbt_update_setting('api_key_status', $status);
+			mbt_update_setting('upgrade_active', 'mybooktable-dev3');
+			mbt_update_setting('api_key_message', __('Valid for MyBookTable Developer 3.0', 'mybooktable'));
+		} else if(in_array('mybooktable-pro3', $permissions)) {
+			mbt_update_setting('api_key_status', $status);
+			mbt_update_setting('upgrade_active', 'mybooktable-pro3');
+			mbt_update_setting('api_key_message', __('Valid for MyBookTable Professional 3.0', 'mybooktable'));
+		} else if(in_array('mybooktable-dev2', $permissions)) {
 			mbt_update_setting('api_key_status', $status);
 			mbt_update_setting('upgrade_active', 'mybooktable-dev2');
 			mbt_update_setting('api_key_message', __('Valid for MyBookTable Developer 2.0', 'mybooktable'));
@@ -959,7 +967,7 @@ function mbt_get_upgrade_version() {
 }
 
 function mbt_get_upgrade_plugin_exists($active=true) {
-	if(!$active) { return defined('MBTDEV2_VERSION') or defined('MBTPRO2_VERSION') or defined('MBTDEV_VERSION') or defined('MBTPRO_VERSION'); }
+	if(!$active) { return defined('MBTDEV3_VERSION') or defined('MBTPRO3_VERSION') or defined('MBTDEV2_VERSION') or defined('MBTPRO2_VERSION') or defined('MBTDEV_VERSION') or defined('MBTPRO_VERSION'); }
 	$upgrade = mbt_get_upgrade();
 	if($upgrade == 'mybooktable-dev3') { return defined('MBTDEV3_VERSION'); }
 	if($upgrade == 'mybooktable-pro3') { return defined('MBTPRO3_VERSION'); }
