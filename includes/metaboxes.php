@@ -496,6 +496,7 @@ function mbt_save_metadata_metabox($post_id) {
 		$metadata = mbt_get_metadata_fields();
 		foreach($metadata as $section_name => $section) {
 			foreach($section as $field_id => $field_data) {
+				if($field_id == 'supports') { continue; }
 				$value = isset($_REQUEST[$field_id]) ? $_REQUEST[$field_id] : null;
 				if($field_data['type'] == 'mbt_metadata_checkbox' or $field_data['type'] == 'mbt_metadata_kindle_instant_preview') { $value = $value === null ? 'no' : 'yes'; }
 				update_post_meta($post_id, $field_id, $value);

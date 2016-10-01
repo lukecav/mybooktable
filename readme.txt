@@ -215,6 +215,9 @@ This version adds **many** new buy button options, including Apple iBooks & Sony
 
 == Changelog ==
 
+= 3.0.1 =
+* Fixed a bug that interfered with saving books on sites with certain versions of PHP.
+
 = 3.0.0 =
 * Added support for using Genius Links with Amazon, Barnes & Noble, and Apple Buy Buttons.
 * Fixed a bug preventing the "Find a Local Bookstore" system from working properly.
