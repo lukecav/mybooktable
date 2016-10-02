@@ -44,7 +44,6 @@ function mbt_totallybooked_get_books() {
 		$new_book['authors'] = mbt_get_totallybooked_taxonomy($book->ID, 'tb_author', 'mbt_author');
 		$new_book['series'] = mbt_get_totallybooked_taxonomy($book->ID, 'tb_series', 'mbt_series');
 		$new_book['genres'] = mbt_get_totallybooked_taxonomy($book->ID, 'tb_genre', 'mbt_genre');
-		$new_book['unique_id_type'] = 'isbn';
 		$new_book['unique_id_isbn'] = get_post_meta($book->ID, 'isbn_number', true);
 		$new_book['buybuttons'] = array();
 		foreach ($urls as $name => $store) {

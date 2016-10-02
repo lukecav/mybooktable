@@ -2,8 +2,8 @@
 Contributors: authormedia, zookatron, neovita
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=K6UGSUCSKP4NS
 Tags: book, books, ecommerce, affiliate, store, author plugin, amazon, ibooks, iTunes, smashwords, goodreads, gumroad
-Requires at least: 3.5.0
-Tested up to: 4.6.0
+Requires at least: 4.5.0
+Tested up to: 4.6.1
 Stable tag: trunk
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -214,6 +214,19 @@ This version adds several cool new features, including "Publisher" and "Publicat
 This version adds **many** new buy button options, including Apple iBooks & Sony Reader.
 
 == Changelog ==
+
+= 3.0.1 =
+* Fixed a bug that interfered with saving books on sites with certain versions of PHP.
+
+= 3.0.0 =
+* Added support for using Genius Links with Amazon, Barnes & Noble, and Apple Buy Buttons.
+* Fixed a bug preventing the "Find a Local Bookstore" system from working properly.
+* Added new Review Checking system to verify that your books are showing their reviews properly.
+* New custom MyBookTable data Import/Export system
+* New and improved book details editor
+* New Beautiful Page Mode gives your books a new modern look!
+* Added an "About the Author" section to book pages
+* Added new "Book Club Resources" section to provide your readers information they can use with their book clubs.
 
 = 2.3.4 =
 * Added WordPress 4.6 support

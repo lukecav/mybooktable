@@ -75,7 +75,6 @@ function mbt_getnoticed_get_books() {
 		$new_book['excerpt'] = $book->post_excerpt;
 		$new_book['authors'] = array();
 		if(!empty($book_meta['bookauthor'])) { $new_book['authors'][] = $book_meta['bookauthor']; }
-		$new_book['unique_id_type'] = 'asin';
 		$new_book['unique_id_asin'] = $book_meta['asin'];
 		$new_book['buybuttons'] = array();
 		if(!empty($book_meta['link'])) { $new_book['buybuttons'][] = array('display' => 'button', 'store' => 'amazon', 'url' => $book_meta['link']); }

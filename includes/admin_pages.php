@@ -26,12 +26,7 @@ function mbt_enqueue_admin_resources() {
 	wp_enqueue_script('jquery-ui-accordion');
 
 	wp_enqueue_script('mbt-admin-pages', plugins_url('js/admin.js', dirname(__FILE__)), array('jquery'), MBT_VERSION);
-	wp_localize_script('mbt-admin-pages', 'mbt_media_upload_i18n', array(
-		'mbt_upload_sample_button' => __('Sample Chapter Image', 'mybooktable'),
-		'mbt_upload_tax_image_button' => __('Taxonomy Image', 'mybooktable'),
-		'mbt_set_book_image_button' => __('Book Cover Image', 'mybooktable'),
-		'select' => __('Select', 'mybooktable')
-	));
+	wp_localize_script('mbt-admin-pages', 'mbt_media_upload_i18n', array('select' => __('Select', 'mybooktable')));
 
 	if(function_exists('wp_enqueue_media')) { wp_enqueue_media(); }
 }
@@ -96,6 +91,8 @@ function mbt_settings_page_init() {
 	add_action('wp_ajax_mbt_api_key_refresh', 'mbt_api_key_refresh_ajax');
 	add_action('wp_ajax_mbt_style_pack_preview', 'mbt_style_pack_preview_ajax');
 	add_action('wp_ajax_mbt_button_size_preview', 'mbt_button_size_preview_ajax');
+	add_action('wp_ajax_mbt_check_reviews', 'mbt_check_reviews_ajax');
+	add_action('wp_ajax_mbt_google_api_key_refresh', 'mbt_google_api_key_refresh_ajax');
 
 	//needs to happen before setup.php admin_init in order to properly update admin notices
 	add_action('admin_init', 'mbt_save_settings_page');
@@ -116,26 +113,28 @@ function mbt_save_settings_page() {
 		mbt_update_setting('booktable_page', $_REQUEST['mbt_booktable_page']);
 		mbt_update_setting('compatibility_mode', isset($_REQUEST['mbt_compatibility_mode']));
 
-		mbt_update_setting('enable_socialmedia_badges_single_book', isset($_REQUEST['mbt_enable_socialmedia_badges_single_book']));
-		mbt_update_setting('enable_socialmedia_badges_book_excerpt', isset($_REQUEST['mbt_enable_socialmedia_badges_book_excerpt']));
-		mbt_update_setting('enable_socialmedia_bar_single_book', isset($_REQUEST['mbt_enable_socialmedia_bar_single_book']));
+		mbt_update_setting('enable_socialmedia_single_book', isset($_REQUEST['mbt_enable_socialmedia_single_book']));
+		mbt_update_setting('enable_socialmedia_book_excerpt', isset($_REQUEST['mbt_enable_socialmedia_book_excerpt']));
 
 		mbt_update_setting('enable_seo', isset($_REQUEST['mbt_enable_seo']));
 
 		mbt_update_setting('style_pack', $_REQUEST['mbt_style_pack']);
 		mbt_update_setting('image_size', $_REQUEST['mbt_image_size']);
-		mbt_update_setting('reviews_box', $_REQUEST['mbt_reviews_box']);
+		mbt_update_setting('reviews_type', isset($_REQUEST['mbt_reviews_type']) ? $_REQUEST['mbt_reviews_type'] : 'none');
 		mbt_update_setting('buybutton_shadowbox', $_REQUEST['mbt_buybutton_shadowbox']);
 		mbt_update_setting('enable_breadcrumbs', isset($_REQUEST['mbt_enable_breadcrumbs']));
 		mbt_update_setting('show_series', isset($_REQUEST['mbt_show_series']));
 		mbt_update_setting('show_find_bookstore', isset($_REQUEST['mbt_show_find_bookstore']));
 		mbt_update_setting('show_find_bookstore_buybuttons_shadowbox', isset($_REQUEST['mbt_show_find_bookstore_buybuttons_shadowbox']));
+		mbt_update_setting('show_about_author', isset($_REQUEST['mbt_show_about_author']));
 		mbt_update_setting('hide_domc_notice', isset($_REQUEST['mbt_hide_domc_notice']));
 		mbt_update_setting('domc_notice_text', wp_unslash($_REQUEST['mbt_domc_notice_text']));
 		mbt_update_setting('posts_per_page', $_REQUEST['mbt_posts_per_page']);
 		mbt_update_setting('book_button_size', $_REQUEST['mbt_book_button_size']);
 		mbt_update_setting('listing_button_size', $_REQUEST['mbt_listing_button_size']);
 		mbt_update_setting('widget_button_size', $_REQUEST['mbt_widget_button_size']);
+
+		mbt_update_setting('google_api_key', $_REQUEST['mbt_google_api_key']);
 
 		$settings_updated = true;
 	} else if(isset($_REQUEST['page']) and $_REQUEST['page'] == 'mbt_settings' and isset($_REQUEST['save_default_affiliate_settings'])) {
@@ -173,6 +172,13 @@ function mbt_api_key_feedback() {
 	return $output;
 }
 
+function mbt_google_api_key_refresh_ajax() {
+	if(!empty($_REQUEST['data'])) {
+		echo('<span class="mbt_admin_message_success">'.__('Valid API Key', 'mybooktable').'</span>');
+	}
+	die();
+}
+
 function mbt_style_pack_preview_ajax() {
 	echo('<img src="'.mbt_style_url('bnn_button.png',  $_REQUEST['data']).'">');
 	die();
@@ -191,6 +197,37 @@ function mbt_button_size_feedback($size) {
 	else if($size == 'medium') { echo('#'.$id.' { width: 172px; height: 30px; }'); }
 	else { echo('#'.$id.' { width: 201px; height: 35px; }'); }
 	echo('</style>');
+}
+
+function mbt_check_reviews_ajax() {
+	$output = '';
+	$reviews_types = mbt_get_reviews_types();
+	$reviews_type = $_REQUEST['reviews_type'];
+	if(!empty($reviews_types[$reviews_type]['book-check'])) {
+		$books_query = new WP_Query(array('post_type' => 'mbt_book', 'posts_per_page' => -1));
+		$books_results = array();
+		foreach ($books_query->posts as $book) {
+			$result = call_user_func_array($reviews_types[$reviews_type]['book-check'], array($book->ID));
+			$books_results[] = array('id' => $book->ID, 'title' => (strlen($book->post_title) > 30 ? substr($book->post_title, 0, 30) : $book->post_title), 'result' => $result);
+		}
+
+		$sort_books_results = function($a, $b) {
+			$a_val = (strpos($a['result'], 'mbt_admin_message_failure') !== false) ? 0 : ((strpos($a['result'], 'mbt_admin_message_warning') !== false) ? 1 : 2);
+			$b_val = (strpos($b['result'], 'mbt_admin_message_failure') !== false) ? 0 : ((strpos($b['result'], 'mbt_admin_message_warning') !== false) ? 1 : 2);
+			return $a_val == $b_val ? 0 : ($a_val > $b_val ? 1 : -1);
+		};
+		usort($books_results, $sort_books_results);
+
+		$output .= '<ul id="mbt-check-reviews-results-list">';
+		foreach($books_results as $result) {
+			$output .= '<li><a href="'.get_permalink($result['id']).'" target="_blank">'.$result['title'].'</a> - '.$result['result'].'</li>';
+		}
+		$output .= '</ul>';
+	} else {
+		$output .= '<div class="mbt-check-reviews-noresults">This reviews system does not support reviews checking.</div>';
+	}
+
+	echo($output); exit();
 }
 
 function mbt_render_settings_page() {
@@ -357,7 +394,7 @@ function mbt_render_settings_page() {
 										<th><?php _e('Upload New Style Pack', 'mybooktable'); ?></th>
 										<td colspan="3">
 											<?php echo($pack_upload_output); ?>
-											<input id="mbt_upload_style_pack_button" type="button" class="button" value="<?php _e('Upload', 'mybooktable'); ?>">
+											<input id="mbt_upload_style_pack_button" class="button mbt_upload_button" data-upload-target="mbt_style_pack_id" data-upload-property="id" data-upload-title="<?php _e('Style Pack', 'mybooktable'); ?>" type="button" value="<?php _e('Upload', 'mybooktable'); ?>">
 											<p class="description"><?php printf(__('If you would like to make your own style pack you can learn how from our <a href="%s" target="_blank">developer documentation</a>.', 'mybooktable'), 'https://github.com/authormedia/mybooktable/wiki/Style-Pack-System'); ?></p>
 										</td>
 									</tr>
@@ -427,52 +464,55 @@ function mbt_render_settings_page() {
 								</td>
 							</tr>
 							<tr>
-								<th><?php _e('Book Reviews Box', 'mybooktable'); ?></th>
+								<th><?php _e('Book Reviews', 'mybooktable'); ?></th>
 								<td>
 									<?php
-										$reviews_boxes = mbt_get_reviews_boxes();
-										$current_reviews = mbt_get_setting('reviews_box');
-										if(empty($current_reviews) or empty($reviews_boxes[$current_reviews])) { $current_reviews = 'none'; }
-										echo('<input type="radio" name="mbt_reviews_box" id="mbt_reviews_box_none" value="none" '.checked($current_reviews, 'none', false).'><label for="mbt_reviews_box_none">None</label><br>');
-										foreach($reviews_boxes as $slug => $reviews_data) {
+										$reviews_types = mbt_get_reviews_types();
+										$current_reviews = mbt_get_setting('reviews_type');
+										if(empty($current_reviews) or empty($reviews_types[$current_reviews])) { $current_reviews = 'none'; }
+										echo('<input type="radio" name="mbt_reviews_type" id="mbt_reviews_type_none" value="none" '.checked($current_reviews, 'none', false).'><label for="mbt_reviews_type_none">None</label><br>');
+										foreach($reviews_types as $slug => $reviews_data) {
 											if(!empty($reviews_data['disabled'])) {
-												echo('<input type="radio" name="mbt_reviews_box" id="mbt_reviews_box_'.$slug.'" value="'.$slug.'" '.checked($current_reviews, $slug, false).' disabled="disabled">');
-												echo('<label for="mbt_reviews_box_'.$slug.'" class="mbt_reviews_box_disabled">'.$reviews_data['name'].' ('.$reviews_data['disabled'].')</label><br>');
+												echo('<input type="radio" name="mbt_reviews_type" id="mbt_reviews_type_'.$slug.'" value="'.$slug.'" '.checked($current_reviews, $slug, false).' disabled="disabled">');
+												echo('<label for="mbt_reviews_type_'.$slug.'" class="mbt_reviews_type_disabled">'.$reviews_data['name'].' ('.$reviews_data['disabled'].')</label><br>');
 											} else {
-												echo('<input type="radio" name="mbt_reviews_box" id="mbt_reviews_box_'.$slug.'" value="'.$slug.'" '.checked($current_reviews, $slug, false).'>');
-												echo('<label for="mbt_reviews_box_'.$slug.'">'.$reviews_data['name'].'</label><br>');
+												echo('<input type="radio" name="mbt_reviews_type" id="mbt_reviews_type_'.$slug.'" value="'.$slug.'" '.checked($current_reviews, $slug, false).'>');
+												echo('<label for="mbt_reviews_type_'.$slug.'">'.$reviews_data['name'].'</label><br>');
 											}
 										}
 									?>
-									<p class="description"><?php _e('Select the reviews box that will be displayed under each book with a valid ISBN.', 'mybooktable'); ?></p>
+									<p class="description"><?php _e('Select the reviews provider that will be displayed under each book with a valid ISBN.', 'mybooktable'); ?></p>
+									<div class="mbt-check-reviews">
+										<div class="mbt-check-reviews-checking">Checking&hellip;<div class="mbt-check-reviews-spinner"></div></div>
+										<div class="mbt-check-reviews-results"></div>
+										<div class="mbt-check-reviews-begin">
+											<div class="mbt-check-reviews-button button"><?php _e('Check Reviews', 'mybooktable'); ?></div>
+											<span class="description"> - <?php _e('Use this tool to check if your books will be able to display reviews.', 'mybooktable'); ?></span>
+										</div>
+									</div>
 								</td>
 							</tr>
 							<tr>
-								<th><?php _e('Social Media Badges', 'mybooktable'); ?></th>
+								<th><?php _e('Social Media', 'mybooktable'); ?></th>
 								<td>
-									<input type="checkbox" name="mbt_enable_socialmedia_badges_single_book" id="mbt_enable_socialmedia_badges_single_book" <?php checked(mbt_get_setting('enable_socialmedia_badges_single_book'), true); ?> >
-									<label for="mbt_enable_socialmedia_badges_single_book"><?php _e('Show on Book Pages', 'mybooktable'); ?></label><br>
-									<input type="checkbox" name="mbt_enable_socialmedia_badges_book_excerpt" id="mbt_enable_socialmedia_badges_book_excerpt" <?php checked(mbt_get_setting('enable_socialmedia_badges_book_excerpt'), true); ?> >
-									<label for="mbt_enable_socialmedia_badges_book_excerpt"><?php _e('Show on Book Listings', 'mybooktable'); ?></label>
-									<p class="description"><?php _e('Check to enable MyBookTable\'s social media badges.', 'mybooktable'); ?></p>
+									<input type="checkbox" name="mbt_enable_socialmedia_single_book" id="mbt_enable_socialmedia_single_book" <?php checked(mbt_get_setting('enable_socialmedia_single_book'), true); ?> >
+									<label for="mbt_enable_socialmedia_single_book"><?php _e('Show on Book Pages', 'mybooktable'); ?></label><br>
+									<input type="checkbox" name="mbt_enable_socialmedia_book_excerpt" id="mbt_enable_socialmedia_book_excerpt" <?php checked(mbt_get_setting('enable_socialmedia_book_excerpt'), true); ?> >
+									<label for="mbt_enable_socialmedia_book_excerpt"><?php _e('Show on Book Listings', 'mybooktable'); ?></label>
+									<p class="description"><?php _e('Check to enable MyBookTable\'s social media buttons.', 'mybooktable'); ?></p>
 								</td>
 							</tr>
 							<tr>
-								<th><?php _e('Social Media Bar', 'mybooktable'); ?></th>
-								<td>
-									<input type="checkbox" name="mbt_enable_socialmedia_bar_single_book" id="mbt_enable_socialmedia_bar_single_book" <?php checked(mbt_get_setting('enable_socialmedia_bar_single_book'), true); ?> >
-									<label for="mbt_enable_socialmedia_bar_single_book"><?php _e('Show on Book Pages', 'mybooktable'); ?></label>
-									<p class="description"><?php _e('Check to enable the social media bar on book pages.', 'mybooktable'); ?></p>
-								</td>
-							</tr>
-							<tr>
-								<th><?php _e('"Find a Local Bookstore" Box', 'mybooktable'); ?></th>
+								<th><?php _e('"Find a Local Bookstore" Form', 'mybooktable'); ?></th>
 								<td>
 									<input type="checkbox" name="mbt_show_find_bookstore" id="mbt_show_find_bookstore" <?php checked(mbt_get_setting('show_find_bookstore'), true); ?> >
 									<label for="mbt_show_find_bookstore"><?php _e('Show on Book Pages', 'mybooktable'); ?></label><br>
 									<input type="checkbox" name="mbt_show_find_bookstore_buybuttons_shadowbox" id="mbt_show_find_bookstore_buybuttons_shadowbox" <?php checked(mbt_get_setting('show_find_bookstore_buybuttons_shadowbox'), true); ?> >
 									<label for="mbt_show_find_bookstore_buybuttons_shadowbox"><?php _e('Show in Buy Buttons Shadow Box', 'mybooktable'); ?></label>
-									<p class="description"><?php _e('If checked, a box that helps your readers find places to buy your book will display under each book.', 'mybooktable'); ?></p>
+									<p class="description">
+										<?php _e('If checked, show a form that helps your readers find places to buy your book will display under each book.', 'mybooktable'); ?>
+										<?php printf(__('<a href="%s">(You must enter your Google Maps API Key for this feature to work)</a>', 'mybooktable'), admin_url('admin.php?page=mbt_settings&mbt_current_tab=5')); ?>
+									</p>
 								</td>
 							</tr>
 							<tr>
@@ -481,6 +521,14 @@ function mbt_render_settings_page() {
 									<input type="checkbox" name="mbt_show_series" id="mbt_show_series" <?php checked(mbt_get_setting('show_series'), true); ?> >
 									<label for="mbt_show_series"><?php _e('Show books', 'mybooktable'); ?></label>
 									<p class="description"><?php _e('If checked, the other books in the same series will display under the book on that book\'s page.', 'mybooktable'); ?></p>
+								</td>
+							</tr>
+							<tr>
+								<th><?php _e('"About the Author" Section', 'mybooktable'); ?></th>
+								<td>
+									<input type="checkbox" name="mbt_show_about_author" id="mbt_show_about_author" <?php checked(mbt_get_setting('show_about_author'), true); ?> >
+									<label for="mbt_show_about_author"><?php _e('Show on Book Pages', 'mybooktable'); ?></label><br>
+									<p class="description"><?php _e('If checked, show a section on the book page that displays information about the book author.', 'mybooktable'); ?></p>
 								</td>
 							</tr>
 						</tbody>
@@ -520,6 +568,20 @@ function mbt_render_settings_page() {
 				</div>
 				<div class="mbt-tab" id="mbt-tab-5">
 					<?php do_action("mbt_integrate_settings_render"); ?>
+					<table class="form-table">
+						<tbody>
+							<tr>
+								<th><label for="mbt_google_api_key"><?php _e('Google Maps API', 'mybooktable'); ?></label></th>
+								<td>
+									<div class="mbt_feedback_above mbt_feedback"></div>
+									<label for="mbt_google_api_key" class="mbt-integrate-label">API Key:</label>
+									<input type="text" id="mbt_google_api_key" name="mbt_google_api_key" value="<?php echo(mbt_get_setting('google_api_key')); ?>" class="regular-text">
+									<div class="mbt_feedback_refresh mbt_feedback_refresh_initial" data-refresh-action="mbt_google_api_key_refresh" data-element="mbt_google_api_key"></div>
+									<p class="description"><?php printf(__('Insert your Google Maps API Key to <a href="%s">enable the Find Local Bookstore Form</a> on your book pages.', 'mybooktable'), admin_url('admin.php?page=mbt_settings&mbt_current_tab=3')); ?> <a href="https://developers.google.com/maps/documentation/javascript/get-api-key#key" target="_blank"> <?php _e('Learn how to get a Google Maps API Key', 'mybooktable'); ?></a></p>
+								</td>
+							</tr>
+						</tbody>
+					</table>
 					<input type="submit" name="save_settings" class="button button-primary" value="<?php _e('Save Changes', 'mybooktable'); ?>">
 				</div>
 			</div>
@@ -563,6 +625,23 @@ function mbt_amazon_web_services_general_settings_render() {
 	<?php
 }
 add_action('mbt_integrate_settings_render', 'mbt_amazon_web_services_general_settings_render');
+
+function mbt_genius_link_integration_general_settings_render() {
+	?>
+	<table class="form-table">
+		<tbody>
+			<tr>
+				<th style="color: #666"><?php _e('Genius Link', 'mybooktable'); ?></th>
+				<td>
+					<input type="text" disabled="true" value="" class="regular-text">
+					<p class="description"><?php echo(mbt_get_upgrade_message()); ?></p>
+				</td>
+			</tr>
+		</tbody>
+	</table>
+	<?php
+}
+add_action('mbt_integrate_settings_render', 'mbt_genius_link_integration_general_settings_render');
 
 function mbt_render_setup_default_affiliates_page() {
 ?>
@@ -919,7 +998,13 @@ function mbt_render_dashboard() {
 							<h3 class="hndle"><?php _e('Current Version', 'mybooktable'); ?></h3>
 							<div class="inside">
 								<h1 class="mybooktable-version"><?php printf(__('You are currently using <span class="current-version">MyBookTable %s</span>', 'mybooktable'), MBT_VERSION); ?></h1>
-								<?php if(mbt_get_upgrade() == 'mybooktable-dev2' and mbt_get_upgrade_plugin_exists()) { ?>
+								<?php if(mbt_get_upgrade() == 'mybooktable-dev3' and mbt_get_upgrade_plugin_exists()) { ?>
+									<h1 class="upgrade-version"><?php printf(__('with the <span class="current-version">Developer Upgrade %s</span>', 'mybooktable'), MBTDEV3_VERSION); ?></h1>
+									<h2 class="thank-you"><?php _e('Thank you for your support!', 'mybooktable'); ?></h2>
+								<?php } else if(mbt_get_upgrade() == 'mybooktable-pro3' and mbt_get_upgrade_plugin_exists()) { ?>
+									<h1 class="upgrade-version"><?php printf(__('with the <span class="current-version">Professional Upgrade %s</span>', 'mybooktable'), MBTPRO3_VERSION); ?></h1>
+									<h2 class="thank-you"><?php _e('Thank you for your support!', 'mybooktable'); ?></h2>
+								<?php } else if(mbt_get_upgrade() == 'mybooktable-dev2' and mbt_get_upgrade_plugin_exists()) { ?>
 									<h1 class="upgrade-version"><?php printf(__('with the <span class="current-version">Developer Upgrade %s</span>', 'mybooktable'), MBTDEV2_VERSION); ?></h1>
 									<h2 class="thank-you"><?php _e('Thank you for your support!', 'mybooktable'); ?></h2>
 								<?php } else if(mbt_get_upgrade() == 'mybooktable-pro2' and mbt_get_upgrade_plugin_exists()) { ?>
@@ -1064,6 +1149,8 @@ function mbt_render_get_upgrade_page() {
 			} else {
 				if(!mbt_get_upgrade_check_is_plugin_inactivate($slug)) {
 					$url = mbt_get_upgrade_get_plugin_url($slug);
+					if($slug == 'mybooktable-dev3') { $name = 'MyBookTable Developer Upgrade 3.0'; }
+					if($slug == 'mybooktable-pro3') { $name = 'MyBookTable Professional Upgrade 3.0'; }
 					if($slug == 'mybooktable-dev2') { $name = 'MyBookTable Developer Upgrade 2.0'; }
 					if($slug == 'mybooktable-pro2') { $name = 'MyBookTable Professional Upgrade 2.0'; }
 					if($slug == 'mybooktable-dev')  { $name = 'MyBookTable Developer Upgrade'; }

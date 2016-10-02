@@ -3,11 +3,11 @@
 function mbt_register_widgets() {
 	register_widget("MBT_Featured_Book");
 	register_widget("MBT_Taxonomies");
-	add_action('admin_enqueue_scripts', 'mbr_enqueue_widget_admin_js');
+	add_action('admin_enqueue_scripts', 'mbt_enqueue_widget_admin_js');
 }
 add_action('widgets_init', 'mbt_register_widgets');
 
-function mbr_enqueue_widget_admin_js() {
+function mbt_enqueue_widget_admin_js() {
 	global $pagenow; if($pagenow != 'widgets.php') { return; }
 
 	wp_enqueue_script("mbt-widgets", plugins_url('js/widgets.js', dirname(dirname(__FILE__))), 'jquery', MBT_VERSION, true);
@@ -63,12 +63,7 @@ class MBT_Featured_Book extends WP_Widget {
 						<h2 class="mbt-book-title widget-title"><a href="<?php echo($permalink); ?>"><?php echo(get_the_title($book->ID)); ?></a></h2>
 						<div class="mbt-book-images"><a href="<?php echo($permalink); ?>"><?php echo(mbt_get_book_image($book->ID, array('class' => $image_size, 'size' => '25vw'))); ?></a></div>
 						<?php if($show_blurb) { ?><div class="mbt-book-blurb"><?php echo(mbt_get_book_blurb($book->ID, true)); ?></div><?php } ?>
-						<div class="mbt-book-buybuttons">
-							<?php
-								echo(mbt_get_buybuttons($book->ID, true, !empty($use_shadowbox)));
-							?>
-							<div style="clear:both;"></div>
-						</div>
+						<?php echo(mbt_get_buybuttons($book->ID, true, !empty($use_shadowbox))); ?>
 					</div>
 				<?php
 			}

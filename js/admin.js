@@ -12,6 +12,7 @@ jQuery(document).ready(function() {
 
 	jQuery('#mbt-tabs').tabs({active: jQuery('#mbt_current_tab').val()-1});
 	jQuery('#mbt-help-link').off();
+	jQuery('.mbt-accordion').accordion({collapsible: true, active: false, heightStyle: 'content'});
 
  	jQuery('#mbt_settings_form input[type="submit"]').click(function() { jQuery('#mbt_current_tab').val(jQuery(this).parents('.mbt-tab').attr('id').substring(8)); });
 
@@ -37,44 +38,59 @@ jQuery(document).ready(function() {
 	/* Media Upload Buttons                                    */
 	/*---------------------------------------------------------*/
 
-	function mbt_make_uploader(button, data_element, title, desired_data) {
-		var file_frame;
+	jQuery.fn.mbt_upload_button = function() {
+		jQuery(this).each(function(i, e) {
+			var file_frame;
 
-		jQuery(button).on('click', function(event) {
+			var element = jQuery(this);
 
-			event.preventDefault();
+			element.on('click', function(event) {
 
-			// If the media frame already exists, reopen it.
-			if(file_frame) {
+				event.preventDefault();
+
+				// If the media frame already exists, reopen it.
+				if(file_frame) {
+					file_frame.open();
+					return;
+				}
+
+				// Create the media frame.
+				var options = {
+					button: { text: mbt_media_upload_i18n.select },
+					multiple: false  // Set to true to allow multiple files to be selected
+				};
+				if(element.attr('data-upload-title')) { options.title = element.attr('data-upload-title'); }
+				file_frame = wp.media.frames.file_frame = wp.media();
+
+				// When an image is selected, run a callback.
+				file_frame.on( 'select', function() {
+					// We set multiple to false so only get one image from the uploader
+					attachment = file_frame.state().get('selection').first().toJSON();
+
+					// Save the desired data
+					var desired_data = 'url';
+					if(element.attr('data-upload-property')) { desired_data = element.attr('data-upload-property'); }
+					jQuery('#'+element.attr('data-upload-target')).val(attachment[desired_data]).trigger('change');
+				});
+
+				// Finally, open the modal
 				file_frame.open();
-				return;
-			}
-
-			// Create the media frame.
-			file_frame = wp.media.frames.file_frame = wp.media({
-				title: title,
-				button: { text: mbt_media_upload_i18n.select },
-				multiple: false  // Set to true to allow multiple files to be selected
 			});
-
-			// When an image is selected, run a callback.
-			file_frame.on( 'select', function() {
-				// We set multiple to false so only get one image from the uploader
-				attachment = file_frame.state().get('selection').first().toJSON();
-
-				// Save the returned url
-				jQuery(data_element).val(attachment[typeof desired_data !== 'undefined' ? desired_data : 'url']).trigger('change');
-			});
-
-			// Finally, open the modal
-			file_frame.open();
 		});
 	};
 
-	mbt_make_uploader('#mbt_upload_sample_button', '#mbt_sample_url', mbt_media_upload_i18n.mbt_upload_sample_button);
-	mbt_make_uploader('#mbt_upload_tax_image_button', '#mbt_tax_image_url', mbt_media_upload_i18n.mbt_upload_tax_image_button);
-	mbt_make_uploader('#mbt_set_book_image_button', '#mbt_book_image_id', mbt_media_upload_i18n.mbt_set_book_image_button, 'id');
-	mbt_make_uploader('#mbt_upload_style_pack_button', '#mbt_style_pack_id', mbt_media_upload_i18n.select, 'id');
+	jQuery('.mbt_upload_button').mbt_upload_button();
+
+	jQuery.fn.mbt_upload_clear_button = function() {
+		jQuery(this).each(function(i, e) {
+			var element = jQuery(e);
+			element.on('click', function() {
+				jQuery('#'+element.attr('data-upload-target')).val('').trigger('change');
+			});
+		});
+	}
+
+	jQuery('.mbt_upload_clear_button').mbt_upload_clear_button();
 
 	/*---------------------------------------------------------*/
 	/* Book Import Page                                        */
@@ -85,24 +101,77 @@ jQuery(document).ready(function() {
 		setTimeout(function() { el.attr('disabled', 'disabled'); }, 0);
 		el.after('<div id="mbt-book-import-spinner"></div>');
 	});
+
+	/*---------------------------------------------------------*/
+	/* Review Checker                                          */
+	/*---------------------------------------------------------*/
+
+	function mbt_reviews_type_display() {
+		jQuery('.mbt-check-reviews-begin').show();
+		jQuery('.mbt-check-reviews-checking').hide();
+		jQuery('.mbt-check-reviews-results').hide();
+
+		if(jQuery('input[name=mbt_reviews_type]:checked').val() == 'none') {
+			jQuery('.mbt-check-reviews').hide();
+		} else {
+			jQuery('.mbt-check-reviews').show();
+		}
+	}
+
+	jQuery('input[name=mbt_reviews_type]:radio').change(mbt_reviews_type_display);
+	mbt_reviews_type_display();
+
+	jQuery('.mbt-check-reviews-button').click(function() {
+		jQuery('.mbt-check-reviews-begin').hide();
+		jQuery('.mbt-check-reviews-results').hide();
+		jQuery('.mbt-check-reviews-checking').show();
+		jQuery.post(ajaxurl,
+			{
+				action: 'mbt_check_reviews',
+				reviews_type: jQuery('input[name=mbt_reviews_type]:checked').val(),
+			},
+			function(response) {
+				jQuery('.mbt-check-reviews-checking').hide();
+				jQuery('.mbt-check-reviews-begin').show();
+				jQuery('.mbt-check-reviews-results').show().html(response);
+			}
+		);
+	});
 });
 
 /*---------------------------------------------------------*/
 /* Feedback Boxes                                          */
 /*---------------------------------------------------------*/
 
+function mbt_do_feedback_colorize(element) {
+	var feedback = element.parent().find('.mbt_feedback').html();
+	element.removeClass('mbt_admin_input_success');
+	element.removeClass('mbt_admin_input_failure');
+	element.removeClass('mbt_admin_input_warning');
+	if(feedback.indexOf('mbt_admin_message_success') !== -1) {
+		element.addClass('mbt_admin_input_success');
+	} else if(feedback.indexOf('mbt_admin_message_failure') !== -1) {
+		element.addClass('mbt_admin_input_failure');
+	} else if(feedback.indexOf('mbt_admin_message_warning') !== -1) {
+		element.addClass('mbt_admin_input_warning');
+	}
+}
+
+function mbt_make_feedback_spinner(element) {
+	var loading_size = {'width': 18, 'height': 18};
+	if(element.children().length > 0) {
+		child = jQuery(element.children()[0]);
+		loading_size = {'width': Math.max(child.width(), loading_size['width']), 'height': Math.max(child.height(), loading_size['height'])};
+	}
+	element.empty().append(jQuery('<div class="mbt_feedback_loading"><div class="mbt_feedback_spinner"></div></div>').css(loading_size));
+}
+
 function mbt_do_feedback_refresh(element) {
 	if(!element.attr('disabled')) {
 		element.attr('disabled', 'disabled');
 		if(element.attr('type') == 'radio') { jQuery('input[name='+element.attr('name')+']').attr('disabled', 'disabled'); }
 		var feedback = element.parent().find('.mbt_feedback');
-
-		var loading_size = {'width': 18, 'height': 18};
-		if(feedback.children().length > 0) {
-			child = jQuery(feedback.children()[0]);
-			loading_size = {'width': Math.max(child.width(), loading_size['width']), 'height': Math.max(child.height(), loading_size['height'])};
-		}
-		feedback.empty().append(jQuery('<div class="mbt_feedback_loading"><div class="mbt_feedback_spinner"></div></div>').css(loading_size));
+		mbt_make_feedback_spinner(feedback);
 
 		var data = null;
 		if(element.attr('data-element') === 'self') {
@@ -126,6 +195,7 @@ function mbt_do_feedback_refresh(element) {
 				element.removeAttr('disabled');
 				if(element.attr('type') == 'radio') { jQuery('input[name='+element.attr('name')+']').removeAttr('disabled', 'disabled'); }
 				feedback.html(response);
+				if(element.hasClass('mbt_feedback_colorize')) { mbt_do_feedback_colorize(element); }
 			}
 		);
 	}
@@ -136,6 +206,7 @@ jQuery.fn.mbt_feedback = function() {
 		var element = jQuery(this);
 
 		if(element.hasClass('mbt_feedback_refresh_initial')) { mbt_do_feedback_refresh(element); }
+		if(element.hasClass('mbt_feedback_colorize')) { mbt_do_feedback_colorize(element); }
 
 		if(element.prop("tagName") == "DIV") {
 			element.click(function() {

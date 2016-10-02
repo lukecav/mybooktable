@@ -6,10 +6,10 @@ Description: A WordPress Bookstore Plugin to help authors boost book sales on si
 Author: Author Media
 Author URI: http://www.authormedia.com
 Text Domain: mybooktable
-Version: 2.3.4
+Version: 3.0.1
 */
 
-define("MBT_VERSION", "2.3.4");
+define("MBT_VERSION", "3.0.1");
 
 
 
@@ -62,6 +62,7 @@ require_once(dirname(__FILE__).'/includes/extras/goodreads.php');
 require_once(dirname(__FILE__).'/includes/extras/booksorting.php');
 require_once(dirname(__FILE__).'/includes/extras/getnoticed.php');
 require_once(dirname(__FILE__).'/includes/extras/totallybooked.php');
+require_once(dirname(__FILE__).'/includes/extras/customimport.php');
 
 
 
@@ -93,10 +94,6 @@ function mbt_init() {
 	mbt_update_check();
 	mbt_customize_plugins_page();
 	if(mbt_detect_deactivation()) { return; }
-
-	//deprecated legacy functionality
-	if(function_exists('mbtdev_init') and mbt_get_setting('dev_active') and version_compare(MBTDEV_VERSION, '1.2.0') < 0) { add_action('mbt_init', 'mbtdev_init'); }
-	else if(function_exists('mbtpro_init') and mbt_get_setting('pro_active') and version_compare(MBTPRO_VERSION, '1.2.0') < 0) { add_action('mbt_init', 'mbtpro_init'); }
 
 	do_action('mbt_init');
 }
