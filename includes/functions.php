@@ -66,15 +66,6 @@ function mbt_update_setting($name, $value) {
 /* General                                                 */
 /*---------------------------------------------------------*/
 
-function mbt_is_socialmedia_active() {
-	$active = (bool)mbt_get_setting('enable_socialmedia');
-	return apply_filters('mbt_is_socialmedia_active', $active);
-}
-
-function mbt_is_in_compatability_mode() {
-	return (bool)mbt_get_setting('compatibility_mode');
-}
-
 function mbt_save_taxonomy_image($taxonomy, $term, $url) {
 	$taxonomy_images = get_option($taxonomy."_meta");
 	if(empty($taxonomy_images)) { $taxonomy_images = array(); }
@@ -279,8 +270,8 @@ function mbt_get_book_display_modes() {
 }
 
 function mbt_add_default_book_display_modes($modes) {
-	$modes['storefront'] = array('name' => 'Storefront', 'supports' => array('compatability', 'sale_price'));
-	$modes['singlecolumn'] = array('name' => 'Beautiful Page', 'supports' => array('compatability', 'teaser', 'sortable_sections'));
+	$modes['storefront'] = array('name' => 'Storefront', 'supports' => array('embedding', 'sale_price'));
+	$modes['singlecolumn'] = array('name' => 'Beautiful Page', 'supports' => array('embedding', 'teaser', 'sortable_sections'));
 	return $modes;
 }
 add_filter('mbt_display_modes', 'mbt_add_default_book_display_modes');

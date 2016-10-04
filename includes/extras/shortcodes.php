@@ -13,9 +13,9 @@ add_action('mbt_init', 'mbt_shorcodes_init');
 /*---------------------------------------------------------*/
 
 function mbt_mybooktable_shortcode($attrs) {
-	global $wp_query, $posts, $post, $id, $mbt_in_custom_page_content;
+	global $wp_query, $posts, $post, $id;
 
-	if(!empty($mbt_in_custom_page_content)) { return ''; }
+	if(mbt_has_template_context('shortcode')) { return ''; }
 	if(mbt_is_mbt_page()) { return ''; }
 
 	$output = '';
@@ -101,51 +101,60 @@ function mbt_mybooktable_shortcode($attrs) {
 		mbt_enqueue_frontend_scripts();
 		ob_start();
 
-		$mbt_in_custom_page_content = true;
+		mbt_start_template_context('shortcode');
 		if(is_singular('mbt_book')) {
 			if(!empty($attrs['display']) and $attrs['display'] === 'summary') {
+				mbt_start_template_context('excerpt');
 				echo('<div id="mbt-container">');
-				include(mbt_locate_template('excerpt-book.php'));
+				do_action('mbt_book_excerpt_content');
 				echo('</div>');
+				mbt_end_template_context();
 			} else if(!empty($attrs['display']) and $attrs['display'] === 'buybuttons') {
+				mbt_start_template_context('shortcode-summary');
 				?>
 				<div id="mbt-container">
-					<div class="<?php mbt_the_book_class('shortcode-summary'); ?>">
-						<div class="mbt-book-buybuttons">
+					<div class="<?php mbt_the_book_class(); ?>">
+						<?php mbt_the_buybuttons(false, (!empty($attrs['buybutton_shadowbox']) and $attrs['buybutton_shadowbox'] === 'true') ? true : null); ?>
+					</div>
+				</div>
+				<?php
+				mbt_end_template_context();
+			} else if(!empty($attrs['display']) and $attrs['display'] === 'cover+buybuttons') {
+				mbt_start_template_context('shortcode-cover-buybuttons');
+				?>
+				<div id="mbt-container">
+					<div class="<?php mbt_the_book_class(); ?>">
+						<?php mbt_the_book_image(); ?>
+						<div class="mbt-book-right">
 							<?php mbt_the_buybuttons(false, (!empty($attrs['buybutton_shadowbox']) and $attrs['buybutton_shadowbox'] === 'true') ? true : null); ?>
 							<div style="clear:both;"></div>
 						</div>
 					</div>
 				</div>
 				<?php
-			} else if(!empty($attrs['display']) and $attrs['display'] === 'cover+buybuttons') {
-				?>
-				<div id="mbt-container">
-					<div class="<?php mbt_the_book_class('shortcode-cover-buybuttons'); ?>">
-						<div class="mbt-book-images">
-							<?php mbt_the_book_image(); ?>
-						</div>
-						<div class="mbt-book-right">
-							<div class="mbt-book-buybuttons">
-								<?php mbt_the_buybuttons(false, (!empty($attrs['buybutton_shadowbox']) and $attrs['buybutton_shadowbox'] === 'true') ? true : null); ?>
-								<div style="clear:both;"></div>
-							</div>
-						</div>
-					</div>
-				</div>
-				<?php
+				mbt_end_template_context();
 			} else {
-				remove_action('mbt_before_single_book', 'mbt_the_breadcrumbs');
-				include(mbt_locate_template('single-book/content.php'));
+				$display_mode = empty($attrs['display_mode']) ? mbt_get_book_display_mode($post->ID) : $attrs['display_mode'];
+				if(!mbt_book_display_mode_supports($display_mode, 'embedding')) { $display_mode = mbt_get_default_book_display_mode(); }
+				mbt_start_template_context('single');
+				mbt_start_template_display_mode($display_mode);
+				?> <div id="mbt-container"> <?php
+				do_action('mbt_single_book_'.$display_mode.'_content');
+				?> </div> <?php
+				mbt_end_template_display_mode();
+				mbt_end_template_context();
 			}
 		} else {
-			remove_action('mbt_before_book_archive', 'mbt_the_breadcrumbs');
 			if(!empty($attrs['header']) and $attrs['header'] == 'hidden') { remove_action('mbt_book_archive_header', 'mbt_do_book_archive_header'); }
 			if(!empty($attrs['gridview'])) { add_filter('mbtpro2_is_gridview_active', $attrs['gridview'] == 'yes' ? '__return_true' : '__return_false', 100); }
-			include(mbt_locate_template('archive-book/content.php'));
+			mbt_start_template_context('archive');
+			?> <div id="mbt-container"> <?php
+			do_action('mbt_book_archive_content');
+			?> </div> <?php
+			mbt_end_template_context();
 			if(!empty($attrs['gridview'])) { remove_filter('mbtpro2_is_gridview_active', $attrs['gridview'] == 'yes' ? '__return_true' : '__return_false', 100); }
 		}
-		$mbt_in_custom_page_content = false;
+		mbt_end_template_context();
 
 		$output = ob_get_contents();
 		ob_end_clean();

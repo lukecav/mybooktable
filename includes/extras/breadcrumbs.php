@@ -1,10 +1,7 @@
 <?php
 
 function mbt_breadcrumbs_init() {
-	if(mbt_get_setting('enable_breadcrumbs')) {
-		add_action('mbt_before_single_book', 'mbt_the_breadcrumbs');
-		add_action('mbt_before_book_archive', 'mbt_the_breadcrumbs');
-	}
+	add_action('mbt_before_single_book', 'mbt_do_page_breadcrumbs', 20);
 	add_filter('woo_breadcrumbs_trail', 'mbt_integrate_woo_breadcrumbs');
 	add_filter('genesis_page_crumb', 'mbt_integrate_genesis_breadcrumb_archive', 20, 2);
 }
@@ -25,6 +22,11 @@ function mbt_integrate_genesis_breadcrumb_archive($crumb, $args) {
 		$crumb = '<a href="'.mbt_get_booktable_url().'">'.mbt_get_product_name().'</a>'.$args['sep'].$crumb;
 	}
 	return $crumb;
+}
+
+function mbt_do_page_breadcrumbs() {
+	$show_breadcrumbs = apply_filters('mbt_show_page_breadcrumbs', mbt_get_setting('enable_breadcrumbs') and !mbt_has_template_context('shortcode'));
+	if($show_breadcrumbs) { mbt_the_breadcrumbs(); }
 }
 
 function mbt_get_breadcrumbs($delimiter = '') {

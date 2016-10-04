@@ -8,8 +8,6 @@
 				global $post; echo(apply_filters('the_content', $post->post_content));
 			?>
 		</div>
-		<?php if(mbt_get_setting('enable_socialmedia_single_book')) { ?>
-			<div class="mbt-book-socialmedia-bar"><?php mbt_the_book_socialmedia_bar(); ?></div>
-		<?php } ?>
+		<?php if(mbt_get_setting('enable_socialmedia_single_book')) { mbt_the_book_socialmedia_bar(); } ?>
 	</div>
 </div>

@@ -70,6 +70,7 @@ function mbt_templates_init() {
 		if(!mbt_get_setting('hide_domc_notice')) { add_action('mbt_after_single_book', 'mbt_the_domc_notice', 90); }
 
 		//book excerpt hooks
+		add_action('mbt_book_excerpt_content', 'mbt_do_book_excerpt_content');
 		add_action('mbt_before_book_excerpt', 'mbt_do_before_book_excerpt', 0);
 		add_action('mbt_after_book_excerpt', 'mbt_do_after_book_excerpt', 100);
 		add_action('mbt_book_excerpt_images', 'mbt_do_book_excerpt_images');
@@ -87,6 +88,7 @@ add_action('mbt_init', 'mbt_templates_init');
 /*---------------------------------------------------------*/
 /* Template Overload Functions                             */
 /*---------------------------------------------------------*/
+
 function mbt_load_book_templates($template) {
 	global $post;
 
@@ -168,6 +170,7 @@ function mbt_add_theme_template_folders($folders) {
 add_filter('mbt_template_folders', 'mbt_add_theme_template_folders', 50);
 
 function mbt_locate_template($name) {
+	$locatedtemplate = '';
 	$template_folders = mbt_get_template_folders();
 	foreach($template_folders as $folder) {
 		$locatedtemplate = $folder.$name;
@@ -207,6 +210,56 @@ function mbt_body_class($classes) {
 		$classes[] = 'mybooktable';
 	}
 	return $classes;
+}
+
+/*---------------------------------------------------------*/
+/* Template Context Functions                              */
+/*---------------------------------------------------------*/
+
+function mbt_init_template_context_data() {
+	global $mbt_template_context_data;
+	if(empty($mbt_template_context_data)) {
+		$mbt_template_context_data = array(
+			'context' => array(),
+			'display_mode' => array(),
+		);
+	}
+}
+
+function mbt_start_template_context($context) {
+	global $mbt_template_context_data;
+	mbt_init_template_context_data();
+	array_push($mbt_template_context_data['context'], $context);
+}
+
+function mbt_end_template_context() {
+	global $mbt_template_context_data;
+	mbt_init_template_context_data();
+	array_pop($mbt_template_context_data['context']);
+}
+
+function mbt_has_template_context($context) {
+	global $mbt_template_context_data;
+	mbt_init_template_context_data();
+	return in_array($context, $mbt_template_context_data['context']);
+}
+
+function mbt_start_template_display_mode($display_mode) {
+	global $mbt_template_context_data;
+	mbt_init_template_context_data();
+	array_push($mbt_template_context_data['display_mode'], $display_mode);
+}
+
+function mbt_end_template_display_mode() {
+	global $mbt_template_context_data;
+	mbt_init_template_context_data();
+	array_pop($mbt_template_context_data['display_mode']);
+}
+
+function mbt_get_template_display_mode() {
+	global $mbt_template_context_data;
+	mbt_init_template_context_data();
+	return end($mbt_template_context_data['display_mode']);
 }
 
 
@@ -390,6 +443,9 @@ function mbt_get_singlecolumn_content_sections($sections) {
 /*---------------------------------------------------------*/
 /* Book Excerpt Template Functions                         */
 /*---------------------------------------------------------*/
+function mbt_do_book_excerpt_content() {
+	mbt_include_template("excerpt-book/content.php");
+}
 function mbt_do_before_book_excerpt() {
 	mbt_include_template("excerpt-book/before.php");
 }
@@ -561,12 +617,14 @@ function mbt_do_book_content_sections($display_mode) {
 
 
 // Book Class
-function mbt_get_book_class($post_id, $context='') {
-	return apply_filters('mbt_get_book_class', 'mbt-book'.(empty($context) ? '' : ' mbt-book-'.$context).' mbt-display-mode-'.mbt_get_book_display_mode($post_id), $post_id, $context);
+function mbt_get_book_class($post_id) {
+	$context = mbt_has_template_context('excerpt') ? 'excerpt' : (mbt_has_template_context('single') ? 'single' : '');
+	$display_mode = $context == 'single' ? mbt_get_template_display_mode() : '';
+	return apply_filters('mbt_get_book_class', 'mbt-book'.(empty($context) ? '' : ' mbt-book-'.$context).(empty($display_mode) ? '' : ' mbt-display-mode-'.$display_mode), $post_id);
 }
-function mbt_the_book_class($context='') {
+function mbt_the_book_class() {
 	global $post;
-	echo(mbt_get_book_class($post->ID, $context));
+	echo(mbt_get_book_class($post->ID));
 }
 
 
@@ -1149,17 +1207,18 @@ function mbt_the_book_teaser() {
 
 
 // Call to Action Button
-function mbt_get_book_cta_button($post_id) {
+function mbt_get_book_cta_button($post_id, $button_text='') {
 	$output = '';
 	$buybuttons = mbt_query_buybuttons($post_id);
 	if(!empty($buybuttons)) {
-		$output .= '<a href="#mbt-book-purchase-anchor" class="mbt-book-purchase-button">ORDER NOW!</a>';
+		$text = apply_filters('mbt_book_cta_button_text', empty($button_text) ? __('Order Now!', 'mybooktable') : $button_text);
+		$output .= '<a href="#mbt-book-purchase-anchor" class="mbt-book-purchase-button">'.$text.'</a>';
 	}
-	return apply_filters('mbt_get_book_cta_button', $output, $post_id);
+	return apply_filters('mbt_get_book_cta_button', $output, $post_id, $button_text);
 }
-function mbt_the_book_cta_button() {
+function mbt_the_book_cta_button($button_text='') {
 	global $post;
-	echo(mbt_get_book_cta_button($post->ID));
+	echo(mbt_get_book_cta_button($post->ID, $button_text));
 }
 
 
@@ -1219,8 +1278,10 @@ function mbt_get_book_socialmedia_badges($post_id) {
 	$url = urlencode(get_permalink($post_id));
 	$output = '';
 
+	$output .= '<div class="mbt-book-socialmedia-badges">';
 	$output .= '<iframe src="https://plusone.google.com/_/+1/fastbutton?url='.$url.'&amp;size=tall&amp;count=true&amp;annotation=bubble" class="mbt-gplusone" style="width: 55px; height: 61px; margin: 0px; border: none; overflow: hidden;" frameborder="0" hspace="0" vspace="0" marginheight="0" marginwidth="0" scrolling="no" allowtransparency="true"></iframe>';
 	$output .= '<iframe src="https://www.facebook.com/plugins/like.php?href='.$url.'&amp;layout=box_count" class="mbt-fblike" style="width: 50px; height: 61px; margin: 0px; border: none; overflow: hidden;" scrolling="no" frameborder="0" allowtransparency="true"></iframe>';
+	$output .= '</div>';
 
 	return apply_filters('mbt_get_book_socialmedia_badges', $output, $post_id);
 }
@@ -1236,6 +1297,7 @@ function mbt_get_book_socialmedia_bar($post_id) {
 	$url = urlencode(get_permalink($post_id));
 	$output = '';
 
+	$output .= '<div class="mbt-book-socialmedia-bar">';
 	if(function_exists('st_makeEntries')) {
 		$output .= st_makeEntries();
 	} else {
@@ -1243,6 +1305,7 @@ function mbt_get_book_socialmedia_bar($post_id) {
 		$output .= '<iframe src="https://www.facebook.com/plugins/like.php?href='.$url.'&amp;layout=button_count" class="mbt-fblike" style="width: 75px; height: 20px; margin: 0px; border: none; overflow: hidden;" scrolling="no" frameborder="0" allowtransparency="true"></iframe>';
 		$output .= '<iframe src="https://platform.twitter.com/widgets/tweet_button.html?url='.$url.'&amp;count=horizontal&amp;size=m" class="mbt-twittershare" style="height: 20px; width: 100px; margin: 0px; border: none; overflow: hidden;" allowtransparency="true" frameborder="0" scrolling="no"></iframe>';
 	}
+	$output .= '</div>';
 
 	return apply_filters('mbt_get_book_socialmedia_bar', $output, $post_id);
 }
@@ -1257,11 +1320,13 @@ function mbt_the_book_socialmedia_bar() {
 function mbt_get_book_socialmedia_buttons($post_id) {
 	$encoded_permalink = urlencode(get_permalink($post_id));
 	$output = '';
+
 	$output .= '<div class="mbt-book-socialmedia-buttons">';
 	$output .= '	<a href="https://www.facebook.com/sharer/sharer.php?u='.$encoded_permalink.'" target="_blank" class="mbt-book-socialmedia-button mbt-book-socialmedia-facebook">Facebook</a>';
 	$output .= '	<a href="https://twitter.com/intent/tweet?text='.urlencode(__('Check out this book!', 'mybooktable')).'&url='.$encoded_permalink.'&original_referer='.$encoded_permalink.'" target="_blank" class="mbt-book-socialmedia-button mbt-book-socialmedia-twitter">Twitter</a>';
 	$output .= '	<a href="https://plus.google.com/share?url='.$encoded_permalink.'" target="_blank" class="mbt-book-socialmedia-button mbt-book-socialmedia-googleplus">Google+</a>';
 	$output .= '</div>';
+
 	return apply_filters('mbt_get_book_socialmedia_buttons', $output, $post_id);
 }
 function mbt_the_book_socialmedia_buttons() {
