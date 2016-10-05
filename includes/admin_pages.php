@@ -152,8 +152,8 @@ function mbt_api_key_refresh_ajax() {
 	if(!current_user_can('manage_options')) { die(); }
 	if($_REQUEST['data'] != mbt_hide_api_key(mbt_get_setting('api_key'))) {
 		mbt_update_setting('api_key', $_REQUEST['data']);
-		mbt_verify_api_key();
 	}
+	mbt_verify_api_key();
 	echo(mbt_api_key_feedback());
 	die();
 }

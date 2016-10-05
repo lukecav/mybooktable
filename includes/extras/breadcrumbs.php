@@ -2,6 +2,7 @@
 
 function mbt_breadcrumbs_init() {
 	add_action('mbt_before_single_book', 'mbt_do_page_breadcrumbs', 20);
+	add_action('mbt_before_book_archive', 'mbt_do_page_breadcrumbs', 20);
 	add_filter('woo_breadcrumbs_trail', 'mbt_integrate_woo_breadcrumbs');
 	add_filter('genesis_page_crumb', 'mbt_integrate_genesis_breadcrumb_archive', 20, 2);
 }

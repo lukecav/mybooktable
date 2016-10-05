@@ -198,6 +198,9 @@ No! This plugin would work great for anyone wanting to have an Amazon Affiliate 
 
 == Upgrade Notice ==
 
+= 3.0.0 =
+This is a major update to MyBookTable that includes some backwards incompatable changes to it's template system and CSS selectors. If you have custom integrations with MyBookTable they may need to be updated in order to work after installing this update.
+
 = 2.2.0 =
 IMPORTANT UPDATE: Barnes and Noble has discontinued Linkshare Affiliates and switched to Commission Junction. This update is required to continue using B&N affiliates. [Learn more...](http://www.authormedia.com/barnes-and-noble-is-ending-its-affiliate-program-how-to-keep-from-losing-out/)
 
@@ -214,6 +217,12 @@ This version adds several cool new features, including "Publisher" and "Publicat
 This version adds **many** new buy button options, including Apple iBooks & Sony Reader.
 
 == Changelog ==
+
+= 3.0.3 =
+* Fixed a bug that prevented Amazon Reviews from working with old versions of the paid Upgrades.
+
+= 3.0.2 =
+* Fixed a bug that was causing PHP errors with certain shortcodes.
 
 = 3.0.1 =
 * Fixed a bug that interfered with saving books on sites with certain versions of PHP.

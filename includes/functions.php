@@ -145,7 +145,8 @@ function mbt_get_product_slug() {
 }
 
 function mbt_get_reviews_types() {
-	return apply_filters('mbt_reviews_types', array());
+	// The 'mbt_reviews_boxes' filter is deprecated, but still supported
+	return apply_filters('mbt_reviews_boxes', apply_filters('mbt_reviews_types', array()));
 }
 
 function mbt_add_disabled_reviews_types($reviews) {
