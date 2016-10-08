@@ -161,7 +161,7 @@ function mbt_update_3_0_0() {
 /*---------------------------------------------------------*/
 
 function mbt_rewrites_check_init() {
-	add_action('init', 'mbt_rewrites_check', 999);
+	add_action('wp_loaded', 'mbt_rewrites_check', 999);
 }
 add_action('mbt_init', 'mbt_rewrites_check_init');
 
@@ -524,34 +524,4 @@ function mbt_install_examples() {
 		include("examples.php");
 		mbt_update_setting('installed_examples', true);
 	}
-}
-
-
-
-/*---------------------------------------------------------*/
-/* Uninstallation Functions                                */
-/*---------------------------------------------------------*/
-
-function mbt_uninstall() {
-	//erase options
-	delete_option('mbt_settings');
-
-	//erase taxonomies
-	mbt_erase_taxonomy('mbt_author');
-	mbt_erase_taxonomy('mbt_series');
-	mbt_erase_taxonomy('mbt_genre');
-	mbt_erase_taxonomy('mbt_tag');
-
-	//erase books
-	global $wpdb;
-	$wpdb->query("DELETE FROM $wpdb->posts WHERE post_type = 'mbt_book'");
-
-	//erase rewrites
-	add_action('admin_init', 'flush_rewrite_rules');
-}
-
-function mbt_erase_taxonomy($name) {
-	global $wpdb;
-	$wpdb->query("DELETE term_rel.* FROM $wpdb->term_relationships AS term_rel INNER JOIN $wpdb->term_taxonomy AS term_tax WHERE term_rel.term_taxonomy_id = term_tax.term_taxonomy_id AND term_tax.taxonomy = '".$name."'");
-	$wpdb->query("DELETE FROM $wpdb->term_taxonomy WHERE taxonomy = '".$name."'");
 }

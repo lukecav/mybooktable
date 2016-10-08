@@ -57,6 +57,8 @@ function mbt_parse_custom_importer_form() {
 					'slug' => $term['slug'],
 					'description' => $term['description'],
 				));
+				if(!empty($term['image'])) { mbt_save_taxonomy_image($tax_slug, $term_data['term_id'], $term['image']); }
+				if($tax_name == 'authors' and !empty($term['priority'])) { mbt_save_author_priority($term_data['term_id'], $term['priority']); }
 				$terms[$key]['imported_id'] = $term_data['term_id'];
 			}
 		}
@@ -80,28 +82,28 @@ function mbt_custom_importer_filter_book($book, $import_type) {
 	if(!empty($book_query->posts)) {
 		$existing_book = $book_query->posts[0];
 		$book_matches = true;
-		$book_matches = $book_matches and ($book['title'] === $existing_book->post_title);
-		$book_matches = $book_matches and ($book['content'] === $existing_book->post_content);
-		$book_matches = $book_matches and ($book['excerpt'] === $existing_book->post_excerpt);
+		$book_matches = ($book_matches and ($book['title'] === $existing_book->post_title));
+		$book_matches = ($book_matches and ($book['content'] === $existing_book->post_content));
+		$book_matches = ($book_matches and ($book['excerpt'] === $existing_book->post_excerpt));
 		$extract_names = function($term) { return $term->name; };
-		$book_matches = $book_matches and ($book['authors'] === array_map($extract_names, wp_get_object_terms($existing_book->ID, 'mbt_author')));
-		$book_matches = $book_matches and ($book['series'] === array_map($extract_names, wp_get_object_terms($existing_book->ID, 'mbt_series')));
-		$book_matches = $book_matches and ($book['genres'] === array_map($extract_names, wp_get_object_terms($existing_book->ID, 'mbt_genre')));
-		$book_matches = $book_matches and ($book['tags'] === array_map($extract_names, wp_get_object_terms($existing_book->ID, 'mbt_tag')));
-		$book_matches = $book_matches and ($book['price'] === get_post_meta($existing_book->ID, 'mbt_price', true));
-		$book_matches = $book_matches and ($book['unique_id_isbn'] === get_post_meta($existing_book->ID, 'mbt_unique_id_isbn', true));
-		$book_matches = $book_matches and ($book['unique_id_asin'] === get_post_meta($existing_book->ID, 'mbt_unique_id_asin', true));
-		$book_matches = $book_matches and ($book['buybuttons'] === get_post_meta($existing_book->ID, 'mbt_buybuttons', true));
-		$book_matches = $book_matches and ($book['publisher_name'] === get_post_meta($existing_book->ID, 'mbt_publisher_name', true));
-		$book_matches = $book_matches and ($book['publisher_url'] === get_post_meta($existing_book->ID, 'mbt_publisher_url', true));
-		$book_matches = $book_matches and ($book['publication_year'] === get_post_meta($existing_book->ID, 'mbt_publication_year', true));
-		$book_matches = $book_matches and ($book['image_filename'] === wp_basename(get_attached_file(get_post_meta($existing_book->ID, 'mbt_book_image_id', true))));
-		$book_matches = $book_matches and ($book['sample_url'] === get_post_meta($existing_book->ID, 'mbt_sample_url', true));
-		$book_matches = $book_matches and ($book['book_length'] === get_post_meta($existing_book->ID, 'mbt_book_length', true));
-		$book_matches = $book_matches and ($book['sale_price'] === get_post_meta($existing_book->ID, 'mbt_sale_price', true));
-		$book_matches = $book_matches and ($book['show_instant_preview'] === get_post_meta($existing_book->ID, 'mbt_show_instant_preview', true));
-		$book_matches = $book_matches and ($book['series_order'] === get_post_meta($existing_book->ID, 'mbt_series_order', true));
-		$book_matches = $book_matches and ($book['display_mode'] === get_post_meta($existing_book->ID, 'mbt_display_mode', true));
+		$book_matches = ($book_matches and ($book['authors'] === array_map($extract_names, wp_get_object_terms($existing_book->ID, 'mbt_author'))));
+		$book_matches = ($book_matches and ($book['series'] === array_map($extract_names, wp_get_object_terms($existing_book->ID, 'mbt_series'))));
+		$book_matches = ($book_matches and ($book['genres'] === array_map($extract_names, wp_get_object_terms($existing_book->ID, 'mbt_genre'))));
+		$book_matches = ($book_matches and ($book['tags'] === array_map($extract_names, wp_get_object_terms($existing_book->ID, 'mbt_tag'))));
+		$book_matches = ($book_matches and ($book['price'] === get_post_meta($existing_book->ID, 'mbt_price', true)));
+		$book_matches = ($book_matches and ($book['unique_id_isbn'] === get_post_meta($existing_book->ID, 'mbt_unique_id_isbn', true)));
+		$book_matches = ($book_matches and ($book['unique_id_asin'] === get_post_meta($existing_book->ID, 'mbt_unique_id_asin', true)));
+		$book_matches = ($book_matches and ($book['buybuttons'] === get_post_meta($existing_book->ID, 'mbt_buybuttons', true)));
+		$book_matches = ($book_matches and ($book['publisher_name'] === get_post_meta($existing_book->ID, 'mbt_publisher_name', true)));
+		$book_matches = ($book_matches and ($book['publisher_url'] === get_post_meta($existing_book->ID, 'mbt_publisher_url', true)));
+		$book_matches = ($book_matches and ($book['publication_year'] === get_post_meta($existing_book->ID, 'mbt_publication_year', true)));
+		$book_matches = ($book_matches and ($book['image_filename'] === wp_basename(get_attached_file(get_post_meta($existing_book->ID, 'mbt_book_image_id', true)))));
+		$book_matches = ($book_matches and ($book['sample_url'] === get_post_meta($existing_book->ID, 'mbt_sample_url', true)));
+		$book_matches = ($book_matches and ($book['book_length'] === get_post_meta($existing_book->ID, 'mbt_book_length', true)));
+		$book_matches = ($book_matches and ($book['sale_price'] === get_post_meta($existing_book->ID, 'mbt_sale_price', true)));
+		$book_matches = ($book_matches and ($book['show_instant_preview'] === get_post_meta($existing_book->ID, 'mbt_show_instant_preview', true)));
+		$book_matches = ($book_matches and ($book['series_order'] === get_post_meta($existing_book->ID, 'mbt_series_order', true)));
+		$book_matches = ($book_matches and ($book['display_mode'] === get_post_meta($existing_book->ID, 'mbt_display_mode', true)));
 		if($book_matches) { return sprintf(__('Book "%s" already exists', 'mybooktable'), $book['title']); }
 	}
 
@@ -141,16 +143,18 @@ function mbt_detect_custom_export_download() {
 		$terms = array();
 		foreach($raw_terms as $term) {
 			$parent = get_term_by('id', $term->parent, $tax_slug);
-			$terms[] = array(
+			$new_term = array(
 				'id' => $term->term_id,
 				'name' => $term->name,
 				'slug' => $term->slug,
 				'description' => $term->description,
 				'parent' => empty($parent->name) ? '' : $parent->name,
+				'image' => mbt_get_taxonomy_image($tax_slug, $term->term_id),
 			);
+			if($tax_name == 'authors') { $new_term['priority'] = mbt_get_author_priority($term->term_id); }
+			$terms[] = $new_term;
 		}
 		$data[$tax_name] = $terms;
-		//todo: export author priorities and taxonomy images
 	}
 
 	// save books

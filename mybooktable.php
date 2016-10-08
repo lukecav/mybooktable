@@ -6,10 +6,11 @@ Description: A WordPress Bookstore Plugin to help authors boost book sales on si
 Author: Author Media
 Author URI: http://www.authormedia.com
 Text Domain: mybooktable
-Version: 3.0.3
+Domain Path: /i18n/
+Version: 3.0.4
 */
 
-define("MBT_VERSION", "3.0.3");
+define("MBT_VERSION", "3.0.4");
 
 
 
@@ -29,7 +30,7 @@ if(PHP_VERSION_ID < 50309) {
 		<div id="message" class="error">
 			<p>
 				<strong><?php _e('PHP Out of Date', 'mybooktable'); ?></strong> &#8211;
-				<?php _e('MyBookTable requires at least PHP 5.3.9. You are currently running PHP '.PHP_VERSION.'. Please contact your hosting provider to request that they update your PHP.', 'mybooktable'); ?>
+				<?php printf(__('MyBookTable requires at least PHP 5.3.9. You are currently running PHP %s. Please contact your hosting provider to request that they update your PHP.', 'mybooktable'), PHP_VERSION); ?>
 			</p>
 		</div>
 		<?php

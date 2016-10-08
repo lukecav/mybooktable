@@ -218,6 +218,10 @@ This version adds **many** new buy button options, including Apple iBooks & Sony
 
 == Changelog ==
 
+= 3.0.4 =
+* Added French translation.
+* Fixed a bug with the custom export system.
+
 = 3.0.3 =
 * Fixed a bug that prevented Amazon Reviews from working with old versions of the paid Upgrades.
 
