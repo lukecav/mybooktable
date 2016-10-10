@@ -55,6 +55,10 @@ function mbt_minify_sectionsorting_metabox($classes) {
 	return $classes;
 }
 
+function mbt_should_not_save_metabox($post_id) {
+	return ((defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) || get_post_status($post_id) == 'auto-draft' || get_post_type($post_id) !== 'mbt_book' || !isset($_REQUEST['mbt_nonce']) || !wp_verify_nonce($_REQUEST['mbt_nonce'], plugin_basename(__FILE__)));
+}
+
 
 
 /*---------------------------------------------------------*/
@@ -117,7 +121,7 @@ function mbt_add_display_mode_field($post) {
 }
 
 function mbt_save_display_mode_field($post_id) {
-	if((defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) || get_post_status($post_id) == 'auto-draft' || get_post_type($post_id) !== 'mbt_book') { return; }
+	if(mbt_should_not_save_metabox($post_id)) { return; }
 	if(isset($_REQUEST['mbt_display_mode'])) { update_post_meta($post_id, 'mbt_display_mode', $_REQUEST['mbt_display_mode']); }
 }
 
@@ -135,7 +139,7 @@ function mbt_add_post_author_field($post) {
 }
 
 function mbt_save_post_author_field($post_id) {
-	if((defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) || get_post_status($post_id) == 'auto-draft' || get_post_type($post_id) !== 'mbt_book') { return; }
+	if(mbt_should_not_save_metabox($post_id)) { return; }
 	if(isset($_REQUEST['mbt_post_author'])) { global $wpdb; $wpdb->update($wpdb->posts, array('post_author' => $_REQUEST['mbt_post_author']), array('ID' => $post_id), array('%d'), array('%d')); }
 }
 
@@ -159,7 +163,7 @@ function mbt_book_blurb_metabox($post) {
 }
 
 function mbt_save_book_blurb_metabox($post_id) {
-	if((defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) || get_post_status($post_id) == 'auto-draft' || get_post_type($post_id) !== 'mbt_book') { return; }
+	if(mbt_should_not_save_metabox($post_id)) { return; }
 	if(isset($_REQUEST['mbt_book_teaser'])) { update_post_meta($post_id, 'mbt_book_teaser', $_REQUEST['mbt_book_teaser']); }
 }
 
@@ -186,7 +190,7 @@ function mbt_overview_metabox($post) {
 }
 
 function mbt_save_overview_metabox($post_id) {
-	if((defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) || get_post_status($post_id) == 'auto-draft' || get_post_type($post_id) !== 'mbt_book') { return; }
+	if(mbt_should_not_save_metabox($post_id)) { return; }
 	if(isset($_REQUEST['mbt_overview_image'])) { update_post_meta($post_id, 'mbt_overview_image', $_REQUEST['mbt_overview_image']); }
 }
 
@@ -485,7 +489,7 @@ function mbt_metadata_metabox($post) {
 }
 
 function mbt_save_metadata_metabox($post_id) {
-	if((defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) || get_post_status($post_id) == 'auto-draft') { return; }
+	if(mbt_should_not_save_metabox($post_id)) { return; }
 
 	if(get_post_type($post_id) == 'mbt_book') {
 		if(isset($_REQUEST['mbt_book_image_id'])) { update_post_meta($post_id, 'mbt_book_image_id', $_REQUEST['mbt_book_image_id']); }
@@ -570,27 +574,25 @@ function mbt_buybuttons_metabox($post) {
 }
 
 function mbt_save_buybuttons_metabox($post_id) {
-	if((defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) || !isset($_REQUEST['mbt_nonce']) || !wp_verify_nonce($_REQUEST['mbt_nonce'], plugin_basename(__FILE__))){return;}
+	if(mbt_should_not_save_metabox($post_id)) { return; }
 
-	if(get_post_type($post_id) == 'mbt_book') {
-		$stores = mbt_get_stores();
-		$buybuttons = array();
-		for($i = 1; isset($_REQUEST['mbt_buybutton'.$i]); $i++) {
-			$buybutton = $_REQUEST['mbt_buybutton'.$i];
-			if(empty($stores[$buybutton['store']])) { continue; }
-			$buybutton['url'] = preg_replace('/[\r\n]/', '', $buybutton['url']);
-			$buybuttons[] = apply_filters('mbt_buybutton_save', $buybutton, $stores[$buybutton['store']]);
-		}
-		update_post_meta($post_id, 'mbt_buybuttons', $buybuttons);
+	$stores = mbt_get_stores();
+	$buybuttons = array();
+	for($i = 1; isset($_REQUEST['mbt_buybutton'.$i]); $i++) {
+		$buybutton = $_REQUEST['mbt_buybutton'.$i];
+		if(empty($stores[$buybutton['store']])) { continue; }
+		$buybutton['url'] = preg_replace('/[\r\n]/', '', $buybutton['url']);
+		$buybuttons[] = apply_filters('mbt_buybutton_save', $buybutton, $stores[$buybutton['store']]);
+	}
+	update_post_meta($post_id, 'mbt_buybuttons', $buybuttons);
 
-		// auto-populate book asin
-		if(get_post_meta($post_id, 'mbt_unique_id_asin', true) == '') {
-			foreach($buybuttons as $buybutton) {
-				if($buybutton['store'] == 'amazon' or $buybutton['store'] == 'kindle') {
-					$asin = mbt_get_amazon_AISN($buybutton['url']);
-					if(!empty($asin)) { update_post_meta($post_id, 'mbt_unique_id_asin', $asin); }
-					break;
-				}
+	// auto-populate book asin
+	if(get_post_meta($post_id, 'mbt_unique_id_asin', true) == '') {
+		foreach($buybuttons as $buybutton) {
+			if($buybutton['store'] == 'amazon' or $buybutton['store'] == 'kindle') {
+				$asin = mbt_get_amazon_AISN($buybutton['url']);
+				if(!empty($asin)) { update_post_meta($post_id, 'mbt_unique_id_asin', $asin); }
+				break;
 			}
 		}
 	}
@@ -610,11 +612,9 @@ function mbt_series_order_metabox($post) {
 }
 
 function mbt_save_series_order_metabox($post_id) {
-	if((defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) || !isset($_REQUEST['mbt_nonce']) || !wp_verify_nonce($_REQUEST['mbt_nonce'], plugin_basename(__FILE__))){return;}
+	if(mbt_should_not_save_metabox($post_id)) { return; }
 
-	if(get_post_type($post_id) == "mbt_book") {
-		update_post_meta($post_id, "mbt_series_order", $_REQUEST["mbt_series_order"]);
-	}
+	if(isset($_REQUEST['mbt_series_order'])) { update_post_meta($post_id, 'mbt_series_order', $_REQUEST['mbt_series_order']); }
 }
 
 
@@ -645,7 +645,7 @@ function mbt_endorsements_metabox($post) {
 }
 
 function mbt_save_endorsements_metabox($post_id) {
-	if((defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) || get_post_status($post_id) == 'auto-draft' || get_post_type($post_id) !== 'mbt_book') { return; }
+	if(mbt_should_not_save_metabox($post_id)) { return; }
 
 	if(isset($_REQUEST['mbt_endorsements'])) { update_post_meta($post_id, 'mbt_endorsements', json_decode(str_replace('\\\\', '\\', str_replace('\"', '"', str_replace('\\\'', '\'', $_REQUEST['mbt_endorsements']))), true)); }
 }
@@ -686,7 +686,7 @@ function mbt_bookclub_metabox($post) {
 }
 
 function mbt_save_bookclub_metabox($post_id) {
-	if((defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) || get_post_status($post_id) == 'auto-draft' || get_post_type($post_id) !== 'mbt_book') { return; }
+	if(mbt_should_not_save_metabox($post_id)) { return; }
 
 	if(isset($_REQUEST['mbt_bookclub_links'])) { update_post_meta($post_id, 'mbt_bookclub_links', json_decode(str_replace('\\\\', '\\', str_replace('\"', '"', str_replace('\\\'', '\'', $_REQUEST['mbt_bookclub_links']))), true)); }
 	if(isset($_REQUEST['mbt_bookclub_video'])) { update_post_meta($post_id, 'mbt_bookclub_video', $_REQUEST['mbt_bookclub_video']); }
@@ -726,7 +726,7 @@ function mbt_sectionsorting_metabox($post) {
 }
 
 function mbt_save_sectionsorting_metabox($post_id) {
-	if((defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) || get_post_status($post_id) == 'auto-draft' || get_post_type($post_id) !== 'mbt_book') { return; }
+	if(mbt_should_not_save_metabox($post_id)) { return; }
 
 	if(isset($_REQUEST['mbt_booksections']) and isset($_REQUEST['mbt_booksections_displaymode'])) {
 		mbt_update_setting('book_section_order_'.$_REQUEST['mbt_booksections_displaymode'], json_decode(str_replace('\\\\', '\\', str_replace('\"', '"', str_replace('\\\'', '\'', $_REQUEST['mbt_booksections']))), true));
