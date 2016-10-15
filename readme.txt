@@ -221,6 +221,7 @@ This version adds **many** new buy button options, including Apple iBooks & Sony
 = 3.0.5 =
 * Fixed a bug that was causing Quick Edit on books to erase metadata.
 * Fixed a bug that was causing the Amazon Book Importer to fail under certain conditions.
+* Fixed a bug that caused the Display Mode selector to erroneously display on non-book pages.
 
 = 3.0.4 =
 * Added French translation.

@@ -103,6 +103,8 @@ function mbt_main_author_url_ajax() {
 /*---------------------------------------------------------*/
 
 function mbt_add_display_mode_field($post) {
+	if(get_post_type($post->ID) !== 'mbt_book') { return; }
+
 	$display_modes = mbt_get_book_display_modes();
 	if(empty($display_modes)) { return; }
 	$current_mode = get_post_meta($post->ID, 'mbt_display_mode', true);
@@ -126,6 +128,7 @@ function mbt_save_display_mode_field($post_id) {
 }
 
 function mbt_add_post_author_field($post) {
+	if(get_post_type($post->ID) !== 'mbt_book') { return; }
 	?>
 	<div class="misc-pub-section misc-pub-post-author" id="mbt_post_author_field">
 	<label for="mbt_post_author">Post Author:</span>
