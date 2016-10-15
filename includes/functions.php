@@ -159,6 +159,8 @@ function mbt_add_disabled_reviews_types($reviews) {
 add_filter('mbt_reviews_types', 'mbt_add_disabled_reviews_types', 9);
 
 function mbt_get_wp_filesystem($nonce_url) {
+	require_once(ABSPATH.'wp-admin/includes/file.php');
+
 	ob_start();
 	$creds = request_filesystem_credentials($nonce_url, '', false, false, null);
 	$output = ob_get_contents();
@@ -184,7 +186,7 @@ function mbt_download_and_insert_attachment($url) {
 	$nonce_url = wp_nonce_url('admin.php', 'mbt_download_and_insert_attachment');
 	$output = mbt_get_wp_filesystem($nonce_url);
 	if(!empty($output)) { return 0;	}
-	global $wp_filesystem;
+	global $wp_filesystem, $wpdb;
 
 	$url_parts = parse_url($url);
 	$filename = basename($url_parts['path']);
