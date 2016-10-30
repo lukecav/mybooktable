@@ -7,10 +7,10 @@ Author: Author Media
 Author URI: http://www.authormedia.com
 Text Domain: mybooktable
 Domain Path: /i18n/
-Version: 3.0.5
+Version: 3.0.6
 */
 
-define("MBT_VERSION", "3.0.5");
+define("MBT_VERSION", "3.0.6");
 
 
 

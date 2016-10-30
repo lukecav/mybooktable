@@ -166,8 +166,8 @@
 .mbt-book .mbt-book-price .mbt-alt-price  {
 	display: block;
 	font-size: 12px;
-    line-height: 1;
-    margin-top: 5px;
+	line-height: 1;
+	margin-top: 5px;
 }
 
 
@@ -212,7 +212,11 @@
 /* Book Samples                                            */
 /*---------------------------------------------------------*/
 
-.mbt-book a.mbt-book-sample {
+.mbt-book .mbt-book-sample {
+	margin-top: 10px;
+}
+
+.mbt-book .mbt-book-sample a {
 	font-family: Helvetica, sans-serif;
 	font-weight: bold;
 	font-size: 14px;
@@ -239,13 +243,8 @@
 
 	display: inline-block;
 	margin: 0;
-	margin-top: 10px;
 	padding: 6px 15px;
 	min-width: 70px;
-}
-
-.mbt-book audio.mbt-book-sample {
-	margin-top: 10px;
 }
 
 
@@ -316,8 +315,23 @@
 /* Book Video Sample                                       */
 /*---------------------------------------------------------*/
 
+.mbt-book .mbt-book-video-sample {
+	text-align: center;
+	width: 100%;
+	overflow: hidden;
+}
+
+.mbt-book .mbt-book-video-sample iframe {
+	padding: 0;
+	margin: 0;
+}
+
 .mbt-book .mbt-book-video-sample .jetpack-video-wrapper {
 	margin: 0;
+}
+
+.mbt-book .mbt-book-video-sample .jetpack-video-wrapper .youtube-player {
+	display: inline-block !important;
 }
 
 
@@ -461,7 +475,7 @@
 /*---------------------------------------------------------*/
 
 .mbt-book .mbt-book-bookclub-resources .mbt-book-bookclub-video {
-    text-align: center;
+	text-align: center;
 	margin-bottom: 20px;
 }
 
@@ -511,7 +525,7 @@
 	background-repeat: no-repeat;
 	background-position: 20px 10px;
 	cursor: pointer;
-    border: none;
+	border: none;
 	-webkit-touch-callout: none;
 	-webkit-user-select: none;
 	-khtml-user-select: none;
@@ -604,7 +618,7 @@
 
 .mbt-book .mbt-book-series .mbt-series-book .mbt-series-book-images a {
 	display: table-cell;
-    vertical-align: middle;
+	vertical-align: middle;
 	border: none;
 	outline: none;
 }
@@ -631,6 +645,8 @@
 .mbt-book .mbt_kindle_instant_preview {
 	width: 100%;
 	height: 550px;
+	padding: 0;
+	margin: 0;
 }
 
 
@@ -719,6 +735,43 @@
 	line-height: 1.7em;
 	padding: 0;
 	margin-bottom: 0.9em;
+}
+
+
+
+/*---------------------------------------------------------*/
+/* Button Styling                                          */
+/*---------------------------------------------------------*/
+
+.mbt-book .mbt-primary-button {
+	border: none;
+	box-shadow: none;
+	outline: none;
+	display: inline-block;
+
+	font-size: 18px;
+	text-align: center;
+	color: white;
+	cursor: pointer;
+	-webkit-transition: all 0.3s ease;
+	-o-transition: all 0.3s ease;
+	transition: all 0.3s ease;
+	font-weight: bold;
+	text-decoration: none;
+	font-style: normal;
+	text-transform: uppercase;
+
+	padding: 10px 40px;
+	border-radius: 10px;
+	margin: 15px;
+	margin-top: 22px;
+	line-height: 1.2;
+	border-bottom: 5px inset rgba(0,0,0,0.3);
+
+	background-color: #64ACF3;
+}
+.mbt-book .mbt-primary-button:hover {
+	border-bottom: 5px inset rgba(0,0,0,0.15);
 }
 
 
@@ -831,8 +884,9 @@
 	text-align: center;
 }
 
-.mbt-book.mbt-book-single.mbt-display-mode-storefront .mbt-book-video-sample {
-	padding-top: 10px;
+.mbt-book.mbt-book-single.mbt-display-mode-storefront .mbt-book-kindle-instant-preview-section .mbt-book-section-title {
+	text-align: center;
+	font-style: italic;
 }
 
 .mbt-book.mbt-book-single.mbt-display-mode-storefront .mbt-book-title {
@@ -896,38 +950,6 @@
 	text-align: center;
 }
 
-.mbt-book.mbt-book-single.mbt-display-mode-singlecolumn .mbt-book-purchase-button {
-	border: none;
-	box-shadow: none;
-	outline: none;
-	display: inline-block;
-
-	font-size: 18px;
-	text-align: center;
-	color: white;
-	cursor: pointer;
-	-webkit-transition: all 0.3s ease;
-	-o-transition: all 0.3s ease;
-	transition: all 0.3s ease;
-	font-weight: bold;
-	text-decoration: none;
-	font-style: normal;
-	text-transform: uppercase;
-
-	padding: 10px 40px;
-	border-radius: 10px;
-	margin: 15px;
-    margin-top: 22px;
-	line-height: 1.2;
-	border-bottom: 5px inset rgba(0,0,0,0.3);
-
-	background-color: #64ACF3;
-}
-.mbt-book.mbt-book-single.mbt-display-mode-singlecolumn .mbt-book-purchase-button:hover {
-	border-bottom: 5px inset rgba(0,0,0,0.15);
-}
-
-
 .mbt-book.mbt-book-single.mbt-display-mode-singlecolumn .mbt-book-buybuttons {
 	margin: 0 30px;
 	display: inline-block;
@@ -938,10 +960,10 @@
  */
 
 .mbt-book.mbt-book-single.mbt-display-mode-singlecolumn .mbt-book-overview p {
-    line-height: 1.7em;
-    padding: 0;
-    margin: 0;
-    margin-bottom: 0.9em;
+	line-height: 1.7em;
+	padding: 0;
+	margin: 0;
+	margin-bottom: 0.9em;
 }
 
 .mbt-book.mbt-book-single.mbt-display-mode-singlecolumn .mbt-book-overview p:last-child {
@@ -1011,6 +1033,13 @@
 .mbt-book.mbt-book-single.mbt-display-mode-singlecolumn .mbt-book-meta {
 	font-size: 16px;
 	line-height: 1.5;
+}
+
+.mbt-book.mbt-book-single.mbt-display-mode-singlecolumn .mbt-book-sample:first-child {
+	margin-top: 0;
+}
+.mbt-book.mbt-book-single.mbt-display-mode-singlecolumn .mbt-book-sample {
+	text-align: center;
 }
 
 
@@ -1190,7 +1219,8 @@
 
 	.mbt-book .mbt-book-right {
 		float: none;
-		width: 100%;
+		width: 100% !important;
+		box-sizing: border-box;
 	}
 }
 

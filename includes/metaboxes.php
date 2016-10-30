@@ -506,6 +506,18 @@ function mbt_save_metadata_metabox($post_id) {
 				if($field_id == 'supports') { continue; }
 				$value = isset($_REQUEST[$field_id]) ? $_REQUEST[$field_id] : null;
 				if($field_data['type'] == 'mbt_metadata_checkbox' or $field_data['type'] == 'mbt_metadata_kindle_instant_preview') { $value = $value === null ? 'no' : 'yes'; }
+				if($field_data['type'] == 'mbt_metadata_colorpicker') {
+					$matches = array();
+					preg_match('/rgb\(([0-9]+), ([0-9]+), ([0-9]+)\)/i', $value, $matches);
+					if(!is_array($matches) or count($matches) != 4) {
+						preg_match('/#([0-9A-F]{2})([0-9A-F]{2})([0-9A-F]{2})/i', $value, $matches);
+						if(is_array($matches) and count($matches) == 4) {
+							$value = 'rgb('.hexdec($matches[1]).', '.hexdec($matches[2]).', '.hexdec($matches[3]).')';
+						} else {
+							$value = '';
+						}
+					}
+				}
 				update_post_meta($post_id, $field_id, $value);
 			}
 		}

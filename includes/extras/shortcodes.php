@@ -102,7 +102,7 @@ function mbt_mybooktable_shortcode($attrs) {
 		ob_start();
 
 		mbt_start_template_context('shortcode');
-		if(is_singular('mbt_book')) {
+		if(!empty($wp_query->posts) and  $wp_query->is_singular('mbt_book')) {
 			if(!empty($attrs['display']) and $attrs['display'] === 'summary') {
 				mbt_start_template_context('excerpt');
 				echo('<div id="mbt-container">');

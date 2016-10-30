@@ -303,6 +303,12 @@ function mbt_add_admin_notices() {
 		add_action('admin_print_footer_scripts', 'mbt_email_subscribe_pointer');
 	}
 
+	if(!mbt_has_seen_new_feature('display_mode')) {
+		wp_enqueue_style('wp-pointer');
+		wp_enqueue_script('wp-pointer');
+		add_action('admin_print_footer_scripts', 'mbt_new_feature_display_mode_pointer');
+	}
+
 	if(isset($_GET['mbt_install_examples'])) {
 		mbt_install_examples();
 	}
@@ -494,6 +500,71 @@ function mbt_email_subscribe_pointer_ajax() {
 	die();
 }
 add_action('wp_ajax_mbt_email_subscribe_pointer', 'mbt_email_subscribe_pointer_ajax');
+
+function mbt_new_feature_display_mode_pointer() {
+	$content  = '<h3>'.__('New!', 'mybooktable').'</h3>';
+	$content .= '<p>'.__('Use the new Display Mode selector to change the way your book page looks!', 'mybooktable').'</p>';
+	$content .= '<div class="mbt-pointer-buttons wp-pointer-buttons">';
+	$content .= '<a id="mbt-pointer-ok" class="button-primary" style="float:left">'.htmlspecialchars(__("Cool, thanks!", 'mybooktable'), ENT_QUOTES).'</a>';
+	$content .= '</div>';
+
+	mbt_new_feature_pointer('display_mode', $content);
+}
+
+function mbt_has_seen_new_feature($feature) {
+	$seen_features = mbt_get_setting('seen_new_features');
+	if(empty($seen_features)) { $seen_features = array(); }
+	return in_array($feature, $seen_features);
+}
+
+function mbt_new_feature_pointer($feature, $content) {
+	global $current_screen; global $pagenow;
+	if(!($current_screen->post_type === 'mbt_book' and ((isset($_REQUEST['action']) and $_REQUEST['action'] === 'edit') or $pagenow === 'post-new.php'))) { return;}
+
+	?>
+	<script type="text/javascript">
+		var mbt_new_feature_pointer_options = {
+			pointerClass: 'mbt-new-feature-pointer',
+			content: '<?php echo($content); ?>',
+			feature: '<?php echo($feature); ?>',
+			position: {edge: 'top', align: 'center'},
+			buttons: function() {}
+		};
+
+		jQuery(document).ready(function () {
+			jQuery('#wpadminbar').pointer(mbt_new_feature_pointer_options).on('pointeropen', function(event, data) {
+				data.pointer.position({
+					of: jQuery('#mbt_display_mode_field'),
+					collision: 'fit none', my: 'right center', 'at': 'left center'
+				}).css('position', 'absolute').removeClass( 'wp-pointer-top' ).addClass( 'wp-pointer-right' );
+			}).pointer('open');
+
+			jQuery('#mbt-pointer-ok').click(function() {
+				jQuery.post(ajaxurl, {action: 'mbt_new_feature_seen', feature: mbt_new_feature_pointer_options.feature});
+				jQuery('#wpadminbar').pointer('close');
+			});
+
+			jQuery('.mbt-email-pointer').on('click', '#mbt-pointer-close', function() {
+				jQuery.post(ajaxurl, {action: 'mbt_new_feature_seen', feature: mbt_new_feature_pointer_options.feature});
+				jQuery('#wpadminbar').pointer('close');
+			});
+		});
+	</script>
+	<?php
+}
+
+function mbt_new_feature_seen_ajax() {
+	if(empty($_REQUEST['feature'])) { die(); }
+	if(!mbt_has_seen_new_feature(strval($_REQUEST['feature']))) {
+		$seen_features = mbt_get_setting('seen_new_features');
+		if(empty($seen_features)) { $seen_features = array(); }
+		$seen_features[] = strval($_REQUEST['feature']);
+		mbt_update_setting('seen_new_features', $seen_features);
+	}
+	die();
+}
+add_action('wp_ajax_mbt_new_feature_seen', 'mbt_new_feature_seen_ajax');
+
 
 
 

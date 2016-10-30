@@ -106,7 +106,7 @@ jQuery(document).ready(function() {
 	// color pickers
 	jQuery('.mbt-colorpicker').each(function() {
 		var ele = jQuery(this);
-		ele.spectrum({preferredFormat: 'rgb', color: ele.val() ? ele.val() : ele.attr('data-default-color')});
+		ele.spectrum({preferredFormat: 'hex', showInput: true, color: ele.val() ? ele.val() : ele.attr('data-default-color')});
 	});
 	jQuery('.mbt-colorpicker-clear').click(function() {
 		jQuery(this).siblings('.mbt-colorpicker').spectrum('set', '#000000').val('');

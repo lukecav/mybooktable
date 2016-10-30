@@ -236,6 +236,11 @@ This version adds **many** new buy button options, including Apple iBooks & Sony
 
 == Changelog ==
 
+= 3.0.6 =
+* Updated style packs to properly override buttons on new Beautiful Page Mode
+* Improved frontend display of Sample Chapter and Audio Sample display
+* Minor bug fixes
+
 = 3.0.5 =
 * Fixed a bug that was causing Quick Edit on books to erase metadata.
 * Fixed a bug that was causing the Amazon Book Importer to fail under certain conditions.
