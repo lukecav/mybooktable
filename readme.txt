@@ -22,7 +22,7 @@ You can find a **live demo** of MyBookTable in action [here](http://www.authorme
 
 = FEATURES =
 
-= Easy to Use (Improved in 2.0) =
+= Easy to Use  =
 With a simple interface, help text and tutorial videos, MyBookTable is designed with the novice user in mind. In version 2.0 we made MyBookTable even easier to use with usability improvements throughout the plugin.
 
 = Drag and Drop Control  =
@@ -30,6 +30,9 @@ Easily control which books appear at the top of your book table page with a simp
 
 = Make Your Individual Book Pages Look Amazing =
 MyBookTable allows you to easily make great-looking book pages. Whether you want a list of books or a individual book page, MyBookTable gives you maximum control with minimum hassle.
+
+= Kindle Instant Preview (New in 3.0) =
+MyBookTable 3 will now officially come with Kindle Instant Preview. Readers can read the first few pages of your Kindle book without ever having to leave your book page or download a PDF.  
 
 = Social Media Integration =
 MyBookTable makes it easy for visitors to like and share your books on social media sites like Facebook, Twitter and Google+. It also works with plugins like ShareThis.
@@ -50,7 +53,7 @@ MyBookTable comes with Buy Buttons for the following stores:
 * Christian Book Distributor (CBD)
 * CreateSpace
 * GoodReads
-* Gumroad (new in 2.0)
+* Gumroad 
 * Indiebound
 * Kobo
 * Lifeway
@@ -60,19 +63,28 @@ MyBookTable comes with Buy Buttons for the following stores:
 * Smashwords
 * Sony Reader
 
-= Premium Buy Buttons =
-The Pro & Dev Upgrades for MyBookTable include the Universal Buy Button, that lets you easily create a custom Buy Button that can link to any site.
+= International Mode (New in 3.0) =
+MyBookTable is partnering with Geniuslink to add link localization to MyBookTable. This means readers in England will automatically be sent to Amazon.co.uk and Canadian readers can click the same button to go to Amazon.ca.
 
-The following advanced buy buttons are available in the Developer Upgrade only:
+= Audiobook Mode (New in 3.0) =
+MyBookTable will come with an audio player so readers can sample your audiobook right on the book page. We are also adding fields for Narrator and Audiobook Price.
 
-* PayPal
-* 1ShoppingCart
-* eJunkie
+ = Book Import/Export (New in 3.0) =
+This user-requested feature will be a huge time saver for authors with multiple websites. With MyBookTable 2.0 you can export your books from one website and import them into another.
+
+= Enhanced Children's Book Support (New in 3.0) =
+Not every author writes children’s books. But those that do want an Illustrator Field so they can give credit to the illustrator of their books. Users will be able to click on an illustrator’s name to see all the books by that illustrator.
+
+= Star Rating Support (New in 3.0) =
+It turns out that not everyone who uses MyBookTable is an author. Readers use MyBookTable to post reviews of books they've read. Now MyBookTable has a Star Rating feature so that those book reviewers can rate the books they are reviewing.
+
+ = Endorsements Section (New in 3.0) =
+MyBookTable 3 has a special section for you to show off endorsements, blurbs, and accolades. Book blurbs can now look better than ever before.
 
 = Buy Button Style Packs =
 Customize your store by showing some of the buy buttons as a bulleted list. Also, choose from multiple buy button color schemes.
 
-= Buy Button Shadow Box (New in 2.0) =
+= Buy Button Shadow Box =
 Have a a lot of buy buttons cluttering up your book pages? No worries. MyBookTable 2.0 allows you to show a single "buy now" button that opens a shadow box with all your buy buttons.
 
 = Featured Book Widget =
@@ -81,7 +93,7 @@ Feature a book on your sidebar with just a few clicks. You can even add multiple
 = Mobile Responsive =
 If your WordPress theme is mobile responsive, MyBookTable will react similarly, delivering maximum compatibility for visitors on phones and tablets.
 
-= Recommend Books (New in 2.0) =
+= Recommend Books =
 Do you want to sell books by other authors? MyBookTable now has a "Recommended Books" tag out of the box so you can sell not only your books but other authors' books as well.
 
 = Advanced Search Engine Optimization =
@@ -119,12 +131,12 @@ MyBookTable can import books from Michael Hyatt's GetNoticed! theme. MyBookTable
 = Book Widgets =
 MyBookTable gives you several cool book widgets. Including a featured book widget, genre widget, series widget, and more!
 
-= Premium Features (Available with Upgrade) =
+= Premium Features (Available with Paid Upgrade) =
 
 = Universal Buy Button (Professional Upgrade Required) =
 Create a button that points to any site on the web. You have full control over both the text and the link.
 
-= Affiliate Compatible (Professional Upgrade Required) =
+= Affiliate Integration (Professional Upgrade Required) =
 Amazon, BN.com, and CBD.com all offer affiliate programs that help you supplement your income as an author. You won’t have to sell your book out of your garage to make more money. It also integrates seamlessly with leading SEO Plugins like Yoast and Scribe.
 
 Affiliate platforms supported:
@@ -132,28 +144,34 @@ Affiliate platforms supported:
 * Commission Junction (Audible)
 * Linkshare (Barnes & Noble, Kobo)
 
-= Grid View (Professional Upgrade Required) =
+= Landing Page Mode (Pro Upgrade Required) =
+MyBookTable 3 can now create landing pages for your books. Landing Page Mode is a total redesign of how a book page looks. It must be seen to be believed. This landing page can be used to power a whole website for your book title or just to make your book pages look better.
+
+= Reading Group Resources Section Pro Upgrade Required)=
+MyBookTable Pro now comes with a brand new section where you can add resources for reading clubs and book groups. The more resources you provide book clubs, the more they will want to read your book. 
+
+Suggested materials include:
+*  a PDF Download of Discussion Questions, 
+* Bulk Ordering Link
+* Powerpoint Companion
+* Chapter Excerpts PDF 
+* Discussion Video
+
+= Grid View (Pro Upgrade Required) =
 Show your books in a responsive grid view.  This is a great option for sites with a lot of books to show.
 
-= Notify Me Button (Professional Upgrade Required) =
+= Notify Me Button (Pro Upgrade Required) =
 Allow visitors to sign up for book updates by subscribing to your MailChimp list. This button can act as a Pre-Pre-Order button for books that are still a work in process.
 
-= Show Amazon Reviews (Professional Upgrade Required) =
+= Show Amazon Reviews (Pro Upgrade Required) =
 Show off your Amazon reviews right there on your book pages.
 
-= Amazon Bulk Book Importer (Developer Upgrade Required) =
+= Amazon Bulk Book Importer (Pro Upgrade Required) =
 Want to add 100 books? No problem. Just paste the ISBN numbers into MyBookTable and let the plugin create the book pages for you. This is a huge timesaver.
 
-= UIEE Book Importer (Developer Upgrade Required) =
+= UIEE Book Importer (Pro Upgrade Required) =
 MyBookTable can also import books from a Universal Information Exchange Environment (UIEE) file.
-
-= Premium Buy Buttons (Developer Upgrade Required) =
-The following buy buttons are available with the Professional & Developer Upgrades for MyBookTable.
-
-* PayPal
-* 1ShoppingCart
-* eJunkie
-
+ 
 == Installation ==
 
 = Repository Crossload Method (Recommended) =
@@ -199,7 +217,7 @@ No! This plugin would work great for anyone wanting to have an Amazon Affiliate 
 == Upgrade Notice ==
 
 = 3.0.0 =
-This is a major update to MyBookTable that includes some backwards incompatable changes to it's template system and CSS selectors. If you have custom integrations with MyBookTable they may need to be updated in order to work after installing this update.
+This is a major improvement to MyBookTable that includes some backwards incompatable changes to it's template system and CSS selectors. If you have custom integrations with MyBookTable they may need to be updated in order to work after installing this update.
 
 = 2.2.0 =
 IMPORTANT UPDATE: Barnes and Noble has discontinued Linkshare Affiliates and switched to Commission Junction. This update is required to continue using B&N affiliates. [Learn more...](http://www.authormedia.com/barnes-and-noble-is-ending-its-affiliate-program-how-to-keep-from-losing-out/)
