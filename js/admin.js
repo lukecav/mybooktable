@@ -60,7 +60,7 @@ jQuery(document).ready(function() {
 					multiple: false  // Set to true to allow multiple files to be selected
 				};
 				if(element.attr('data-upload-title')) { options.title = element.attr('data-upload-title'); }
-				file_frame = wp.media.frames.file_frame = wp.media();
+				file_frame = wp.media.frames.file_frame = wp.media(options);
 
 				// When an image is selected, run a callback.
 				file_frame.on( 'select', function() {

@@ -1094,7 +1094,7 @@ function mbt_render_get_upgrade_page() {
 					$options = array(
 						'timeout' => 3,
 						'body' => $to_send,
-						'user-agent' => 'WordPress/'.$wp_version.'; '.get_bloginfo('url')
+						'user-agent' => 'WordPress/'.$wp_version
 					);
 
 					$raw_response = wp_remote_post('http://api.authormedia.com/plugins/'.$slug.'/update-check', $options);

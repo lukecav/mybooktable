@@ -146,13 +146,13 @@ function mbt_mybooktable_shortcode($attrs) {
 			}
 		} else {
 			if(!empty($attrs['header']) and $attrs['header'] == 'hidden') { remove_action('mbt_book_archive_header', 'mbt_do_book_archive_header'); }
-			if(!empty($attrs['gridview'])) { add_filter('mbtpro2_is_gridview_active', $attrs['gridview'] == 'yes' ? '__return_true' : '__return_false', 100); }
+			if(!empty($attrs['gridview'])) { add_filter('mbtpro2_is_gridview_active', $attrs['gridview'] == 'true' ? '__return_true' : '__return_false', 100); }
 			mbt_start_template_context('archive');
 			?> <div id="mbt-container"> <?php
 			do_action('mbt_book_archive_content');
 			?> </div> <?php
 			mbt_end_template_context();
-			if(!empty($attrs['gridview'])) { remove_filter('mbtpro2_is_gridview_active', $attrs['gridview'] == 'yes' ? '__return_true' : '__return_false', 100); }
+			if(!empty($attrs['gridview'])) { remove_filter('mbtpro2_is_gridview_active', $attrs['gridview'] == 'true' ? '__return_true' : '__return_false', 100); }
 		}
 		mbt_end_template_context();
 

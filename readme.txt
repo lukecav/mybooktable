@@ -3,7 +3,7 @@ Contributors: authormedia, zookatron, neovita
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=K6UGSUCSKP4NS
 Tags: book, books, ecommerce, affiliate, store, author plugin, amazon, ibooks, iTunes, smashwords, goodreads, gumroad
 Requires at least: 4.5.0
-Tested up to: 4.6.1
+Tested up to: 4.7
 Stable tag: trunk
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -32,7 +32,7 @@ Easily control which books appear at the top of your book table page with a simp
 MyBookTable allows you to easily make great-looking book pages. Whether you want a list of books or a individual book page, MyBookTable gives you maximum control with minimum hassle.
 
 = Kindle Instant Preview (New in 3.0) =
-MyBookTable 3 will now officially come with Kindle Instant Preview. Readers can read the first few pages of your Kindle book without ever having to leave your book page or download a PDF.  
+MyBookTable 3 will now officially come with Kindle Instant Preview. Readers can read the first few pages of your Kindle book without ever having to leave your book page or download a PDF.
 
 = Social Media Integration =
 MyBookTable makes it easy for visitors to like and share your books on social media sites like Facebook, Twitter and Google+. It also works with plugins like ShareThis.
@@ -53,7 +53,7 @@ MyBookTable comes with Buy Buttons for the following stores:
 * Christian Book Distributor (CBD)
 * CreateSpace
 * GoodReads
-* Gumroad 
+* Gumroad
 * Indiebound
 * Kobo
 * Lifeway
@@ -148,13 +148,13 @@ Affiliate platforms supported:
 MyBookTable 3 can now create landing pages for your books. Landing Page Mode is a total redesign of how a book page looks. It must be seen to be believed. This landing page can be used to power a whole website for your book title or just to make your book pages look better.
 
 = Reading Group Resources Section Pro Upgrade Required)=
-MyBookTable Pro now comes with a brand new section where you can add resources for reading clubs and book groups. The more resources you provide book clubs, the more they will want to read your book. 
+MyBookTable Pro now comes with a brand new section where you can add resources for reading clubs and book groups. The more resources you provide book clubs, the more they will want to read your book.
 
 Suggested materials include:
-*  a PDF Download of Discussion Questions, 
+* A PDF Download of Discussion Questions
 * Bulk Ordering Link
 * Powerpoint Companion
-* Chapter Excerpts PDF 
+* Chapter Excerpts PDF
 * Discussion Video
 
 = Grid View (Pro Upgrade Required) =
@@ -171,7 +171,7 @@ Want to add 100 books? No problem. Just paste the ISBN numbers into MyBookTable 
 
 = UIEE Book Importer (Pro Upgrade Required) =
 MyBookTable can also import books from a Universal Information Exchange Environment (UIEE) file.
- 
+
 == Installation ==
 
 = Repository Crossload Method (Recommended) =
@@ -235,6 +235,10 @@ This version adds several cool new features, including "Publisher" and "Publicat
 This version adds **many** new buy button options, including Apple iBooks & Sony Reader.
 
 == Changelog ==
+
+= 3.0.7 =
+* Fixed a bug that sometimes prevented MyBookTable from verifing API Keys
+* Other minor bug fixes
 
 = 3.0.6 =
 * Updated style packs to properly override buttons on new Beautiful Page Mode

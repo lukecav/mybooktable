@@ -1136,6 +1136,12 @@
 	clear: both;
 }
 
+.mbt-book-archive .mbt-book-archive-books:after {
+	content: "";
+	display: table;
+	clear: both;
+}
+
 .mbt-book-archive .mbt-book {
 	margin-bottom: 40px;
 	border-bottom: 1px solid #E0E2E2;

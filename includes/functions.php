@@ -834,7 +834,7 @@ function mbt_send_tracking_data() {
 	$options = array(
 		'timeout' => ((defined('DOING_CRON') && DOING_CRON) ? 30 : 3),
 		'body' => array('data' => serialize($data)),
-		'user-agent' => 'WordPress/'.$wp_version.'; '.get_bloginfo('url')
+		'user-agent' => 'WordPress/'.$wp_version
 	);
 
 	$response = wp_remote_post('http://api.authormedia.com/plugins/mybooktable/analytics/submit', $options);
@@ -869,7 +869,7 @@ function mbt_verify_api_key() {
 	$options = array(
 		'timeout' => 3,
 		'body' => $to_send,
-		'user-agent' => 'WordPress/'.$wp_version.'; '.get_bloginfo('url')
+		'user-agent' => 'WordPress/'.$wp_version
 	);
 
 	$raw_response = wp_remote_post('http://api.authormedia.com/plugins/apikey/check', $options);
