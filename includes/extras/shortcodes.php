@@ -16,7 +16,6 @@ function mbt_mybooktable_shortcode($attrs) {
 	global $wp_query, $posts, $post, $id;
 
 	if(mbt_has_template_context('shortcode')) { return ''; }
-	if(mbt_is_mbt_page()) { return ''; }
 
 	$output = '';
 	if(!empty($attrs['list'])) {
