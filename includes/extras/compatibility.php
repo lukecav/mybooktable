@@ -147,7 +147,7 @@ function mbt_compat_override_query_posts() {
 		$wp_query->is_archive = false;
 		$wp_query->is_post_type_archive = false;
 		$wp_query->queried_object = $post;
-		$wp_query->queried_object_id = 0;
+		$wp_query->queried_object_id = -1;
 		$GLOBALS['post'] = $wp_query->post;
 		$GLOBALS['posts'] = &$wp_query->posts;
 	}
