@@ -853,7 +853,7 @@ function mbt_the_buybuttons($excerpt=false, $force_shadowbox=null) {
 // Book Blurb
 function mbt_get_book_blurb($post_id, $read_more = false) {
 	$post = get_post($post_id);
-	$output = $post->post_excerpt;
+	$output = do_shortcode($post->post_excerpt);
 	if($read_more) { $output .= apply_filters('mbt_read_more', ' <a href="'.get_permalink($post_id).'" class="mbt-read-more">'.apply_filters('mbt_read_more_text',__('More info', 'mybooktable').' →' ).'</a>'); }
 	return apply_filters('mbt_get_book_blurb', $output, $post_id, $read_more);
 }
