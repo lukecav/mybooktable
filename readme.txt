@@ -3,7 +3,7 @@ Contributors: authormedia, zookatron, neovita
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=K6UGSUCSKP4NS
 Tags: book, books, ecommerce, affiliate, store, author plugin, amazon, ibooks, iTunes, smashwords, goodreads, gumroad
 Requires at least: 4.5.0
-Tested up to: 4.7
+Tested up to: 4.7.3
 Stable tag: trunk
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -235,6 +235,12 @@ This version adds several cool new features, including "Publisher" and "Publicat
 This version adds **many** new buy button options, including Apple iBooks & Sony Reader.
 
 == Changelog ==
+
+= 3.0.8 =
+* Fixed an issue with shortcodes not displaying properly on MyBookTable pages.
+* Fixed an bug that caused MyBookTable pages to redirect to the home page on certain setups.
+* Added support for shortcodes in Book Blurbs.
+* Added support for the max_books option in the Author Media Shortcode Editor.
 
 = 3.0.7 =
 * Fixed a bug that sometimes prevented MyBookTable from verifing API Keys
