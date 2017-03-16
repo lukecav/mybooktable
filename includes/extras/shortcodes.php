@@ -200,6 +200,11 @@ function mbt_add_authormedia_shortcodes($shortcodes) {
 					'description'	=> 'Shows the book table title and description above the book listing',
 					'type'			=> 'dropdown',
 					'choices'		=> array('show' => 'Shown', 'hidden' => 'Hidden')
+				),
+				'max_books'	=> array(
+					'title'			=> __('Max Books to Display', 'mybooktable'),
+					'description'	=> 'Sets the maximum number of books that will be shown',
+					'type'			=> 'number'
 				)
 			)
 		),
@@ -224,6 +229,11 @@ function mbt_add_authormedia_shortcodes($shortcodes) {
 					'description'	=> 'Shows the taxonomy title and description above the book listing',
 					'type'			=> 'dropdown',
 					'choices'		=> array('show' => 'Shown', 'hidden' => 'Hidden')
+				),
+				'max_books'	=> array(
+					'title'			=> __('Max Books to Display', 'mybooktable'),
+					'description'	=> 'Sets the maximum number of books that will be shown',
+					'type'			=> 'number'
 				)
 			)
 		),
@@ -248,6 +258,11 @@ function mbt_add_authormedia_shortcodes($shortcodes) {
 					'description'	=> 'Shows the taxonomy title and description above the book listing',
 					'type'			=> 'dropdown',
 					'choices'		=> array('show' => 'Shown', 'hidden' => 'Hidden')
+				),
+				'max_books'	=> array(
+					'title'			=> __('Max Books to Display', 'mybooktable'),
+					'description'	=> 'Sets the maximum number of books that will be shown',
+					'type'			=> 'number'
 				)
 			)
 		),
@@ -272,6 +287,11 @@ function mbt_add_authormedia_shortcodes($shortcodes) {
 					'description'	=> 'Shows the taxonomy title and description above the book listing',
 					'type'			=> 'dropdown',
 					'choices'		=> array('show' => 'Shown', 'hidden' => 'Hidden')
+				),
+				'max_books'	=> array(
+					'title'			=> __('Max Books to Display', 'mybooktable'),
+					'description'	=> 'Sets the maximum number of books that will be shown',
+					'type'			=> 'number'
 				)
 			)
 		),
@@ -296,6 +316,11 @@ function mbt_add_authormedia_shortcodes($shortcodes) {
 					'description'	=> 'Shows the taxonomy title and description above the book listing',
 					'type'			=> 'dropdown',
 					'choices'		=> array('show' => 'Shown', 'hidden' => 'Hidden')
+				),
+				'max_books'	=> array(
+					'title'			=> __('Max Books to Display', 'mybooktable'),
+					'description'	=> 'Sets the maximum number of books that will be shown',
+					'type'			=> 'number'
 				)
 			)
 		),
