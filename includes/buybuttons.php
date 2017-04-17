@@ -257,6 +257,24 @@ function mbt_cj_affiliate_settings_render() {
 <?php
 }
 
+function mbt_get_cj_affiliate_link($url, $website_id) {
+	$server = 'www.qksrv.net';
+	$scheme = 'http';
+	$url_info = parse_url($url);
+	if(!empty($url_info) and !empty($url_info['scheme'])) { $scheme = $url_info['scheme']; }
+	$hashIndex = strpos($url, '#');
+	$frag = "";
+	if($hashIndex !== false) {
+		$frag = substr($url, $hashIndex + 1);
+		$url = substr($url, 0, $hashIndex);
+	}
+	$extraParams = "";
+	if(!empty($frag)) { $extraParams = "/fragment/".urlencode($frag); }
+	return $scheme."://".$server."/links/".$website_id."/type/am".$extraParams."/".$url;
+}
+
+
+
 /*---------------------------------------------------------*/
 /* Genius Link Validation                                  */
 /*---------------------------------------------------------*/
@@ -297,7 +315,7 @@ function mbt_filter_amazon_buybutton_data($data, $store) {
 	if(($data['store'] == 'amazon' or $data['store'] == 'kindle') and !empty($data['url']) and !mbt_is_genius_link($data['url'])) {
 		$tld = mbt_get_amazon_tld($data['url']);
 		$aisn = mbt_get_amazon_AISN($data['url']);
-		$data['url'] = empty($aisn) ? '' : 'http://www.amazon.'.$tld.'/dp/'.$aisn.';
+		$data['url'] = empty($aisn) ? '' : 'http://www.amazon.'.$tld.'/dp/'.$aisn.'?tag=ammbt-20';
 	}
 	return $data;
 }
@@ -305,6 +323,14 @@ function mbt_filter_amazon_buybutton_data($data, $store) {
 function mbt_amazon_buybutton_preview() {
 	if(empty($_REQUEST['data'])) { die(); }
 	$id = mbt_get_amazon_AISN($_REQUEST['data']);
+	if(mbt_is_genius_link($_REQUEST['data'])) {
+		echo('<span class="mbt_admin_message_success">'.__('Valid Genius Link', 'mybooktable').'</span>');
+	} else if(empty($id)) {
+		echo('<span class="mbt_admin_message_failure">'.__('Invalid Amazon product link', 'mybooktable').'</span>');
+	} else {
+		echo('<span class="mbt_admin_message_success">'.__('Valid Amazon product link', 'mybooktable').'</span>');
+	}
+	die();
 }
 
 function mbt_amazon_buybutton_editor($editor, $data, $id, $store) {
