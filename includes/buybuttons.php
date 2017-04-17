@@ -305,14 +305,6 @@ function mbt_filter_amazon_buybutton_data($data, $store) {
 function mbt_amazon_buybutton_preview() {
 	if(empty($_REQUEST['data'])) { die(); }
 	$id = mbt_get_amazon_AISN($_REQUEST['data']);
-	if(mbt_is_genius_link($_REQUEST['data'])) {
-		echo('<span class="mbt_admin_message_success">'.__('Valid Genius Link', 'mybooktable').'</span>');
-	} else if(empty($id)) {
-		echo('<span class="mbt_admin_message_failure">'.__('Invalid Amazon product link', 'mybooktable').'</span>');
-	} else {
-		echo('<span class="mbt_admin_message_success">'.__('Valid Amazon product link', 'mybooktable').'</span>');
-	}
-	die();
 }
 
 function mbt_amazon_buybutton_editor($editor, $data, $id, $store) {
